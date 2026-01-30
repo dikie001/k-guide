@@ -1,4 +1,7 @@
+import FirstAid from "@/features/FirstAid";
+import ScanDopine from "@/features/ScanDopine";
 import Dashboard from "@/pages/Dashboard";
+import NotFound from "@/pages/NotFound";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 export const AppRoutes = () => {
@@ -7,7 +10,11 @@ export const AppRoutes = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Dashboard />} />
-        </Routes>        
+          <Route path="/scan-dopine" element={<ScanDopine />} />
+          <Route path="/first-aid" element={<FirstAid />} />
+          <Route path="*" element={<NotFound />} />
+
+        </Routes>
       </Router>
     </div>
   );
