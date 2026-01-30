@@ -2,6 +2,7 @@ import FirstAid from "@/features/FirstAid";
 import ScanDopine from "@/features/ScanDopine";
 import Dashboard from "@/pages/Dashboard";
 import ProfilePage from "@/pages/ProfilePage";
+import WadaPage from "@/pages/WadaPage";
 import NotFound from "@/pages/NotFound";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
