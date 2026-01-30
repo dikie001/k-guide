@@ -33,6 +33,7 @@ const injuries = [
 
 export default function ProfilePage() {
     const [activeTab, setActiveTab] = useState("grid");
+    console.log(activeTab)
 
     return (
         <div className="min-h-screen bg-slate-50 font-sans pb-24 text-slate-900">

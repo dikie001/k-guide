@@ -16,6 +16,7 @@ export const AppRoutes = () => {
           <Route path="/first-aid" element={<FirstAid />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/wada" element={<WadaPage />} />
 
         </Routes>
       </Router>

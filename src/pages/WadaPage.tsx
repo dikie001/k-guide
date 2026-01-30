@@ -1,5 +1,4 @@
 import BottomNav from "@/components/shared/BottomNav";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -18,20 +17,20 @@ import {
 const updates = [
     {
         id: 1,
-        title: "New Prohibited Substances 2026",
-        icon: <Pill className="h-8 w-8 text-orange-500" />,
+        title: "Prohibited List 2026",
+        icon: <Pill className="h-6 w-6 text-orange-500" />,
         color: "bg-orange-50"
     },
     {
         id: 2,
-        title: "Changes to TUE Process",
-        icon: <Megaphone className="h-8 w-8 text-blue-500" />,
+        title: "TUE Process Changes",
+        icon: <Megaphone className="h-6 w-6 text-blue-500" />,
         color: "bg-blue-50"
     },
     {
         id: 3,
-        title: "International Standard Updates",
-        icon: <Globe className="h-8 w-8 text-indigo-500" />,
+        title: "Standard Updates",
+        icon: <Globe className="h-6 w-6 text-indigo-500" />,
         color: "bg-indigo-50"
     },
 ];
@@ -56,117 +55,118 @@ const blogs = [
 
 export default function WadaPage() {
     return (
-        <div className="min-h-screen bg-slate-50/50 pb-24 font-sans text-slate-900">
+        // OUTER WRAPPER: Centers content on desktop, handles background
+        <div className="h-screen w-full bg-slate-100 flex items-center justify-center">
+            
+            {/* MOBILE CONTAINER: Constrains width to look like an app on all screens */}
+            <div className="w-full max-w-md h-full bg-white shadow-2xl overflow-hidden flex flex-col relative">
 
-            {/* 1. Header */}
-            <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-md px-4 py-3 flex items-center justify-between gap-3 border-b border-slate-100">
-                <div className="flex items-center gap-1">
-                    <span className="text-xl font-black text-blue-500 tracking-tighter">K</span>
-                    <span className="text-lg font-bold text-slate-900">-Guide</span>
+                {/* 1. Header */}
+                <div className="shrink-0 z-30 bg-white/80 backdrop-blur-md px-4 py-3 flex items-center justify-between gap-3 border-b border-slate-100 sticky top-0">
+                    <div className="flex items-center gap-1">
+                        <span className="text-xl font-black text-blue-600 tracking-tighter">K</span>
+                        <span className="text-lg font-bold text-slate-900">-Guide</span>
+                    </div>
+
+                    <div className="flex-1 max-w-[180px] relative">
+                        <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                        <Input
+                            placeholder="Search..."
+                            className="h-9 pl-9 bg-slate-100 border-none rounded-full text-xs font-medium focus-visible:ring-1 focus-visible:ring-blue-500 placeholder:text-slate-400"
+                        />
+                    </div>
+
+                    <div className="flex items-center gap-0.5">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-slate-100 text-slate-600">
+                            <Bookmark className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-slate-100 text-slate-600 relative">
+                            <Bell className="h-4 w-4" />
+                            <span className="absolute top-2 right-2.5 h-1.5 w-1.5 bg-red-500 rounded-full border border-white"></span>
+                        </Button>
+                    </div>
                 </div>
 
-                <div className="flex-1 max-w-[200px] relative">
-                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                    <Input
-                        placeholder="Search"
-                        className="h-9 pl-9 bg-slate-100 border-none rounded-full text-xs font-medium focus-visible:ring-1 focus-visible:ring-blue-500"
-                    />
-                </div>
+                {/* Main Scrollable Content */}
+                <ScrollArea className="flex-1 w-full">
+                    <div className="p-4 space-y-6 pb-24">
 
-                <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full hover:bg-slate-100 text-slate-600">
-                        <Bookmark className="h-5 w-5" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full hover:bg-slate-100 text-slate-600 relative">
-                        <Bell className="h-5 w-5" />
-                        <span className="absolute top-2 right-2.5 h-2 w-2 bg-red-500 rounded-full border border-white"></span>
-                    </Button>
+                        {/* 2. Recent WADA Updates (Compact) */}
+                        <section>
+                            <div className="flex items-center justify-between mb-3 px-1">
+                                <h2 className="text-sm font-bold text-slate-900">Recent Updates</h2>
+                                <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wide cursor-pointer">View All</span>
+                            </div>
+                            
+                            <div className="flex overflow-x-auto gap-3 pb-2 -mx-4 px-4 scrollbar-hide snap-x">
+                                {updates.map(item => (
+                                    <div key={item.id} className={`flex-none w-28 aspect-[3/4] ${item.color} rounded-xl flex flex-col p-3 relative overflow-hidden snap-start border border-black/5 active:scale-95 transition-transform duration-200`}>
+                                        <div className="flex-1 flex items-start pt-1">
+                                            <div className="bg-white p-2 rounded-lg shadow-sm ring-1 ring-black/5">
+                                                {item.icon}
+                                            </div>
+                                        </div>
+                                        <p className="text-xs font-bold text-slate-800 leading-tight">
+                                            {item.title}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* 3. Substance & Method List Card (Refined) */}
+                        <section>
+                            <h2 className="text-sm font-bold text-slate-900 mb-3 px-1">Substance Database</h2>
+                            <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex gap-4 items-center">
+                                {/* Icon */}
+                                <div className="shrink-0 h-16 w-16 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center">
+                                    <ClipboardList className="h-7 w-7 text-blue-600" />
+                                </div>
+
+                                {/* Content */}
+                                <div className="flex-1">
+                                    <h3 className="text-sm font-bold text-slate-900 mb-1">Check Compliance</h3>
+                                    <p className="text-xs text-slate-500 mb-3 leading-snug">
+                                        Check substances against the 2026 Prohibited List.
+                                    </p>
+                                    <Button size="sm" className="h-8 px-4 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-[10px] uppercase font-bold tracking-wide w-full">
+                                        Open Database <ChevronRight className="ml-1 h-3 w-3" />
+                                    </Button>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* 4. Educational Blogs (Tighter Layout) */}
+                        <section>
+                            <h2 className="text-sm font-bold text-slate-900 mb-3 px-1">Insights</h2>
+                            <div className="grid gap-3">
+                                {blogs.map(blog => (
+                                    <div key={blog.id} className="bg-white p-2.5 rounded-xl shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] border border-slate-100 flex items-center gap-3 active:scale-[0.99] transition-transform cursor-pointer">
+                                        <img
+                                            src={blog.image}
+                                            alt="Blog"
+                                            className="h-16 w-16 object-cover rounded-lg bg-slate-100 shrink-0"
+                                        />
+                                        <div className="flex-1 py-0.5 pr-2">
+                                            <span className="text-[10px] font-bold text-blue-600 mb-0.5 block uppercase tracking-wider">Education</span>
+                                            <h3 className="text-sm font-bold text-slate-900 leading-snug line-clamp-2">
+                                                {blog.title}
+                                            </h3>
+                                        </div>
+                                        <ChevronRight className="h-4 w-4 text-slate-300 shrink-0" />
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+
+                    </div>
+                </ScrollArea>
+
+                {/* Wrapper ensures BottomNav stays inside the phone frame */}
+                <div className="absolute bottom-0 left-0 right-0 z-40">
+                   <BottomNav /> 
                 </div>
             </div>
-
-            <ScrollArea className="h-[calc(100vh-65px)]">
-                <div className="p-4 space-y-8">
-
-                    {/* 2. Recent WADA Updates (Horizontal Scroll) */}
-                    <section>
-                        <h2 className="text-sm font-bold text-slate-900 mb-3 px-1">Recent WADA Updates</h2>
-                        <div className="flex overflow-x-auto gap-3 pb-4 -mx-4 px-4 scrollbar-hide snap-x">
-                            {updates.map(item => (
-                                <div key={item.id} className={`flex-none w-36 aspect-[4/5] ${item.color} rounded-2xl flex flex-col p-4 relative overflow-hidden snap-start shadow-sm border border-black/5 active:scale-95 transition-transform duration-200`}>
-                                    <div className="flex-1 flex items-center justify-center">
-                                        <div className="bg-white p-3 rounded-full shadow-sm">
-                                            {item.icon}
-                                        </div>
-                                    </div>
-                                    <p className="text-xs font-bold text-slate-800 leading-tight mt-3">
-                                        {item.title}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-
-                    {/* 3. Substance & Method List Card */}
-                    <section>
-                        <h2 className="text-sm font-bold text-slate-900 mb-3 px-1">Substance & Method List</h2>
-                        <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 flex gap-4">
-                            {/* Large Icon */}
-                            <div className="shrink-0">
-                                <div className="h-24 w-20 rounded-xl border-2 border-slate-100 flex flex-col items-center justify-center gap-2">
-                                    <div className="h-3 w-8 bg-blue-500 rounded-b-md mb-1"></div>
-                                    <ClipboardList className="h-8 w-8 text-blue-500" />
-                                    <div className="space-y-1 w-10">
-                                        <div className="h-1 w-full bg-slate-100 rounded-full"></div>
-                                        <div className="h-1 w-3/4 bg-slate-100 rounded-full"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Content */}
-                            <div className="flex-1 space-y-3">
-                                <ul className="space-y-1.5">
-                                    {["Prohibited at all times", "Prohibited in-competition", "Substances of Abuse"].map(txt => (
-                                        <li key={txt} className="text-xs font-medium text-slate-600 flex items-center gap-2">
-                                            <span className="h-1.5 w-1.5 rounded-full bg-slate-800 shrink-0" /> {txt}
-                                        </li>
-                                    ))}
-                                </ul>
-                                <Button className="w-full h-8 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-900/10">
-                                    View Full WADA List
-                                </Button>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* 4. Educational Blogs & Insights */}
-                    <section className="pb-20">
-                        <h2 className="text-sm font-bold text-slate-900 mb-3 px-1">Educational Blogs & Insights</h2>
-                        <div className="space-y-3">
-                            {blogs.map(blog => (
-                                <div key={blog.id} className="bg-white p-3 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 active:scale-[0.98] transition-all">
-                                    <img
-                                        src={blog.image}
-                                        alt="Blog"
-                                        className="h-16 w-24 object-cover rounded-xl bg-slate-100"
-                                    />
-                                    <div className="flex-1 py-1">
-                                        <h3 className="text-sm font-bold text-slate-900 leading-snug line-clamp-2">
-                                            {blog.title}
-                                        </h3>
-                                        <div className="flex items-center gap-1 mt-2 text-blue-600">
-                                            <span className="text-[10px] font-bold uppercase tracking-wider">Read More</span>
-                                            <ChevronRight className="h-3 w-3" />
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-
-                </div>
-            </ScrollArea>
-
-            <BottomNav />
         </div>
     );
 }
