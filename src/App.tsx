@@ -10,7 +10,7 @@ const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
          DESKTOP (md): Fixed width/height, thick borders, rounded corners, shadow.
       */}
       <div className="relative w-full h-full bg-background 
-        md:w-[400px] md:h-[650px]  md:border-12  md:border-gray-900 md:rounded-[3rem] 
+        md:w-[380px] md:h-[650px]  md:border-12  md:border-gray-900 md:rounded-[3rem] 
         md:shadow-2xl md:overflow-hidden ring-1 ring-black/5"
       >
         
