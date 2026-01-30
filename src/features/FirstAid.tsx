@@ -150,7 +150,7 @@ export default function FirstAid() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="h-10 w-10 bg-zinc-50 rounded-lg border border-zinc-100 flex items-center justify-center">
-                  {React.cloneElement(selectedInjury.icon as React.ReactElement, { className: "h-5 w-5" })}
+                  {React.cloneElement(selectedInjury.icon as React.ReactElement<{ className?: string }>, { className: "h-5 w-5" })}
                 </div>
                 <Badge variant="outline" className={`text-[10px] px-2 py-0.5 border-none ${selectedInjury.severity === 'Critical' ? 'bg-red-100 text-red-700' :
                   selectedInjury.severity === 'Severe' || selectedInjury.severity === 'High' ? 'bg-orange-100 text-orange-700' :
@@ -256,7 +256,7 @@ export default function FirstAid() {
                 <div className="relative z-10">
                   <div className="flex justify-between items-start mb-2">
                     <div className="text-zinc-400 group-hover:text-zinc-600 transition-colors">
-                      {React.cloneElement(item.icon as React.ReactElement, { className: "h-4 w-4" })}
+                      {React.cloneElement(item.icon as React.ReactElement<{ className?: string }>, { className: "h-4 w-4" })}
                     </div>
                     <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${item.severity === 'Critical' ? 'bg-red-50 text-red-600' : 'bg-zinc-50 text-zinc-500'
                       }`}>
@@ -297,7 +297,7 @@ export default function FirstAid() {
         </div>
       )}
 
-      <BottomNav/>
+      <BottomNav />
     </div>
   );
 }
