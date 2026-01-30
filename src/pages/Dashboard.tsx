@@ -1,18 +1,17 @@
 import BottomNav from "@/components/shared/BottomNav";
 import Header from "@/components/shared/Header";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
-    Activity,
-    Bell,
     Camera,
     ChevronRight,
     ClipboardList,
     Droplets,
+    HeartPulse,
     Move,
-    Plus,
-    Search
+    ScanLine,
+    Search,
+    Stethoscope
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,9 +24,9 @@ export default function Dashboard() {
 
     // --- Data Configuration ---
     const tools = [
-        { label: "Scan Meds", icon: <Camera className="h-5 w-5" />, route: "scan-dopine" },
-        { label: "First Aid", icon: <Plus className="h-5 w-5" />, route: "first-aid" },
-        { label: "Recovery", icon: <Activity className="h-5 w-5" />, route: "recovery" },
+        { label: "Scan Meds", icon: <ScanLine className="h-5 w-5" />, route: "scan-dopine" },
+        { label: "First Aid", icon: <HeartPulse className="h-5 w-5" />, route: "first-aid" },
+        { label: "Recovery", icon: <Stethoscope className="h-5 w-5" />, route: "recovery" },
     ];
 
     const insights = [
@@ -82,20 +81,38 @@ export default function Dashboard() {
             </div>
 
             {/* --- TOOLS GRID --- */}
-            <div className="px-4 py-2">
-                <h3 className="text-sm font-bold text-slate-800 mb-3 ml-1">K-Guide Tools</h3>
-                <div className="grid grid-cols-3 gap-3">
+            <div className="px-4 py-3">
+                {/* Section Header with Accent */}
+                <div className="flex items-center gap-2 mb-4 pl-1">
+                    <div className="w-1 h-4 bg-blue-600 rounded-full shadow-sm shadow-blue-200" />
+                    <h3 className="text-sm font-extrabold text-slate-900 tracking-tight">
+                        K-Guide Tools
+                    </h3>
+                </div>
+
+                {/* Tools Grid */}
+                <div className="grid grid-cols-3 gap-2">
                     {tools.map((tool, index) => (
-                        <div
+                        <button
                             key={index}
                             onClick={() => handleRoute(tool.route)}
-                            className="bg-white p-3 rounded-2xl shadow-[0_4px_15px_-3px_rgba(0,0,0,0.07)] border border-slate-50 flex flex-col items-center justify-center gap-2 h-24 cursor-pointer active:scale-95 transition-all duration-300 group hover:-translate-y-1 hover:shadow-lg"
+                            className="relative flex flex-col items-center cursor-pointer  shadow-lg shadow-black/20 justify-center h-28 rounded-2xl bg-white border border-slate-100  hover:shadow-xl hover:border-blue-200/60 hover:-translate-y-1 active:scale-95 transition-all duration-300 group outline-none overflow-hidden"
                         >
-                            <div className="p-2.5 bg-slate-50 rounded-xl text-slate-600 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors shadow-inner">
-                                {tool.icon}
+                            {/* Background Decoration (Subtle Shine) */}
+                            <div className="absolute  inset-0 bg-gradient-to-tr from-transparent via-transparent to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                            {/* Icon Container */}
+                            <div className="relative p-2 mb-2 rounded-2xl bg-slate-50 border border-slate-100 group-hover:bg-blue-50 group-hover:border-blue-100 group-hover:shadow-sm transition-all duration-300">
+                                <div className="text-blue-600 group-hover:text-blue-900 group-hover:scale-110 transition-all duration-300">
+                                    {tool.icon}
+                                </div>
                             </div>
-                            <span className="text-[10px] font-bold text-slate-500 group-hover:text-slate-800 transition-colors">{tool.label}</span>
-                        </div>
+
+                            {/* Label */}
+                            <span className="text-[11px] font-bold text-slate-500 group-hover:text-slate-900 transition-colors duration-300">
+                                {tool.label}
+                            </span>
+                        </button>
                     ))}
                 </div>
             </div>
