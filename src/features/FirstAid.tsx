@@ -1,197 +1,106 @@
+import BottomNav from "@/components/shared/BottomNav";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-    Activity,
-    AlertCircle,
-    ArrowLeft,
-    Bone,
-    ChevronLeft, ChevronRight, HeartPulse,
-    Search,
-    ShieldAlert,
-    Stethoscope,
-    Thermometer,
-    X
+  Activity,
+  AlertCircle,
+  ArrowLeft,
+  Bone,
+  ChevronLeft, ChevronRight, HeartPulse,
+  Search,
+  ShieldAlert,
+  Stethoscope,
+  Thermometer
 } from 'lucide-react';
 import React, { useState } from 'react';
 
-// --- MOCK DATA DATABASE ---
+// --- MOCK DATA ---
 const firstAidData = [
   {
-    id: 1,
-    title: "Ankle Sprain",
-    category: "Joints",
-    severity: "Moderate",
+    id: 1, title: "Ankle Sprain", category: "Joints", severity: "Moderate",
     icon: <Activity className="text-orange-500" />,
-    symptoms: ["Swelling", "Bruising", "Pain when bearing weight", "Restricted range of motion"],
-    treatment: [
-      "R.I.C.E Protocol: Rest, Ice, Compression, Elevation.",
-      "Apply ice for 15-20 minutes every 2-3 hours.",
-      "Wrap with a compression bandage (not too tight).",
-      "Elevate the leg above heart level."
-    ],
-    warning: "If unable to walk more than 4 steps, seek X-ray for fracture."
+    symptoms: ["Swelling", "Bruising", "Pain on weight", "Restricted motion"],
+    treatment: ["R.I.C.E Protocol", "Ice 15-20 mins", "Compression wrap", "Elevate leg"],
+    warning: "Seek X-ray if unable to walk >4 steps."
   },
   {
-    id: 2,
-    title: "Muscle Cramp",
-    category: "Muscle",
-    severity: "Mild",
+    id: 2, title: "Muscle Cramp", category: "Muscle", severity: "Mild",
     icon: <Activity className="text-yellow-500" />,
-    symptoms: ["Sudden, sharp pain", "Hard lump of muscle tissue", "Inability to use muscle"],
-    treatment: [
-      "Stop activity immediately.",
-      "Gently stretch and massage the cramping muscle.",
-      "Apply heat to tight muscles, or cold to sore muscles.",
-      "Hydrate with water or electrolyte drink."
-    ],
-    warning: "Do not force the muscle if pain is excruciating."
+    symptoms: ["Sudden sharp pain", "Hard lump", "Muscle lock"],
+    treatment: ["Stop activity", "Stretch & massage", "Apply heat/cold", "Hydrate"],
+    warning: "Do not force muscle if pain is excruciating."
   },
   {
-    id: 3,
-    title: "Concussion",
-    category: "Head Trauma",
-    severity: "Critical",
+    id: 3, title: "Concussion", category: "Head Trauma", severity: "Critical",
     icon: <ShieldAlert className="text-red-600" />,
-    symptoms: ["Headache", "Confusion", "Dizziness", "Nausea", "Sensitivity to light"],
-    treatment: [
-      "Remove athlete from play immediately (No return same day).",
-      "Monitor for deteriorating condition.",
-      "Rest typically 24-48 hours.",
-      "Avoid screens and bright lights."
-    ],
-    warning: "Call 911 if: Loss of consciousness, repeated vomiting, or worsening headache."
+    symptoms: ["Confusion", "Dizziness", "Nausea", "Light sensitivity"],
+    treatment: ["Remove from play", "Monitor condition", "Rest 24-48h", "No screens"],
+    warning: "Call 911 if unconscious or vomiting."
   },
   {
-    id: 4,
-    title: "Heat Exhaustion",
-    category: "Environmental",
-    severity: "High",
+    id: 4, title: "Heat Exhaustion", category: "Environmental", severity: "High",
     icon: <Thermometer className="text-red-500" />,
-    symptoms: ["Heavy sweating", "Pale skin", "Muscle cramps", "Dizziness", "Fainting"],
-    treatment: [
-      "Move to a cool, shaded place.",
-      "Loosen clothing.",
-      "Sip cool water (do not chug).",
-      "Apply cool wet cloths to neck and forehead."
-    ],
-    warning: "If not treated, can progress to Heat Stroke (Life Threatening)."
+    symptoms: ["Heavy sweating", "Pale skin", "Dizziness", "Fainting"],
+    treatment: ["Move to cool shade", "Loosen clothes", "Sip water", "Cool wet cloths"],
+    warning: "Can progress to Heat Stroke (Life Threatening)."
   },
   {
-    id: 5,
-    title: "Nosebleed",
-    category: "Trauma",
-    severity: "Mild",
+    id: 5, title: "Nosebleed", category: "Trauma", severity: "Mild",
     icon: <HeartPulse className="text-red-400" />,
-    symptoms: ["Bleeding from nostril", "Iron taste in throat"],
-    treatment: [
-      "Sit upright and lean forward slightly (do NOT tilt head back).",
-      "Pinch the soft part of the nose for 10-15 minutes.",
-      "Breathe through the mouth.",
-      "Apply ice pack to bridge of nose."
-    ],
-    warning: "Seek help if bleeding doesn't stop after 20 minutes."
+    symptoms: ["Nostril bleeding", "Iron taste"],
+    treatment: ["Lean forward", "Pinch nose soft part", "Breathe via mouth", "Ice bridge"],
+    warning: "Seek help if bleeding > 20 mins."
   },
   {
-    id: 6,
-    title: "Bone Fracture",
-    category: "Trauma",
-    severity: "Severe",
+    id: 6, title: "Bone Fracture", category: "Trauma", severity: "Severe",
     icon: <Bone className="text-slate-500" />,
-    symptoms: ["Deformity", "Swelling", "Bruising", "Grinding sensation"],
-    treatment: [
-      "Immobilize the area (Splint if trained).",
-      "Stop any bleeding with sterile pressure.",
-      "Apply ice packs to limit swelling.",
-      "Treat for shock (lay down, keep warm)."
-    ],
+    symptoms: ["Deformity", "Swelling", "Grinding feel"],
+    treatment: ["Immobilize/Splint", "Stop bleeding", "Ice packs", "Treat shock"],
     warning: "Do not try to realign the bone yourself."
   },
   {
-    id: 7,
-    title: "Blisters",
-    category: "Skin",
-    severity: "Mild",
+    id: 7, title: "Blisters", category: "Skin", severity: "Mild",
     icon: <Activity className="text-blue-400" />,
-    symptoms: ["Fluid-filled bubble", "Pain", "Redness"],
-    treatment: [
-      "Clean area with soap and water.",
-      "Cover with a blister pad or donut bandage.",
-      "Do not pop the blister unless necessary for drainage."
-    ],
-    warning: "If it pops, keep clean and apply antibiotic ointment."
+    symptoms: ["Fluid bubble", "Pain", "Redness"],
+    treatment: ["Clean area", "Cover with pad", "Don't pop"],
+    warning: "If popped, apply antibiotic ointment."
   },
   {
-    id: 8,
-    title: "Dislocation",
-    category: "Joints",
-    severity: "Severe",
+    id: 8, title: "Dislocation", category: "Joints", severity: "Severe",
     icon: <Bone className="text-orange-600" />,
-    symptoms: ["Visibly out of place", "Intense pain", "Immovable joint"],
-    treatment: [
-      "Do not move the joint.",
-      "Ice the area to control swelling.",
-      "Immobilize in the position found."
-    ],
-    warning: "Seek immediate medical attention. Do not pop back in."
+    symptoms: ["Out of place", "Intense pain", "Immovable"],
+    treatment: ["Don't move joint", "Ice area", "Immobilize as found"],
+    warning: "Seek medical help. Do not pop back in."
   },
   {
-    id: 9,
-    title: "Hypothermia",
-    category: "Environmental",
-    severity: "Critical",
+    id: 9, title: "Hypothermia", category: "Environmental", severity: "Critical",
     icon: <Thermometer className="text-blue-600" />,
-    symptoms: ["Shivering", "Confusion", "Slurred speech", "Slow breathing"],
-    treatment: [
-      "Move to warm area.",
-      "Remove wet clothing.",
-      "Warm the center of the body first (chest, neck, groin).",
-      "Give warm (non-alcoholic) beverages."
-    ],
-    warning: "Handle gently; rough handling can trigger cardiac arrest."
+    symptoms: ["Shivering", "Confusion", "Slurred speech"],
+    treatment: ["Warm area", "Remove wet clothes", "Warm center body", "Warm drink"],
+    warning: "Handle gently; rough handling risks cardiac arrest."
   },
   {
-    id: 10,
-    title: "Asthma Attack",
-    category: "Respiratory",
-    severity: "High",
+    id: 10, title: "Asthma Attack", category: "Respiratory", severity: "High",
     icon: <Activity className="text-purple-500" />,
-    symptoms: ["Wheezing", "Coughing", "Shortness of breath", "Chest tightness"],
-    treatment: [
-      "Sit person upright.",
-      "Help them use their rescue inhaler.",
-      "Keep them calm."
-    ],
-    warning: "If no improvement after 10 puffs or 15 mins, call Emergency Services."
+    symptoms: ["Wheezing", "Short breath", "Chest tight"],
+    treatment: ["Sit upright", "Use inhaler", "Keep calm"],
+    warning: "No improvement > 15 mins? Call Emergency."
   },
   {
-    id: 11,
-    title: "Abrasion / Road Rash",
-    category: "Skin",
-    severity: "Mild",
+    id: 11, title: "Abrasion", category: "Skin", severity: "Mild",
     icon: <HeartPulse className="text-pink-500" />,
-    symptoms: ["Raw skin", "Bleeding", "Stinging pain"],
-    treatment: [
-      "Clean with water to remove debris.",
-      "Apply antibiotic ointment.",
-      "Cover with non-stick sterile bandage."
-    ],
-    warning: "Watch for signs of infection (pus, increasing redness)."
+    symptoms: ["Raw skin", "Bleeding", "Stinging"],
+    treatment: ["Clean debris", "Antibiotic ointment", "Non-stick bandage"],
+    warning: "Watch for signs of infection."
   },
   {
-    id: 12,
-    title: "Choking",
-    category: "Emergency",
-    severity: "Critical",
+    id: 12, title: "Choking", category: "Emergency", severity: "Critical",
     icon: <AlertCircle className="text-red-600" />,
-    symptoms: ["Hands clutched to throat", "Inability to talk", "Blue lips"],
-    treatment: [
-      "Give 5 back blows.",
-      "Give 5 abdominal thrusts (Heimlich Maneuver).",
-      "Repeat until object is cleared."
-    ],
-    warning: "If they fall unconscious, start CPR."
+    symptoms: ["Clutching throat", "Silent", "Blue lips"],
+    treatment: ["5 Back blows", "5 Abdominal thrusts", "Repeat"],
+    warning: "Unconscious? Start CPR."
   }
 ];
 
@@ -200,10 +109,10 @@ export default function FirstAid() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedInjury, setSelectedInjury] = useState<typeof firstAidData[0] | null>(null);
 
-  const ITEMS_PER_PAGE = 6;
+  const ITEMS_PER_PAGE = 8; // Increased slightly for compact grid
 
   // --- Filter Logic ---
-  const filteredData = firstAidData.filter(item => 
+  const filteredData = firstAidData.filter(item =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -218,167 +127,144 @@ export default function FirstAid() {
     if (direction === 'prev' && currentPage > 1) setCurrentPage(p => p - 1);
   };
 
-  // --- Detail View Component (Overlay) ---
-  const DetailView = ({ item, onClose }: { item: typeof firstAidData[0], onClose: () => void }) => (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div 
-        className="bg-white w-full max-w-lg h-[90vh] sm:h-auto sm:max-h-[85vh] sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-10 duration-300"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="p-6 bg-slate-50 border-b border-slate-100 flex justify-between items-start">
-          <div className="flex gap-4">
-            <div className="h-12 w-12 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center">
-              {React.cloneElement(item.icon as React.ReactElement, { className: "h-6 w-6" })}
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-slate-900">{item.title}</h2>
-              <div className="flex gap-2 mt-1">
-                <Badge variant="secondary" className="bg-slate-200 text-slate-600 text-[10px]">{item.category}</Badge>
-                <Badge variant="outline" className={`text-[10px] border-none ${
-                  item.severity === 'Critical' ? 'bg-red-100 text-red-700' :
-                  item.severity === 'Severe' ? 'bg-orange-100 text-orange-700' :
-                  'bg-blue-100 text-blue-700'
-                }`}>
-                  {item.severity}
-                </Badge>
-              </div>
-            </div>
-          </div>
-          <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-slate-200">
-            <X className="h-5 w-5 text-slate-500" />
+  // --- VIEW: DETAIL PAGE (No Dialogs) ---
+  if (selectedInjury) {
+    return (
+      <div className="min-h-screen bg-white text-zinc-900 font-sans animate-in slide-in-from-right-4 duration-300">
+        {/* Sticky Header */}
+        <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-zinc-100 px-4 h-14 flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 -ml-1 rounded-full hover:bg-zinc-100"
+            onClick={() => setSelectedInjury(null)}
+          >
+            <ArrowLeft className="h-5 w-5 text-zinc-600" />
           </Button>
+          <span className="font-bold text-sm text-zinc-900">Emergency Guide</span>
         </div>
 
-        {/* Content */}
-        <ScrollArea className="flex-1 p-6">
-          <div className="space-y-6">
-            
-            {/* Warning Box */}
-            <div className="bg-red-50 border border-red-100 p-4 rounded-xl flex gap-3">
-              <AlertCircle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
-              <div>
-                <h4 className="font-bold text-red-700 text-sm mb-1">Critical Warning</h4>
-                <p className="text-red-600/90 text-sm leading-relaxed">{item.warning}</p>
+        <ScrollArea className="h-[calc(100vh-3.5rem)]">
+          <div className="p-5 pb-20 space-y-6">
+            {/* Title Section */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="h-10 w-10 bg-zinc-50 rounded-lg border border-zinc-100 flex items-center justify-center">
+                  {React.cloneElement(selectedInjury.icon as React.ReactElement, { className: "h-5 w-5" })}
+                </div>
+                <Badge variant="outline" className={`text-[10px] px-2 py-0.5 border-none ${selectedInjury.severity === 'Critical' ? 'bg-red-100 text-red-700' :
+                  selectedInjury.severity === 'Severe' || selectedInjury.severity === 'High' ? 'bg-orange-100 text-orange-700' :
+                    'bg-blue-50 text-blue-700'
+                  }`}>
+                  {selectedInjury.severity}
+                </Badge>
               </div>
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight text-zinc-900">{selectedInjury.title}</h1>
+                <p className="text-xs font-medium text-zinc-400 mt-1 uppercase tracking-wide">{selectedInjury.category}</p>
+              </div>
+            </div>
+
+            {/* Critical Warning */}
+            <div className="bg-red-50/80 border border-red-100 p-3 rounded-lg flex gap-3">
+              <AlertCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
+              <p className="text-xs text-red-700 font-medium leading-relaxed">{selectedInjury.warning}</p>
             </div>
 
             {/* Symptoms */}
-            <div>
-              <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-3 flex items-center gap-2">
-                <Stethoscope className="h-4 w-4 text-blue-500" /> Symptoms
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider flex items-center gap-2">
+                <Stethoscope className="h-3 w-3 text-zinc-400" /> Symptoms
               </h3>
-              <ul className="grid grid-cols-1 gap-2">
-                {item.symptoms.map((sym, i) => (
-                  <li key={i} className="flex items-center gap-2 text-slate-600 text-sm bg-slate-50 p-2 rounded-lg border border-slate-100">
-                    <div className="h-1.5 w-1.5 rounded-full bg-slate-300" />
+              <div className="grid grid-cols-2 gap-2">
+                {selectedInjury.symptoms.map((sym, i) => (
+                  <div key={i} className="bg-zinc-50 border border-zinc-100/50 p-2 rounded-md text-xs font-medium text-zinc-600">
                     {sym}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Treatment Steps */}
-            <div>
-              <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-3 flex items-center gap-2">
-                <Activity className="h-4 w-4 text-green-500" /> Immediate Action
-              </h3>
-              <div className="space-y-3">
-                {item.treatment.map((step, i) => (
-                  <div key={i} className="flex gap-3">
-                    <div className="flex-none h-6 w-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold shadow-md shadow-slate-900/20">
-                      {i + 1}
-                    </div>
-                    <p className="text-slate-700 text-sm pt-0.5 leading-relaxed font-medium">
-                      {step}
-                    </p>
                   </div>
                 ))}
               </div>
             </div>
 
+            {/* Treatment */}
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider flex items-center gap-2">
+                <Activity className="h-3 w-3 text-zinc-400" /> Action Plan
+              </h3>
+              <div className="space-y-2">
+                {selectedInjury.treatment.map((step, i) => (
+                  <div key={i} className="flex gap-3 items-start p-3 bg-white border border-zinc-100 rounded-lg shadow-sm">
+                    <span className="flex-none flex items-center justify-center h-5 w-5 rounded-full bg-zinc-900 text-white text-[10px] font-bold">
+                      {i + 1}
+                    </span>
+                    <p className="text-sm text-zinc-700 font-medium leading-snug">{step}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </ScrollArea>
 
         {/* Footer Action */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
-          <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl" onClick={onClose}>
-            I Understand
+        <div className="fixed bottom-6 left-0 right-0 left-1/2 -translate-x-1/2 max-w-80 p-4  border-zinc-100">
+          <Button className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg text-xs font-bold" onClick={() => setSelectedInjury(null)}>
+            Done
           </Button>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 
+  // --- VIEW: MAIN LIST ---
   return (
-    <div className="relative min-h-screen bg-slate-50 text-slate-900 font-sans pb-10">
-      
-      {/* --- HEADER --- */}
-      <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-lg border-b border-slate-200">
-        <div className="px-4 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" className="-ml-2 hover:bg-slate-100 rounded-full" onClick={() => console.log('Back')}>
-              <ArrowLeft className="h-5 w-5 text-slate-600" />
-            </Button>
-            <h1 className="text-lg font-bold text-slate-900">First Aid Guide</h1>
-          </div>
-          <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center">
-            <HeartPulse className="h-4 w-4 text-red-500" />
+    <div className="min-h-screen bg-zinc-50/50 pb-20 font-sans">
+      {/* Header */}
+      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-zinc-100 px-4 py-3 flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <h1 className="text-lg font-bold text-zinc-900 tracking-tight">First Aid</h1>
+          <div className="h-7 w-7 bg-red-50 rounded-full flex items-center justify-center border border-red-100">
+            <HeartPulse className="h-3.5 w-3.5 text-red-500" />
           </div>
         </div>
-      </header>
-
-      {/* --- SEARCH BAR --- */}
-      <div className="px-4 py-4 sticky top-14 z-20 bg-slate-50">
-        <div className="relative shadow-sm shadow-slate-200/50 rounded-xl group">
-          <div className="absolute left-3 top-2.5 text-slate-400 group-focus-within:text-blue-500 transition-colors">
-            <Search className="h-5 w-5" />
-          </div>
-          <Input 
-            placeholder="Search sprain, cut, concussion..." 
+        <div className="relative">
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
+          <Input
+            placeholder="Search injury..."
             value={searchTerm}
             onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-            className="pl-10 h-11 bg-white border-none rounded-xl focus-visible:ring-2 focus-visible:ring-blue-500 text-base"
+            className="pl-9 h-9 text-sm bg-zinc-50 border-zinc-200 rounded-lg focus-visible:ring-1 focus-visible:ring-zinc-900"
           />
         </div>
       </div>
 
-      {/* --- CONTENT GRID --- */}
-      <div className="px-4 pb-24">
+      {/* Grid Content */}
+      <div className="px-4 pt-4">
         {filteredData.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
-            <Search className="h-12 w-12 text-slate-300 mb-2" />
-            <p className="text-slate-500 font-medium">No results found</p>
+          <div className="py-20 text-center opacity-40">
+            <p className="text-sm font-medium text-zinc-500">No results found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2.5">
             {currentItems.map((item) => (
-              <div 
+              <div
                 key={item.id}
                 onClick={() => setSelectedInjury(item)}
-                className="bg-white p-4 rounded-2xl border border-slate-100 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] active:scale-[0.98] transition-all duration-200 cursor-pointer hover:shadow-md hover:border-blue-100 group"
+                className="bg-white p-3 rounded-2xl border border-zinc-100 shadow-sm active:scale-95 transition-transform duration-200 cursor-pointer flex flex-col justify-between h-28 relative overflow-hidden group"
               >
-                <div className="flex items-start justify-between mb-2">
-                  <div className="p-2 bg-slate-50 rounded-xl group-hover:bg-blue-50 transition-colors">
-                    {React.cloneElement(item.icon as React.ReactElement, { className: "h-5 w-5" })}
+                <div className={`absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-transparent to-white/50 z-0 pointer-events-none rounded-bl-3xl opacity-50 ${item.severity === 'Critical' ? 'from-red-50/50' : 'from-zinc-50/50'
+                  }`} />
+
+                <div className="relative z-10">
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="text-zinc-400 group-hover:text-zinc-600 transition-colors">
+                      {React.cloneElement(item.icon as React.ReactElement, { className: "h-4 w-4" })}
+                    </div>
+                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${item.severity === 'Critical' ? 'bg-red-50 text-red-600' : 'bg-zinc-50 text-zinc-500'
+                      }`}>
+                      {item.severity === 'Critical' ? 'CRITICAL' : item.severity}
+                    </span>
                   </div>
-                  <Badge variant="outline" className={`font-semibold border-none ${
-                    item.severity === 'Critical' ? 'bg-red-50 text-red-600' :
-                    item.severity === 'Severe' ? 'bg-orange-50 text-orange-600' :
-                    'bg-slate-100 text-slate-600'
-                  }`}>
-                    {item.severity}
-                  </Badge>
-                </div>
-                
-                <h3 className="font-bold text-slate-900 text-lg mb-1">{item.title}</h3>
-                <p className="text-xs text-slate-500 font-medium mb-3 line-clamp-1">{item.treatment[0]}</p>
-                
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="bg-slate-100 text-slate-500 text-[10px] h-5 px-2">{item.category}</Badge>
-                  <span className="text-[10px] text-blue-600 font-bold ml-auto flex items-center">
-                    Read Guide <ChevronRight className="h-3 w-3 ml-0.5" />
-                  </span>
+                  <h3 className="font-bold text-zinc-800 text-sm leading-tight mb-0.5">{item.title}</h3>
+                  <p className="text-[10px] text-zinc-400 font-medium">{item.category}</p>
                 </div>
               </div>
             ))}
@@ -386,39 +272,32 @@ export default function FirstAid() {
         )}
       </div>
 
-      {/* --- PAGINATION FOOTER --- */}
-      {filteredData.length > 0 && (
-        <div className="fixed bottom-8 left-0 shadow-lg shadow-black/40 w-full rounded-4xl left-1/2 -translate-x-1/2 max-w-80 bg-white border-t border-slate-100 p-4 flex items-center justify-between pb-8 z-10">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={() => handlePageChange('prev')}
-            disabled={currentPage === 1}
-            className="rounded-full px-4 h-9 border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-30"
-          >
-            <ChevronLeft className="h-4 w-4 mr-1" /> Prev
-          </Button>
-          
-          <span className="text-xs font-bold text-slate-400">
-            Page <span className="text-slate-900">{currentPage}</span> of {totalPages}
-          </span>
-          
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={() => handlePageChange('next')}
-            disabled={currentPage === totalPages}
-            className="rounded-full px-4 h-9 border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-30"
-          >
-            Next <ChevronRight className="h-4 w-4 ml-1" />
-          </Button>
+      {/* Tiny Pagination */}
+      {filteredData.length > 0 && totalPages > 1 && (
+        <div className=" mx-auto flex justify-center mt-6 z-20">
+          <div className="flex items-center gap-3 bg-zinc-900/90 backdrop-blur text-white px-3 py-1.5 rounded-full shadow-lg shadow-zinc-900/20">
+            <button
+              onClick={() => handlePageChange('prev')}
+              disabled={currentPage === 1}
+              className="p-1 hover:text-zinc-300 disabled:opacity-30 disabled:hover:text-white transition-colors"
+            >
+              <ChevronLeft className="h-3 w-3" />
+            </button>
+            <span className="text-[10px] font-bold tabular-nums tracking-widest opacity-90">
+              {currentPage} / {totalPages}
+            </span>
+            <button
+              onClick={() => handlePageChange('next')}
+              disabled={currentPage === totalPages}
+              className="p-1 hover:text-zinc-300 disabled:opacity-30 disabled:hover:text-white transition-colors"
+            >
+              <ChevronRight className="h-3 w-3" />
+            </button>
+          </div>
         </div>
       )}
 
-      {/* --- OVERLAY RENDERING --- */}
-      {selectedInjury && (
-        <DetailView item={selectedInjury} onClose={() => setSelectedInjury(null)} />
-      )}
+      <BottomNav/>
     </div>
   );
 }

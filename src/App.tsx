@@ -13,13 +13,13 @@ const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
         md:w-[380px] md:h-[650px]  md:border-12  md:border-gray-900 md:rounded-[3rem] 
         md:shadow-2xl md:overflow-hidden ring-1 ring-black/5"
       >
-        
+
         {/* --- DECORATIONS (Hidden on Mobile) --- */}
-        
+
         {/* Dynamic Island / Notch */}
         <div className="hidden md:flex absolute top-0 left-1/2 transform -translate-x-1/2 h-[35px] w-[120px] bg-black rounded-b-[18px] z-50 items-center justify-center pointer-events-none">
-           <div className="w-16 h-4 bg-black rounded-full" />
-           <div className="absolute right-3 w-3 h-3 rounded-full bg-gray-900 ring-1 ring-gray-800/50" />
+          <div className="w-16 h-4 bg-black rounded-full" />
+          <div className="absolute right-3 w-3 h-3 rounded-full bg-gray-900 ring-1 ring-gray-800/50" />
         </div>
 
         {/* Buttons (Volume/Power) */}
@@ -39,7 +39,7 @@ const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         {/* --- CONTENT AREA --- */}
-        <div className="h-full w-full overflow-y-auto no-scrollbar md:pt-12 md:pb-8">
+        <div className="h-full w-full overflow-y-auto no-scrollbar md:pt-8 md:pb-8">
           {children}
         </div>
 

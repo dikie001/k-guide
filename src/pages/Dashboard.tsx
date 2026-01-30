@@ -119,11 +119,16 @@ export default function Dashboard() {
 
             {/* --- DAILY INSIGHTS (Horizontal Scroll) --- */}
             <div className="py-2">
-                <div className="px-6 flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-bold text-slate-800 ml-1">Daily Insights</h3>
-                    <button
+                <div className="px-4 flex items-center justify-between">
+                    {/* Section Header with Accent */}
+                    <div className="flex items-center gap-2 mb-4 pl-1">
+                        <div className="w-1 h-4 bg-blue-600 rounded-full shadow-sm shadow-blue-200" />
+                        <h3 className="text-sm font-extrabold text-slate-900 tracking-tight">
+                            Daily Insights
+                        </h3>
+                    </div>        <button
                         onClick={() => handleRoute('insights')}
-                        className="text-[10px] font-bold text-slate-400 hover:text-blue-600 active:text-blue-700 transition-colors py-1 px-2 -mr-2 active:bg-slate-100 rounded"
+                        className="text-[10px] font-bold text-zinc-400 hover:text-blue-600 active:text-blue-700 transition-colors py-1 px-2 -mr-2 active:bg-zinc-100 rounded"
                     >
                         View all
                     </button>
@@ -134,13 +139,13 @@ export default function Dashboard() {
                             <div
                                 key={index}
                                 onClick={() => handleRoute(item.route)}
-                                className={`w-28 bg-white p-3 rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] border border-slate-50 flex flex-col justify-between h-24 cursor-pointer active:scale-95 transition-all duration-300 hover:shadow-xl border-b-4 ${item.color}`}
+                                className={`w-28 bg-white p-3 rounded-2xl shadow-[0_2px_15px_-4px_rgba(0,0,0,0.05)] border border-zinc-100 flex flex-col justify-between h-24 cursor-pointer active:scale-95 transition-all duration-300 hover:shadow-lg border-b-2 ${item.color}`}
                             >
                                 <div className="leading-tight">
-                                    <p className="text-xs font-bold text-slate-800">{item.title}</p>
-                                    <p className="text-[10px] font-bold text-slate-400">{item.subtitle}</p>
+                                    <p className="text-xs font-bold text-zinc-800">{item.title}</p>
+                                    <p className="text-[10px] font-bold text-zinc-400">{item.subtitle}</p>
                                 </div>
-                                <div className="self-end p-1.5 bg-slate-50 rounded-full group-hover:bg-white transition-colors">
+                                <div className="self-end p-1.5 bg-zinc-50 rounded-full group-hover:bg-white transition-colors">
                                     {item.icon}
                                 </div>
                             </div>
