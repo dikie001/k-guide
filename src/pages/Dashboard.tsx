@@ -156,7 +156,7 @@ export default function Dashboard() {
             </div>
 
             {/* --- RECENT ACTIVITIES --- */}
-            <div className="px-6 pb-6">
+            <div className="px-4 pb-2">
                 <div className="flex items-center justify-between mb-2">
                     <h3 className="text-sm font-bold text-slate-800 ml-1">Recent Activities</h3>
                     <button
