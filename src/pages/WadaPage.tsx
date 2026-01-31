@@ -7,12 +7,10 @@ import {
     Bookmark,
     ChevronRight,
     ClipboardList,
-    Globe,
     Megaphone,
     Pill,
     Search
 } from "lucide-react";
-import { useEffect } from "react";
 
 // --- MOCK DATA ---
 const updates = [
