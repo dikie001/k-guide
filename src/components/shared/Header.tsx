@@ -9,7 +9,7 @@ const Header = () => {
         navigate(route)
     };
     return (
-        <header className="sticky -top-12 z-50 w-full bg-slate-50/80 backdrop-blur-2xl border-b border-slate-200/50 flex items-center justify-between px-5 py-2 transition-all duration-300 supports-[backdrop-filter]:bg-slate-50/60">
+        <header className="sticky top-0 z-50 w-full bg-background  border-b border-slate-200/50 flex items-center justify-between px-5 py-2 transition-all duration-300 supports-[backdrop-filter]:bg-background">
 
             {/* Brand Identity */}
             <div className="flex items-center gap-2.5">

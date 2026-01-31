@@ -29,7 +29,7 @@ const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
         <div className="hidden md:block absolute -right-[17px] top-[180px] h-[95px] w-[3px] bg-gray-800 rounded-r-lg" />
 
         {/* Status Bar (Desktop Only - Mobile has its own real one) */}
-        <div className="hidden md:flex justify-between items-center px-8 pt-3 pb-1 w-full absolute top-0 z-40 text-black font-semibold text-xs select-none pointer-events-none">
+        <div className="hidden md:flex bg-background justify-between items-center px-8 pt-3 pb-1 w-full absolute top-0 z-40 text-black font-semibold text-xs select-none pointer-events-none">
           <span className="pl-1">9:41</span>
           <div className="flex items-center gap-1.5 pr-1">
             <Signal className="w-3.5 h-3.5" />

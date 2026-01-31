@@ -1,16 +1,14 @@
 import BottomNav from "@/components/shared/BottomNav";
+import Header from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-    Bell,
-    Bookmark,
     ChevronRight,
     ClipboardList,
     Megaphone,
-    Pill,
-    Search
+    Pill
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // --- MOCK DATA ---
 const updates = [
@@ -53,39 +51,17 @@ const blogs = [
 ];
 
 export default function WadaPage() {
-   
+    const navigate = useNavigate()
+
     return (
         // OUTER WRAPPER: Centers content on desktop, handles background
-        <div className="max-h-screen w-full pt-46 bg-slate-100 flex items-center justify-center">
-            
+        <div className="min-h-screen w-full flex flex-col  bg-slate-100 flex items-center justify-center">
+            <Header />
+
             {/* MOBILE CONTAINER: Constrains width to look like an app on all screens */}
             <div className="w-full max-w-md h-full bg-white shadow-2xl overflow-hidden flex flex-col relative">
 
                 {/* 1. Header */}
-                <div className="shrink-0 z-30 bg-white/80 backdrop-blur-md px-4 py-3 flex items-center justify-between gap-3 border-b border-slate-100 sticky top-0">
-                    <div className="flex items-center gap-1">
-                        <span className="text-xl font-black text-blue-600 tracking-tighter">K</span>
-                        <span className="text-lg font-bold text-slate-900">-Guide</span>
-                    </div>
-
-                    <div className="flex-1 max-w-[180px] relative">
-                        <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
-                        <Input
-                            placeholder="Search..."
-                            className="h-9 pl-9 bg-slate-100 border-none rounded-full text-xs font-medium focus-visible:ring-1 focus-visible:ring-blue-500 placeholder:text-slate-400"
-                        />
-                    </div>
-
-                    <div className="flex items-center gap-0.5">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-slate-100 text-slate-600">
-                            <Bookmark className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-slate-100 text-slate-600 relative">
-                            <Bell className="h-4 w-4" />
-                            <span className="absolute top-2 right-2.5 h-1.5 w-1.5 bg-red-500 rounded-full border border-white"></span>
-                        </Button>
-                    </div>
-                </div>
 
                 {/* Main Scrollable Content */}
                 <ScrollArea className="flex-1 w-full">
@@ -97,7 +73,7 @@ export default function WadaPage() {
                                 <h2 className="text-sm font-bold text-slate-900">Recent Updates</h2>
                                 <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wide cursor-pointer">View All</span>
                             </div>
-                            
+
                             <div className="grid grid-cols-2  pb-2 ">
                                 {updates.map(item => (
                                     <div key={item.id} className={` ${item.color} rounded-xl flex items-center mx-auto flex-col gap-2 p-3 relative  border border-black/5 active:scale-95 transition-transform duration-200`}>
@@ -129,7 +105,7 @@ export default function WadaPage() {
                                     <p className="text-xs text-slate-500 mb-3 leading-snug">
                                         Check substances against the 2026 Prohibited List.
                                     </p>
-                                    <Button size="sm" className="h-8 px-4 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-[10px] uppercase font-bold tracking-wide w-full">
+                                    <Button onClick={() => navigate("/substance-database")} size="sm" className="h-8 px-4 rounded-full cursor-pointer bg-slate-900 hover:bg-slate-800 text-white text-[10px] uppercase font-bold tracking-wide w-full">
                                         Open Database <ChevronRight className="ml-1 h-3 w-3" />
                                     </Button>
                                 </div>
@@ -164,7 +140,7 @@ export default function WadaPage() {
 
                 {/* Wrapper ensures BottomNav stays inside the phone frame */}
                 <div className="absolute bottom-0 left-0 right-0 z-40">
-                   <BottomNav /> 
+                    <BottomNav />
                 </div>
             </div>
         </div>

@@ -1,5 +1,6 @@
 import FirstAid from "@/features/FirstAid";
 import ScanDopine from "@/features/ScanDopine";
+import SubstanceDatabase from "@/features/SubstanceDatabase";
 import Dashboard from "@/pages/Dashboard";
 import NotFound from "@/pages/NotFound";
 import ProfilePage from "@/pages/ProfilePage";
@@ -17,6 +18,7 @@ export const AppRoutes = () => {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/wada" element={<WadaPage />} />
+          <Route path="/substance-database" element={<SubstanceDatabase />} />
 
         </Routes>
       </Router>
