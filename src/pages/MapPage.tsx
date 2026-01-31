@@ -8,7 +8,6 @@ import {
     Crosshair,
     MapPin,
     Menu,
-    Navigation,
     PlusSquare,
     Search,
     Tent,
