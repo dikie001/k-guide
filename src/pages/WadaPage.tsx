@@ -16,13 +16,15 @@ const updates = [
         id: 1,
         title: "Prohibited List 2026",
         icon: <Pill className="h-6 w-6 text-orange-500" />,
-        color: "bg-orange-50"
+        color: "bg-orange-50",
+        to:"/prohibited-list"
     },
     {
         id: 2,
         title: "TUE Process Changes",
         icon: <Megaphone className="h-6 w-6 text-blue-500" />,
-        color: "bg-blue-50"
+        color: "bg-blue-50",
+        to:"/tue-process"
     },
     // {
     //     id: 3,
@@ -76,7 +78,7 @@ export default function WadaPage() {
 
                             <div className="grid grid-cols-2  pb-2 ">
                                 {updates.map(item => (
-                                    <div key={item.id} className={` ${item.color} rounded-xl flex items-center mx-auto flex-col gap-2 p-3 relative  border border-black/5 active:scale-95 transition-transform duration-200`}>
+                                    <button onClick={()=>navigate(item.to)} key={item.id} className={` ${item.color} rounded-xl flex items-center mx-auto flex-col gap-2 p-3 relative  border border-black/5 active:scale-95 transition-transform duration-200`}>
                                         <div className="flex-1 flex items-start pt-1">
                                             <div className="bg-white p-2 rounded-lg shadow-sm ring-1 ring-black/5">
                                                 {item.icon}
@@ -85,7 +87,7 @@ export default function WadaPage() {
                                         <p className="text-xs  font-bold text-slate-800 leading-tight">
                                             {item.title}
                                         </p>
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
                         </section>

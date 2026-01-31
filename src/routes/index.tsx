@@ -1,6 +1,8 @@
 import FirstAid from "@/features/FirstAid";
+import ProhibitedListPage from "@/features/ProhibitedList";
 import ScanDopine from "@/features/ScanDopine";
 import SubstanceDatabase from "@/features/SubstanceDatabase";
+import TueProcess from "@/features/TueProcess";
 import Dashboard from "@/pages/Dashboard";
 import NotFound from "@/pages/NotFound";
 import ProfilePage from "@/pages/ProfilePage";
@@ -19,6 +21,8 @@ export const AppRoutes = () => {
           <Route path="*" element={<NotFound />} />
           <Route path="/wada" element={<WadaPage />} />
           <Route path="/substance-database" element={<SubstanceDatabase />} />
+          <Route path="/tue-process" element={<TueProcess />} />
+          <Route path="/prohibited-list" element={<ProhibitedListPage />} />
 
         </Routes>
       </Router>
