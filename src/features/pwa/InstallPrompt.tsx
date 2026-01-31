@@ -48,7 +48,7 @@ export default function InstallPrompt() {
                         <div className="flex flex-col">
                             <h3 className="text-sm font-bold text-white">Install App</h3>
                             <p className="text-[11px] font-medium text-slate-300">
-                                90% Faster & Offline Mode
+                                Faster access and offline mode
                             </p>
                         </div>
                     </div>
