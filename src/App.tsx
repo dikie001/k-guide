@@ -50,10 +50,13 @@ const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+import InstallPrompt from "@/features/pwa/InstallPrompt";
+
 const App = () => {
   return (
     <PhoneFrame>
       <AppRoutes />
+      <InstallPrompt />
     </PhoneFrame>
   );
 };
