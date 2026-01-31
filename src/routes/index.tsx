@@ -4,6 +4,7 @@ import ScanDopine from "@/features/ScanDopine";
 import SubstanceDatabase from "@/features/SubstanceDatabase";
 import TueProcess from "@/features/TueProcess";
 import Dashboard from "@/pages/Dashboard";
+import MapPage from "@/pages/MapPage";
 import NotFound from "@/pages/NotFound";
 import ProfilePage from "@/pages/ProfilePage";
 import WadaPage from "@/pages/WadaPage";
@@ -23,6 +24,7 @@ export const AppRoutes = () => {
           <Route path="/substance-database" element={<SubstanceDatabase />} />
           <Route path="/tue-process" element={<TueProcess />} />
           <Route path="/prohibited-list" element={<ProhibitedListPage />} />
+          <Route path="/map" element={<MapPage />} />
 
         </Routes>
       </Router>
