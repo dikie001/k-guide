@@ -9,13 +9,15 @@ import {
   AlertTriangle,
   Ban,
   CheckCircle2,
+  ChevronLeft,
   ChevronRight,
-  Info,
-  Search
+  FlaskConical,
+  Search,
+  X,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
-// --- TYPES & MOCK DATA (Unchanged) ---
+// --- MOCK DATA (Same as before) ---
 type ComplianceStatus = "BANNED" | "CONDITIONAL" | "SAFE" | "TUE_REQUIRED";
 
 interface Substance {
@@ -27,82 +29,156 @@ interface Substance {
   inComp: boolean;
   outComp: boolean;
   threshold?: string;
-  lastUpdated: string;
+  description: string;
 }
 
 const CATEGORIES = [
   { id: "ALL", label: "All" },
-  { id: "S1", label: "Anabolic Agents" },
+  { id: "S1", label: "Anabolic" },
   { id: "S2", label: "Peptides" },
   { id: "S6", label: "Stimulants" },
   { id: "S9", label: "Glucocorticoids" },
+  { id: "S3", label: "Beta-2 Agonists" }, // Added to show scroll
+  { id: "M1", label: "Manipulation" },
 ];
 
-const SUBSTANCES: Substance[] = [
-  {
-    id: "1",
-    name: "Stanozolol",
-    category: "Anabolic Steroids",
-    code: "S1",
-    status: "BANNED",
-    inComp: true,
-    outComp: true,
-    lastUpdated: "Jan 2025",
-  },
-  {
-    id: "2",
-    name: "Pseudoephedrine",
-    category: "Stimulants",
-    code: "S6",
-    status: "CONDITIONAL",
-    inComp: true,
-    outComp: false,
-    threshold: "> 150 µg/mL",
-    lastUpdated: "Nov 2024",
-  },
-  {
-    id: "3",
-    name: "Salbutamol",
-    category: "Beta-2 Agonists",
-    code: "S3",
-    status: "TUE_REQUIRED",
-    inComp: true,
-    outComp: true,
-    threshold: "Max 1600µg",
-    lastUpdated: "Feb 2025",
-  },
-];
+const SUBSTANCES: Substance[] = Array.from({ length: 24 }).map((_, i) => ({
+  id: `${i + 1}`,
+  name: [
+    "Stanozolol", "Pseudoephedrine", "Salbutamol", "Caffeine", "EPO", 
+    "Clenbuterol", "Testosterone", "Cannabis", "Insulin", "Morphine",
+    "Furosemide", "Tamoxifen"
+  ][i % 12] + (i > 11 ? ` Type-${i}` : ""),
+  category: ["Anabolic Agents", "Stimulants", "Beta-2 Agonists", "Monitoring", "Peptide Hormones"][i % 5],
+  code: `S${(i % 9) + 1}`,
+  status: (["BANNED", "CONDITIONAL", "TUE_REQUIRED", "SAFE"] as const)[i % 4],
+  inComp: i % 4 !== 3,
+  outComp: i % 4 === 0 || i % 4 === 2,
+  threshold: i % 2 === 0 ? "> 150 ng/mL" : undefined,
+  description: "Used to treat various medical conditions but regulated in sports due to performance-enhancing effects.",
+}));
+
+// --- CUSTOM MODAL (Kept same as requested, focus is on list) ---
+const CustomDetailModal = ({ 
+  item, 
+  onClose 
+}: { 
+  item: Substance | null; 
+  onClose: () => void 
+}) => {
+  if (!item) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] md:max-w-90 w-full mx-auto flex items-end justify-center sm:items-center">
+      <div 
+        className="absolute inset-0 h-screen rounded-[50px] bg-slate-900/60 backdrop-blur-sm transition-opacity" 
+        onClick={onClose}
+      />
+      <div className="relative w-full max-w-md animate-in slide-in-from-bottom-10 bg-white p-6 rounded-t-[2rem] sm:rounded-[2rem] shadow-2xl">
+        <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-slate-200 sm:hidden" />
+        
+        <div className="flex items-start justify-between mb-6">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Badge variant="outline" className="border-slate-200 text-slate-500">
+                {item.code}
+              </Badge>
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                {item.category}
+              </span>
+            </div>
+            <h2 className="text-2xl font-black text-slate-900 leading-none">
+              {item.name}
+            </h2>
+          </div>
+          <button 
+            onClick={onClose}
+            className="rounded-full bg-slate-100 p-2 text-slate-500 hover:bg-slate-200"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className={cn(
+          "mb-6 flex items-center gap-3 rounded-2xl p-4",
+          item.status === 'BANNED' ? "bg-red-50 text-red-700" :
+          item.status === 'SAFE' ? "bg-green-50 text-green-700" :
+          "bg-amber-50 text-amber-700"
+        )}>
+          {item.status === 'BANNED' ? <Ban className="h-6 w-6" /> :
+           item.status === 'SAFE' ? <CheckCircle2 className="h-6 w-6" /> :
+           <AlertTriangle className="h-6 w-6" />}
+          <div>
+            <p className="text-xs font-bold opacity-70 uppercase">Global Status</p>
+            <p className="font-extrabold">{item.status.replace('_', ' ')}</p>
+          </div>
+        </div>
+
+        <p className="text-sm text-slate-500 leading-relaxed mb-6">
+          {item.description}
+        </p>
+
+        <Button className="w-full rounded-xl h-12 text-base font-bold bg-slate-900" onClick={onClose}>
+          Understood
+        </Button>
+      </div>
+    </div>
+  );
+};
 
 export default function SubstanceDatabasePage() {
   const [activeFilter, setActiveFilter] = useState("ALL");
+  const [page, setPage] = useState(1);
+  const [selectedItem, setSelectedItem] = useState<Substance | null>(null);
+  const itemsPerPage = 6;
+
+  const filteredData = useMemo(() => {
+    return SUBSTANCES.filter(s => activeFilter === "ALL" || s.code === activeFilter);
+  }, [activeFilter]);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const currentData = filteredData.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) setPage(newPage);
+  };
 
   return (
     <div className="flex h-screen w-full flex-col bg-slate-50 font-sans text-slate-900">
-      {/* 1. Compact Sticky Header */}
-      <div className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-slate-100">
+      
+      {/* 1. Header & Controls */}
+      <div className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-slate-200/60">
         <Header />
-        
-        <div className="px-4 pb-3 pt-1 space-y-3">
-          {/* Compact Search */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <Input 
-              placeholder="Search database..." 
-              className="h-10 rounded-xl border-slate-200 bg-slate-50 pl-9 text-sm focus-visible:ring-1 focus-visible:ring-slate-900 focus-visible:ring-offset-0"
-            />
+        <div className="px-4 pb-1 pt-1">
+          {/* Search */}
+          <div className="relative mb-2 group">
+             <div className="absolute left-3 top-1/2 -translate-y-1/2 bg-white p-1 rounded-md shadow-sm transition-all group-focus-within:scale-110 group-focus-within:text-indigo-600">
+                <Search className="h-3.5 w-3.5 text-slate-400 group-focus-within:text-indigo-600" />
+             </div>
+             <Input 
+               placeholder="Search database..." 
+               className=" rounded-2xl border-transparent bg-slate-100 pl-11 text-sm font-semibold shadow-inner focus:bg-white focus:border-slate-200 focus:shadow-lg transition-all"
+             />
           </div>
-
-          {/* Streamlined Categories (Scrollable Pills) */}
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4">
+          
+          {/* Categories - CUSTOM SCROLLBAR ADDED HERE */}
+          <div className="
+            flex gap-2 overflow-x-auto pb-2 -mx-4 px-4
+            [&::-webkit-scrollbar]:h-1.5
+            [&::-webkit-scrollbar-track]:bg-transparent
+            [&::-webkit-scrollbar-thumb]:bg-slate-200
+            [&::-webkit-scrollbar-thumb]:rounded-full
+            [&::-webkit-scrollbar-thumb]:hover:bg-slate-300
+          ">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setActiveFilter(cat.id)}
+                onClick={() => { setActiveFilter(cat.id); setPage(1); }}
                 className={cn(
-                  "flex-shrink-0 rounded-full px-3.5 py-1.5 text-[11px] font-bold transition-all border",
+                  "flex-shrink-0 rounded-xl px-4 py-2 text-[11px] font-bold uppercase tracking-wider transition-all duration-200 border",
                   activeFilter === cat.id
-                    ? "bg-slate-900 text-white border-slate-900 shadow-sm"
-                    : "bg-white text-slate-500 border-slate-200 hover:border-slate-300"
+                    ? "bg-slate-900 text-white border-slate-900 shadow-md transform -translate-y-0.5"
+                    : "bg-white text-slate-500 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                 )}
               >
                 {cat.label}
@@ -112,91 +188,101 @@ export default function SubstanceDatabasePage() {
         </div>
       </div>
 
-      {/* 2. Scrollable Content */}
-      <ScrollArea className="flex-1 w-full px-4">
-        <div className="pt-4 pb-24 space-y-3">
+      {/* 2. Scrollable List */}
+      <ScrollArea className="flex-1 w-full bg-slate-50/50">
+        <div className="p-4 pb-32 space-y-3">
           
-          <div className="flex items-center justify-between px-1 mb-2">
-             <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-               {SUBSTANCES.length} Records found
-             </h2>
-          </div>
-
-          {SUBSTANCES.map((item) => (
+          {currentData.map((item) => (
             <div 
               key={item.id}
-              className="relative overflow-hidden rounded-2xl border border-slate-100 bg-white p-3 shadow-sm transition-all active:scale-[0.99]"
+              onClick={() => setSelectedItem(item)}
+              // UPDATED CARD DESIGN
+              className={cn(
+                "group relative flex items-center justify-between rounded-xl bg-white p-4 shadow-sm border border-slate-100 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer overflow-hidden",
+                // Dynamic border color based on status
+                item.status === 'BANNED' ? 'border-l-[6px] border-l-red-500' : 
+                item.status === 'SAFE' ? 'border-l-[6px] border-l-green-500' : 
+                'border-l-[6px] border-l-amber-500'
+              )}
             >
-              {/* Card Header: Icon + Name + Badge */}
-              <div className="flex gap-3 mb-3">
-                {/* Status Icon Indicator */}
+              <div className="flex items-center gap-4">
+                {/* Icon Box */}
                 <div className={cn(
-                  "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
-                  item.status === 'BANNED' ? 'bg-red-50 text-red-500' : 
-                  item.status === 'SAFE' ? 'bg-green-50 text-green-500' :
-                  'bg-amber-50 text-amber-500'
+                  "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition-colors",
+                  item.status === 'BANNED' ? 'bg-red-50 text-red-600' :
+                  item.status === 'SAFE' ? 'bg-green-50 text-green-600' :
+                  'bg-amber-50 text-amber-600'
                 )}>
-                  {item.status === 'BANNED' ? <Ban className="h-5 w-5" /> : 
-                   item.status === 'SAFE' ? <CheckCircle2 className="h-5 w-5" /> :
-                   <Info className="h-5 w-5" />}
+                  <FlaskConical className="h-6 w-6" />
                 </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <h3 className="text-sm font-bold text-slate-900 truncate pr-2">
-                        {item.name}
-                      </h3>
-                      <div className="flex items-center gap-1.5 text-[10px] text-slate-500 mt-0.5">
-                        <span className="font-mono font-bold text-slate-400">{item.code}</span>
-                        <span className="h-0.5 w-0.5 rounded-full bg-slate-300" />
-                        <span className="truncate max-w-[120px]">{item.category}</span>
-                      </div>
-                    </div>
-                    
-                    {/* Status Badge */}
-                    <Badge variant="outline" className={cn(
-                      "h-5 border-0 px-2 text-[9px] font-extrabold uppercase tracking-wide",
-                       item.status === 'BANNED' ? 'bg-red-100 text-red-600' : 
-                       item.status === 'SAFE' ? 'bg-green-100 text-green-600' :
-                       'bg-amber-100 text-amber-700'
-                    )}>
-                      {item.status.replace('_', ' ')}
-                    </Badge>
+                
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-base font-bold text-slate-900 leading-tight group-hover:text-indigo-900 transition-colors">
+                    {item.name}
+                  </h3>
+                  <div className="flex flex-wrap items-center gap-2">
+                     <Badge variant="secondary" className="h-5 px-1.5 text-[10px] bg-slate-100 text-slate-500 font-bold border-0">
+                       {item.code}
+                     </Badge>
+                     <span className="text-[11px] font-medium text-slate-400">
+                       {item.category}
+                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* Threshold Warning (if exists) */}
-              {item.threshold && (
-                <div className="mb-3 flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-[10px] font-medium text-amber-700">
-                  <AlertTriangle className="h-3 w-3 shrink-0" />
-                  <span>Threshold: {item.threshold}</span>
-                </div>
-              )}
-
-              {/* Footer: Compliance Grid */}
-              <div className="mt-3 flex items-center divide-x divide-slate-100 border-t border-slate-50 pt-3">
-                <div className="flex flex-1 items-center justify-center gap-1.5">
-                  <div className={cn("h-1.5 w-1.5 rounded-full", item.inComp ? "bg-red-500" : "bg-green-500")} />
-                  <span className="text-[10px] font-medium text-slate-600">In-Comp</span>
-                </div>
-                <div className="flex flex-1 items-center justify-center gap-1.5">
-                  <div className={cn("h-1.5 w-1.5 rounded-full", item.outComp ? "bg-red-500" : "bg-green-500")} />
-                  <span className="text-[10px] font-medium text-slate-600">Out-Comp</span>
-                </div>
-                <div className="flex flex-1 items-center justify-end">
-                   <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-slate-300 hover:text-slate-600">
-                     <ChevronRight className="h-4 w-4" />
-                   </Button>
-                </div>
+              {/* Status & Arrow */}
+              <div className="flex flex-col items-end gap-1 pl-2">
+                 <div className={cn(
+                   "px-2 py-1 rounded-md text-[10px] font-extrabold uppercase tracking-wide",
+                   item.status === 'BANNED' ? "bg-red-100 text-red-700" :
+                   item.status === 'SAFE' ? "bg-green-100 text-green-700" :
+                   "bg-amber-100 text-amber-700"
+                 )}>
+                   {item.status === 'BANNED' ? "Banned" : item.status === 'SAFE' ? "Safe" : "Caution"}
+                 </div>
+                 <ChevronRight className="h-4 w-4 text-slate-300 transition-transform group-hover:translate-x-1" />
               </div>
             </div>
           ))}
-          
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-6 pt-8 pb-4">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => handlePageChange(page - 1)}
+                disabled={page === 1}
+                className="h-11 w-11 rounded-full border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-30"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </Button>
+              <div className="flex flex-col items-center">
+                 <span className="text-sm font-black text-slate-900">
+                   Page {page}
+                 </span>
+                 <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">
+                   of {totalPages}
+                 </span>
+              </div>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => handlePageChange(page + 1)}
+                disabled={page === totalPages}
+                className="h-11 w-11 rounded-full border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-30"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </Button>
+            </div>
+          )}
+
         </div>
         <BottomNav />
       </ScrollArea>
+
+      <CustomDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />
     </div>
   );
 }
