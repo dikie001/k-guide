@@ -17,7 +17,7 @@ const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
         {/* --- DECORATIONS (Hidden on Mobile) --- */}
 
         {/* Dynamic Island / Notch */}
-        <div className="hidden md:flex absolute top-0 left-1/2 transform -translate-x-1/2 h-[35px] w-[120px] bg-black rounded-b-[18px] z-50 items-center justify-center pointer-events-none">
+        <div className="hidden md:flex absolute top-0 left-1/2 transform -translate-x-1/2 h-[32px] w-[120px] bg-black rounded-b-[18px] z-50 items-center justify-center pointer-events-none">
           <div className="w-16 h-4 bg-black rounded-full" />
           <div className="absolute right-3 w-3 h-3 rounded-full bg-gray-900 ring-1 ring-gray-800/50" />
         </div>

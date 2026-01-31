@@ -12,6 +12,7 @@ import {
     Pill,
     Search
 } from "lucide-react";
+import { useEffect } from "react";
 
 // --- MOCK DATA ---
 const updates = [
@@ -27,12 +28,12 @@ const updates = [
         icon: <Megaphone className="h-6 w-6 text-blue-500" />,
         color: "bg-blue-50"
     },
-    {
-        id: 3,
-        title: "Standard Updates",
-        icon: <Globe className="h-6 w-6 text-indigo-500" />,
-        color: "bg-indigo-50"
-    },
+    // {
+    //     id: 3,
+    //     title: "Standard Updates",
+    //     icon: <Globe className="h-6 w-6 text-indigo-500" />,
+    //     color: "bg-indigo-50"
+    // },
 ];
 
 const blogs = [
@@ -54,9 +55,10 @@ const blogs = [
 ];
 
 export default function WadaPage() {
+   
     return (
         // OUTER WRAPPER: Centers content on desktop, handles background
-        <div className="h-screen w-full bg-slate-100 flex items-center justify-center">
+        <div className="max-h-screen w-full pt-46 bg-slate-100 flex items-center justify-center">
             
             {/* MOBILE CONTAINER: Constrains width to look like an app on all screens */}
             <div className="w-full max-w-md h-full bg-white shadow-2xl overflow-hidden flex flex-col relative">
@@ -98,15 +100,15 @@ export default function WadaPage() {
                                 <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wide cursor-pointer">View All</span>
                             </div>
                             
-                            <div className="flex overflow-x-auto gap-3 pb-2 -mx-4 px-4 scrollbar-hide snap-x">
+                            <div className="grid grid-cols-2  pb-2 ">
                                 {updates.map(item => (
-                                    <div key={item.id} className={`flex-none w-28 aspect-[3/4] ${item.color} rounded-xl flex flex-col p-3 relative overflow-hidden snap-start border border-black/5 active:scale-95 transition-transform duration-200`}>
+                                    <div key={item.id} className={` ${item.color} rounded-xl flex items-center mx-auto flex-col gap-2 p-3 relative  border border-black/5 active:scale-95 transition-transform duration-200`}>
                                         <div className="flex-1 flex items-start pt-1">
                                             <div className="bg-white p-2 rounded-lg shadow-sm ring-1 ring-black/5">
                                                 {item.icon}
                                             </div>
                                         </div>
-                                        <p className="text-xs font-bold text-slate-800 leading-tight">
+                                        <p className="text-xs  font-bold text-slate-800 leading-tight">
                                             {item.title}
                                         </p>
                                     </div>
@@ -137,7 +139,7 @@ export default function WadaPage() {
                         </section>
 
                         {/* 4. Educational Blogs (Tighter Layout) */}
-                        <section>
+                        <section className="pb-2">
                             <h2 className="text-sm font-bold text-slate-900 mb-3 px-1">Insights</h2>
                             <div className="grid gap-3">
                                 {blogs.map(blog => (
