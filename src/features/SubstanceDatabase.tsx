@@ -45,7 +45,7 @@ const CATEGORIES = [
 const SUBSTANCES: Substance[] = Array.from({ length: 24 }).map((_, i) => ({
   id: `${i + 1}`,
   name: [
-    "Stanozolol", "Pseudoephedrine", "Salbutamol", "Caffeine", "EPO", 
+    "Stanozolol", "Pseudoephedrine", "Salbutamol", "Caffeine", "EPO",
     "Clenbuterol", "Testosterone", "Cannabis", "Insulin", "Morphine",
     "Furosemide", "Tamoxifen"
   ][i % 12] + (i > 11 ? ` Type-${i}` : ""),
@@ -59,24 +59,24 @@ const SUBSTANCES: Substance[] = Array.from({ length: 24 }).map((_, i) => ({
 }));
 
 // --- CUSTOM MODAL (Kept same as requested, focus is on list) ---
-const CustomDetailModal = ({ 
-  item, 
-  onClose 
-}: { 
-  item: Substance | null; 
-  onClose: () => void 
+const CustomDetailModal = ({
+  item,
+  onClose
+}: {
+  item: Substance | null;
+  onClose: () => void
 }) => {
   if (!item) return null;
 
   return (
     <div className="fixed inset-0 z-[100] md:max-w-90 w-full mx-auto flex items-end justify-center sm:items-center">
-      <div 
-        className="absolute inset-0 h-screen rounded-[50px] bg-slate-900/60 backdrop-blur-sm transition-opacity" 
+      <div
+        className="absolute inset-0 h-screen rounded-[50px] bg-slate-900/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
       <div className="relative w-full max-w-md animate-in slide-in-from-bottom-10 bg-white p-6 rounded-t-[2rem] sm:rounded-[2rem] shadow-2xl">
         <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-slate-200 sm:hidden" />
-        
+
         <div className="flex items-start justify-between mb-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -91,7 +91,7 @@ const CustomDetailModal = ({
               {item.name}
             </h2>
           </div>
-          <button 
+          <button
             onClick={onClose}
             className="rounded-full bg-slate-100 p-2 text-slate-500 hover:bg-slate-200"
           >
@@ -102,12 +102,12 @@ const CustomDetailModal = ({
         <div className={cn(
           "mb-6 flex items-center gap-3 rounded-2xl p-4",
           item.status === 'BANNED' ? "bg-red-50 text-red-700" :
-          item.status === 'SAFE' ? "bg-green-50 text-green-700" :
-          "bg-amber-50 text-amber-700"
+            item.status === 'SAFE' ? "bg-green-50 text-green-700" :
+              "bg-amber-50 text-amber-700"
         )}>
           {item.status === 'BANNED' ? <Ban className="h-6 w-6" /> :
-           item.status === 'SAFE' ? <CheckCircle2 className="h-6 w-6" /> :
-           <AlertTriangle className="h-6 w-6" />}
+            item.status === 'SAFE' ? <CheckCircle2 className="h-6 w-6" /> :
+              <AlertTriangle className="h-6 w-6" />}
           <div>
             <p className="text-xs font-bold opacity-70 uppercase">Global Status</p>
             <p className="font-extrabold">{item.status.replace('_', ' ')}</p>
@@ -144,23 +144,23 @@ export default function SubstanceDatabasePage() {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col bg-slate-50 font-sans text-slate-900">
-      
+    <div className="flex h-full w-full flex-col bg-slate-50 font-sans text-slate-900">
+
       {/* 1. Header & Controls */}
       <div className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-slate-200/60">
         <Header />
         <div className="px-4 pb-1 pt-1">
           {/* Search */}
           <div className="relative mb-2 group">
-             <div className="absolute left-3 top-1/2 -translate-y-1/2 bg-white p-1 rounded-md shadow-sm transition-all group-focus-within:scale-110 group-focus-within:text-indigo-600">
-                <Search className="h-3.5 w-3.5 text-slate-400 group-focus-within:text-indigo-600" />
-             </div>
-             <Input 
-               placeholder="Search database..." 
-               className=" rounded-2xl border-transparent bg-slate-100 pl-11 text-sm font-semibold shadow-inner focus:bg-white focus:border-slate-200 focus:shadow-lg transition-all"
-             />
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 bg-white p-1 rounded-md shadow-sm transition-all group-focus-within:scale-110 group-focus-within:text-indigo-600">
+              <Search className="h-3.5 w-3.5 text-slate-400 group-focus-within:text-indigo-600" />
+            </div>
+            <Input
+              placeholder="Search database..."
+              className=" rounded-2xl border-transparent bg-slate-100 pl-11 text-sm font-semibold shadow-inner focus:bg-white focus:border-slate-200 focus:shadow-lg transition-all"
+            />
           </div>
-          
+
           {/* Categories - CUSTOM SCROLLBAR ADDED HERE */}
           <div className="
             flex gap-2 overflow-x-auto pb-2 -mx-4 px-4
@@ -191,18 +191,18 @@ export default function SubstanceDatabasePage() {
       {/* 2. Scrollable List */}
       <ScrollArea className="flex-1 w-full bg-slate-50/50">
         <div className="p-4 pb-32 space-y-3">
-          
+
           {currentData.map((item) => (
-            <div 
+            <div
               key={item.id}
               onClick={() => setSelectedItem(item)}
               // UPDATED CARD DESIGN
               className={cn(
                 "group relative flex items-center justify-between rounded-xl bg-white p-4 shadow-sm border border-slate-100 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer overflow-hidden",
                 // Dynamic border color based on status
-                item.status === 'BANNED' ? 'border-l-[6px] border-l-red-500' : 
-                item.status === 'SAFE' ? 'border-l-[6px] border-l-green-500' : 
-                'border-l-[6px] border-l-amber-500'
+                item.status === 'BANNED' ? 'border-l-[6px] border-l-red-500' :
+                  item.status === 'SAFE' ? 'border-l-[6px] border-l-green-500' :
+                    'border-l-[6px] border-l-amber-500'
               )}
             >
               <div className="flex items-center gap-4">
@@ -210,38 +210,38 @@ export default function SubstanceDatabasePage() {
                 <div className={cn(
                   "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition-colors",
                   item.status === 'BANNED' ? 'bg-red-50 text-red-600' :
-                  item.status === 'SAFE' ? 'bg-green-50 text-green-600' :
-                  'bg-amber-50 text-amber-600'
+                    item.status === 'SAFE' ? 'bg-green-50 text-green-600' :
+                      'bg-amber-50 text-amber-600'
                 )}>
                   <FlaskConical className="h-6 w-6" />
                 </div>
-                
+
                 <div className="flex flex-col gap-1">
                   <h3 className="text-base font-bold text-slate-900 leading-tight group-hover:text-indigo-900 transition-colors">
                     {item.name}
                   </h3>
                   <div className="flex flex-wrap items-center gap-2">
-                     <Badge variant="secondary" className="h-5 px-1.5 text-[10px] bg-slate-100 text-slate-500 font-bold border-0">
-                       {item.code}
-                     </Badge>
-                     <span className="text-[11px] font-medium text-slate-400">
-                       {item.category}
-                     </span>
+                    <Badge variant="secondary" className="h-5 px-1.5 text-[10px] bg-slate-100 text-slate-500 font-bold border-0">
+                      {item.code}
+                    </Badge>
+                    <span className="text-[11px] font-medium text-slate-400">
+                      {item.category}
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Status & Arrow */}
               <div className="flex flex-col items-end gap-1 pl-2">
-                 <div className={cn(
-                   "px-2 py-1 rounded-md text-[10px] font-extrabold uppercase tracking-wide",
-                   item.status === 'BANNED' ? "bg-red-100 text-red-700" :
-                   item.status === 'SAFE' ? "bg-green-100 text-green-700" :
-                   "bg-amber-100 text-amber-700"
-                 )}>
-                   {item.status === 'BANNED' ? "Banned" : item.status === 'SAFE' ? "Safe" : "Caution"}
-                 </div>
-                 <ChevronRight className="h-4 w-4 text-slate-300 transition-transform group-hover:translate-x-1" />
+                <div className={cn(
+                  "px-2 py-1 rounded-md text-[10px] font-extrabold uppercase tracking-wide",
+                  item.status === 'BANNED' ? "bg-red-100 text-red-700" :
+                    item.status === 'SAFE' ? "bg-green-100 text-green-700" :
+                      "bg-amber-100 text-amber-700"
+                )}>
+                  {item.status === 'BANNED' ? "Banned" : item.status === 'SAFE' ? "Safe" : "Caution"}
+                </div>
+                <ChevronRight className="h-4 w-4 text-slate-300 transition-transform group-hover:translate-x-1" />
               </div>
             </div>
           ))}
@@ -259,12 +259,12 @@ export default function SubstanceDatabasePage() {
                 <ChevronLeft className="h-5 w-5" />
               </Button>
               <div className="flex flex-col items-center">
-                 <span className="text-sm font-black text-slate-900">
-                   Page {page}
-                 </span>
-                 <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">
-                   of {totalPages}
-                 </span>
+                <span className="text-sm font-black text-slate-900">
+                  Page {page}
+                </span>
+                <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">
+                  of {totalPages}
+                </span>
               </div>
               <Button
                 variant="outline"

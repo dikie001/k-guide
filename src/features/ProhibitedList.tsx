@@ -6,13 +6,13 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import {
-    BookOpen,
-    ChevronRight,
-    FileText,
-    Info,
-    Search,
-    ShieldAlert,
-    X
+  BookOpen,
+  ChevronRight,
+  FileText,
+  Info,
+  Search,
+  ShieldAlert,
+  X
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -103,7 +103,7 @@ const ChangeDetailModal = ({ item, onClose }: { item: ListChange | null; onClose
           <BookOpen className="h-4 w-4" />
           <span>Effective: {item.effectiveDate}</span>
         </div>
-        
+
         <div className="bg-slate-50 rounded-2xl p-5 mb-6 border border-slate-100">
           <p className="text-sm font-bold text-slate-400 uppercase text-[10px] mb-2">Change Description</p>
           <p className="text-slate-800 leading-relaxed font-medium">{item.description}</p>
@@ -124,18 +124,18 @@ export default function ProhibitedListPage() {
   }, [activeFilter]);
 
   return (
-    <div className="flex h-screen w-full flex-col bg-slate-50 font-sans text-slate-900">
+    <div className="flex h-full w-full flex-col bg-slate-50 font-sans text-slate-900">
       <div className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-slate-200/60">
         <Header />
         <div className="px-4 pb-4 pt-2">
           {/* Search */}
           <div className="relative mb-4 group">
-             <div className="absolute left-3 top-1/2 -translate-y-1/2 bg-white p-1 rounded-md shadow-sm">
-                <Search className="h-3.5 w-3.5 text-slate-400" />
-             </div>
-             <Input placeholder="Search changes..." className="h-12 rounded-2xl border-transparent bg-slate-100 pl-11 text-sm font-semibold focus:bg-white focus:border-slate-200 transition-all" />
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 bg-white p-1 rounded-md shadow-sm">
+              <Search className="h-3.5 w-3.5 text-slate-400" />
+            </div>
+            <Input placeholder="Search changes..." className="h-12 rounded-2xl border-transparent bg-slate-100 pl-11 text-sm font-semibold focus:bg-white focus:border-slate-200 transition-all" />
           </div>
-          
+
           {/* Filters (Custom Scroll) */}
           <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full">
             {CHANGE_FILTERS.map((cat) => (
@@ -159,33 +159,33 @@ export default function ProhibitedListPage() {
       <ScrollArea className="flex-1 w-full bg-slate-50/50">
         <div className="p-4 pb-32 space-y-3">
           {filteredData.map((item) => (
-            <div 
+            <div
               key={item.id}
               onClick={() => setSelectedItem(item)}
               className={cn(
                 "group relative flex items-center justify-between rounded-xl bg-white p-4 shadow-sm border border-slate-100 transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer",
                 // Color Logic: Red for New, Blue for Modified, Amber for Clarification
-                item.type === 'NEW' ? 'border-l-[6px] border-l-red-500' : 
-                item.type === 'MODIFIED' ? 'border-l-[6px] border-l-blue-500' : 
-                'border-l-[6px] border-l-amber-500'
+                item.type === 'NEW' ? 'border-l-[6px] border-l-red-500' :
+                  item.type === 'MODIFIED' ? 'border-l-[6px] border-l-blue-500' :
+                    'border-l-[6px] border-l-amber-500'
               )}
             >
               <div className="flex items-center gap-4">
                 <div className={cn(
                   "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl",
                   item.type === 'NEW' ? 'bg-red-50 text-red-600' :
-                  item.type === 'MODIFIED' ? 'bg-blue-50 text-blue-600' :
-                  'bg-amber-50 text-amber-600'
+                    item.type === 'MODIFIED' ? 'bg-blue-50 text-blue-600' :
+                      'bg-amber-50 text-amber-600'
                 )}>
-                  {item.type === 'NEW' ? <ShieldAlert className="h-6 w-6" /> : 
-                   item.type === 'MODIFIED' ? <FileText className="h-6 w-6" /> : <Info className="h-6 w-6" />}
+                  {item.type === 'NEW' ? <ShieldAlert className="h-6 w-6" /> :
+                    item.type === 'MODIFIED' ? <FileText className="h-6 w-6" /> : <Info className="h-6 w-6" />}
                 </div>
-                
+
                 <div className="flex flex-col gap-1">
                   <h3 className="text-base font-bold text-slate-900 leading-tight">{item.title}</h3>
                   <div className="flex items-center gap-2">
-                     <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded uppercase">{item.category.split('.')[0]}</span>
-                     <span className="text-[11px] font-medium text-slate-400 truncate w-32">{item.category}</span>
+                    <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded uppercase">{item.category.split('.')[0]}</span>
+                    <span className="text-[11px] font-medium text-slate-400 truncate w-32">{item.category}</span>
                   </div>
                 </div>
               </div>

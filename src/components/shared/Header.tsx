@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Bell } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Bell, ChevronLeft } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Header = () => {
     const navigate = useNavigate()
+    const location = useLocation()
+    const isHome = location.pathname === '/'
 
     const handleRoute = (route: string) => {
         navigate(route)
@@ -13,6 +15,16 @@ const Header = () => {
 
             {/* Brand Identity */}
             <div className="flex items-center gap-2.5">
+                {!isHome && (
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => navigate(-1)}
+                        className="-ml-2 mr-1 h-8 w-8 text-slate-700 hover:bg-slate-100"
+                    >
+                        <ChevronLeft className="h-5 w-5" />
+                    </Button>
+                )}
                 <div className="h-8 w-8 bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20 rotate-3">
                     <span className="text-white font-black text-sm italic">K</span>
                 </div>

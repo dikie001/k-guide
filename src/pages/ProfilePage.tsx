@@ -50,8 +50,7 @@ export default function ProfilePage() {
     console.log(activeTab)
 
     return (
-        // FIX: Use h-screen with flex-col to handle mobile viewport heights correctly
-        <div className="flex h-screen w-full flex-col bg-slate-50 font-sans text-slate-900">
+        <div className="flex h-full w-full flex-col bg-slate-50 font-sans text-slate-900">
 
             {/* 1. Sticky Header */}
             <div className="sticky top-0 z-40 w-full bg-slate-50/80 backdrop-blur-md">
@@ -194,8 +193,8 @@ export default function ProfilePage() {
                                 {scans.map((scan) => (
                                     <div key={scan.id} className="group relative flex aspect-square flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border border-slate-100 bg-white p-2 shadow-sm transition-all hover:border-slate-200 hover:shadow-md">
                                         <div className={`absolute right-0 top-0 rounded-bl-xl p-1.5 ${scan.result === 'SAFE' ? 'bg-green-50 text-green-600' :
-                                                scan.result === 'BANNED' ? 'bg-red-50 text-red-600' :
-                                                    'bg-orange-50 text-orange-600'
+                                            scan.result === 'BANNED' ? 'bg-red-50 text-red-600' :
+                                                'bg-orange-50 text-orange-600'
                                             }`}>
                                             {scan.result === 'SAFE' ? <CheckCircle2 className="h-3 w-3" /> : <AlertTriangle className="h-3 w-3" />}
                                         </div>

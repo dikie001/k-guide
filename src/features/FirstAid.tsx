@@ -15,6 +15,7 @@ import {
   Thermometer
 } from 'lucide-react';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // --- MOCK DATA ---
 const firstAidData = [
@@ -105,6 +106,7 @@ const firstAidData = [
 ];
 
 export default function FirstAid() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedInjury, setSelectedInjury] = useState<typeof firstAidData[0] | null>(null);
@@ -130,7 +132,7 @@ export default function FirstAid() {
   // --- VIEW: DETAIL PAGE (No Dialogs) ---
   if (selectedInjury) {
     return (
-      <div className="min-h-screen bg-white text-zinc-900 font-sans animate-in slide-in-from-right-4 duration-300">
+      <div className="min-h-full bg-white text-zinc-900 font-sans animate-in slide-in-from-right-4 duration-300">
         {/* Sticky Header */}
         <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-zinc-100 px-4 h-14 flex items-center gap-3">
           <Button
@@ -216,11 +218,16 @@ export default function FirstAid() {
 
   // --- VIEW: MAIN LIST ---
   return (
-    <div className="min-h-screen bg-zinc-50/50 pb-20 font-sans">
+    <div className="min-h-full bg-zinc-50/50 pb-20 font-sans">
       {/* Header */}
       <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-zinc-100 px-4 py-3 flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-bold text-zinc-900 tracking-tight">First Aid</h1>
+          <div className="flex items-center gap-1">
+            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-8 w-8 -ml-2 rounded-full hover:bg-zinc-100 text-zinc-600">
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <h1 className="text-lg font-bold text-zinc-900 tracking-tight">First Aid</h1>
+          </div>
           <div className="h-7 w-7 bg-red-50 rounded-full flex items-center justify-center border border-red-100">
             <HeartPulse className="h-3.5 w-3.5 text-red-500" />
           </div>

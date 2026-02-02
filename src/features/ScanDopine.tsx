@@ -196,7 +196,7 @@ export default function ScanDopine() {
   }
 
   return (
-    <div className="h-screen w-full bg-zinc-950 overflow-hidden font-sans text-slate-50">
+    <div className="h-full w-full bg-zinc-950 overflow-hidden font-sans text-slate-50">
 
       {/* --- LAYER 1: CAMERA FEED --- */}
       {(viewMode === 'scan' || viewMode === 'analyzing') && (
@@ -222,20 +222,20 @@ export default function ScanDopine() {
 
         <div className="flex items-center gap-2">
           {viewMode === 'scan' && (
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={toggleTorch} 
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTorch}
               className="rounded-full cursor-pointer text-white hover:bg-white/10"
             >
               {torchOn ? <Zap className="h-5 w-5 text-yellow-400 fill-yellow-400" /> : <ZapOff className="h-5 w-5 opacity-70" />}
             </Button>
           )}
           {viewMode === 'scan' && (
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={toggleCamera} 
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleCamera}
               className="rounded-full cursor-pointer text-white hover:bg-white/10"
             >
               <FlipHorizontal className="h-5 w-5 opacity-70" />

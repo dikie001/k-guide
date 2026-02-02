@@ -4,11 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-    BarChart3,
-    Clock,
-    Play,
-    X,
-    Zap
+  BarChart3,
+  Clock,
+  Play,
+  X,
+  Zap
 } from "lucide-react";
 import { useState } from "react";
 
@@ -21,7 +21,7 @@ const RECOVERY_MODULES = [
     duration: "5 min",
     intensity: "Low",
     category: "Mobility",
-    youtubeId: "uYaUNOKeE3s", 
+    youtubeId: "uYaUNOKeE3s",
     views: "12k",
   },
   {
@@ -31,7 +31,7 @@ const RECOVERY_MODULES = [
     duration: "15 min",
     intensity: "Medium",
     category: "Myofascial",
-    youtubeId: "abFZLv4QkAM", 
+    youtubeId: "abFZLv4QkAM",
     views: "24k",
   },
   {
@@ -41,7 +41,7 @@ const RECOVERY_MODULES = [
     duration: "11 min",
     intensity: "Education",
     category: "Nutrition",
-    youtubeId: "QLZOsMppVeE", 
+    youtubeId: "QLZOsMppVeE",
     views: "22k",
   },
   {
@@ -51,7 +51,7 @@ const RECOVERY_MODULES = [
     duration: "480 min",
     intensity: "None",
     category: "Mental",
-    youtubeId: "Vn2cd6O3gKw", 
+    youtubeId: "Vn2cd6O3gKw",
     views: "5M+",
   },
   {
@@ -61,7 +61,7 @@ const RECOVERY_MODULES = [
     duration: "20 min",
     intensity: "Low",
     category: "Mobility",
-    youtubeId: "2Mp238c9uEA", 
+    youtubeId: "2Mp238c9uEA",
     views: "1M+",
   },
 ];
@@ -72,38 +72,38 @@ export default function RecoveryPage() {
 
   const handleVideoSelect = (video: typeof RECOVERY_MODULES[0]) => {
     setActiveVideo(video);
-    setIsPlaying(true); 
+    setIsPlaying(true);
   };
 
   return (
-    <div className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-slate-50 font-sans text-slate-900">
-      
+    <div className="relative flex h-full w-full flex-col overflow-hidden bg-slate-50 font-sans text-slate-900">
+
       {/* 1. HEADER (Hides when playing) */}
       <div className={`absolute top-0 left-0 z-50 w-full transition-opacity duration-300 ${isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-         <Header />
+        <Header />
       </div>
 
       {/* 2. HERO PLAYER AREA */}
       {/* shrink-0 ensures this stays exactly 40% height */}
       <div className="relative z-0 h-[40%] w-full shrink-0 bg-black shadow-2xl transition-all duration-500">
-        
+
         {isPlaying ? (
           /* VIDEO MODE */
           <div className="relative h-full mb-4 -mt-4 w-full animate-in fade-in duration-500">
-             <iframe
+            <iframe
               className="h-full w-full object-contain bg-black"
               src={`https://www.youtube.com/embed/${activeVideo.youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&controls=1`}
               title={activeVideo.title}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
-            <Button 
-                size="icon"
-                variant="ghost"
-                className="absolute top-4 right-4 z-50 h-10 w-10 rounded-full bg-black/40 text-white backdrop-blur-md hover:bg-black/60"
-                onClick={() => setIsPlaying(false)}
+            <Button
+              size="icon"
+              variant="ghost"
+              className="absolute top-4 right-4 z-50 h-10 w-10 rounded-full bg-black/40 text-white backdrop-blur-md hover:bg-black/60"
+              onClick={() => setIsPlaying(false)}
             >
-                <X className="h-5 w-5" />
+              <X className="h-5 w-5" />
             </Button>
           </div>
         ) : (
@@ -118,7 +118,7 @@ export default function RecoveryPage() {
 
             {/* Play Trigger */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <button 
+              <button
                 onClick={() => setIsPlaying(true)}
                 className="group relative flex h-20 w-20 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm transition-all active:scale-95 hover:bg-white/30"
               >
@@ -131,14 +131,14 @@ export default function RecoveryPage() {
 
             {/* Info Overlay */}
             <div className="absolute bottom-10 left-0 w-full px-6 text-white">
-               <Badge className="mb-2 border-none bg-[#008CA5] text-white shadow-lg">
-                  {activeVideo.category}
-               </Badge>
-              
+              <Badge className="mb-2 border-none bg-[#008CA5] text-white shadow-lg">
+                {activeVideo.category}
+              </Badge>
+
               <h1 className="line-clamp-2 text-2xl font-black leading-tight tracking-tight">
                 {activeVideo.title}
               </h1>
-              
+
               <div className="mt-3 flex items-center gap-4 text-sm font-medium text-slate-200">
                 <span className="flex items-center gap-1.5"><Clock className="h-4 w-4" /> {activeVideo.duration}</span>
                 <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-yellow-400" /> {activeVideo.intensity}</span>
@@ -151,14 +151,14 @@ export default function RecoveryPage() {
       {/* 3. PLAYLIST CARD */}
       {/* min-h-0 is CRITICAL for flex-col scrolling to work properly */}
       <div className="relative z-10 -mt-6 flex flex-1 flex-col overflow-hidden rounded-t-[2rem] bg-white shadow-[0_-10px_40px_rgba(0,0,0,0.2)] min-h-0">
-        
+
         {/* Drag Handle */}
         <div className="mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-slate-200" />
 
         {/* ScrollArea must be h-full to fill the flex container */}
         <ScrollArea className="h-full w-full">
           <div className="px-5 pt-2 pb-32"> {/* INCREASED PADDING TO 32 (8rem) to clear bottom nav */}
-            
+
 
             {/* Playlist Items */}
             <div>
@@ -168,36 +168,35 @@ export default function RecoveryPage() {
                   const isActive = activeVideo.id === item.id;
 
                   return (
-                    <div 
-                        key={item.id} 
-                        onClick={() => handleVideoSelect(item)}
-                        className={`group flex items-center gap-3 rounded-2xl border p-2.5 transition-all cursor-pointer ${
-                            isActive 
-                            ? 'border-[#008CA5] bg-cyan-50/50 shadow-sm' 
-                            : 'border-transparent hover:bg-slate-50'
+                    <div
+                      key={item.id}
+                      onClick={() => handleVideoSelect(item)}
+                      className={`group flex items-center gap-3 rounded-2xl border p-2.5 transition-all cursor-pointer ${isActive
+                          ? 'border-[#008CA5] bg-cyan-50/50 shadow-sm'
+                          : 'border-transparent hover:bg-slate-50'
                         }`}
                     >
-                        {/* Thumbnail */}
-                        <div className="relative h-16  shrink-0 overflow-hidden rounded-lg bg-slate-200">
-                        <img 
-                            src={`https://img.youtube.com/vi/${item.youtubeId}/mqdefault.jpg`} 
-                            alt="thumb" 
-                            className={`h-full w-full object-cover transition-opacity ${isActive ? 'opacity-50' : 'opacity-100'}`}
+                      {/* Thumbnail */}
+                      <div className="relative h-16  shrink-0 overflow-hidden rounded-lg bg-slate-200">
+                        <img
+                          src={`https://img.youtube.com/vi/${item.youtubeId}/mqdefault.jpg`}
+                          alt="thumb"
+                          className={`h-full w-full object-cover transition-opacity ${isActive ? 'opacity-50' : 'opacity-100'}`}
                         />
                         {isActive && (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <BarChart3 className="h-5 w-5 animate-bounce text-[#008CA5]" />
-                            </div>
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <BarChart3 className="h-5 w-5 animate-bounce text-[#008CA5]" />
+                          </div>
                         )}
-                        </div>
+                      </div>
 
-                        {/* Info */}
-                        <div className="flex min-w-0 flex-1 flex-col justify-center">
-                            <h4 className={`truncate text-sm font-bold ${isActive ? 'text-[#008CA5]' : 'text-slate-900'}`}>
-                                {item.title}
-                            </h4>
-                            <p className="text-xs text-slate-500">{item.trainer}</p>
-                        </div>
+                      {/* Info */}
+                      <div className="flex min-w-0 flex-1 flex-col justify-center">
+                        <h4 className={`truncate text-sm font-bold ${isActive ? 'text-[#008CA5]' : 'text-slate-900'}`}>
+                          {item.title}
+                        </h4>
+                        <p className="text-xs text-slate-500">{item.trainer}</p>
+                      </div>
                     </div>
                   );
                 })}

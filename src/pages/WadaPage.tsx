@@ -17,14 +17,14 @@ const updates = [
         title: "Prohibited List 2026",
         icon: <Pill className="h-6 w-6 text-orange-500" />,
         color: "bg-orange-50",
-        to:"/prohibited-list"
+        to: "/prohibited-list"
     },
     {
         id: 2,
         title: "TUE Process Changes",
         icon: <Megaphone className="h-6 w-6 text-blue-500" />,
         color: "bg-blue-50",
-        to:"/tue-process"
+        to: "/tue-process"
     },
     // {
     //     id: 3,
@@ -56,14 +56,12 @@ export default function WadaPage() {
     const navigate = useNavigate()
 
     return (
-        // OUTER WRAPPER: Centers content on desktop, handles background
-        <div className="min-h-screen w-full flex flex-col  bg-slate-100 flex items-center justify-center">
+        <div className="flex h-full w-full flex-col bg-slate-100 relative">
             <Header />
 
-            {/* MOBILE CONTAINER: Constrains width to look like an app on all screens */}
-            <div className="w-full max-w-md h-full bg-white shadow-2xl overflow-hidden flex flex-col relative">
+            {/* Main Content Helper */}
+            <div className="flex-1 w-full overflow-hidden flex flex-col relative">
 
-                {/* 1. Header */}
 
                 {/* Main Scrollable Content */}
                 <ScrollArea className="flex-1 w-full">
@@ -78,7 +76,7 @@ export default function WadaPage() {
 
                             <div className="grid grid-cols-2  pb-2 ">
                                 {updates.map(item => (
-                                    <button onClick={()=>navigate(item.to)} key={item.id} className={` ${item.color} rounded-xl flex items-center mx-auto flex-col gap-2 p-3 relative  border border-black/5 active:scale-95 transition-transform duration-200`}>
+                                    <button onClick={() => navigate(item.to)} key={item.id} className={` ${item.color} rounded-xl flex items-center mx-auto flex-col gap-2 p-3 relative  border border-black/5 active:scale-95 transition-transform duration-200`}>
                                         <div className="flex-1 flex items-start pt-1">
                                             <div className="bg-white p-2 rounded-lg shadow-sm ring-1 ring-black/5">
                                                 {item.icon}

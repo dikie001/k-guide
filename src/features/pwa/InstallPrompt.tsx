@@ -31,7 +31,7 @@ export default function InstallPrompt() {
     if (!isVisible) return null;
 
     return (
-        <div className="fixed bottom-24 left-4 right-4 z-50 animate-in slide-in-from-bottom-8 fade-in duration-700">
+        <div className="fixed bottom-24 max-w-80 mx-auto left-4 right-4 z-50 animate-in slide-in-from-bottom-8 fade-in duration-700">
             {/* Glass Container */}
             <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-950/80 p-1 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-xl">
                 

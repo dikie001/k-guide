@@ -6,13 +6,13 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import {
-    Calendar,
-    CheckCircle,
-    ClipboardList,
-    FileCheck,
-    Search,
-    Stethoscope,
-    X
+  Calendar,
+  CheckCircle,
+  ClipboardList,
+  FileCheck,
+  Search,
+  Stethoscope,
+  X
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -78,7 +78,7 @@ const TueDetailModal = ({ item, onClose }: { item: TueUpdate | null; onClose: ()
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} />
       <div className="relative w-full max-w-md animate-in slide-in-from-bottom-10 bg-white p-6 rounded-t-[2rem] sm:rounded-[2rem] shadow-2xl">
         <div className="mx-auto mb-6 h-1.5 w-12 rounded-full bg-slate-200 sm:hidden" />
-        
+
         <div className="flex items-center justify-between mb-6">
           <Badge className="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border-0 font-bold">
             {item.tag}
@@ -94,10 +94,10 @@ const TueDetailModal = ({ item, onClose }: { item: TueUpdate | null; onClose: ()
         </p>
 
         <div className="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100 mb-6">
-           <h4 className="text-indigo-900 font-bold text-sm mb-2 flex items-center gap-2">
-             <ClipboardList className="h-4 w-4" /> Description
-           </h4>
-           <p className="text-slate-700 text-sm leading-relaxed">{item.description}</p>
+          <h4 className="text-indigo-900 font-bold text-sm mb-2 flex items-center gap-2">
+            <ClipboardList className="h-4 w-4" /> Description
+          </h4>
+          <p className="text-slate-700 text-sm leading-relaxed">{item.description}</p>
         </div>
 
         {item.actionRequired && (
@@ -124,17 +124,17 @@ export default function TueProcessPage() {
   }, [activeFilter]);
 
   return (
-    <div className="flex h-screen w-full flex-col bg-slate-50 font-sans text-slate-900">
+    <div className="flex h-full w-full flex-col bg-slate-50 font-sans text-slate-900">
       <div className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-slate-200/60">
         <Header />
         <div className="px-4 pb-4 pt-2">
           <div className="relative mb-4 group">
-             <div className="absolute left-3 top-1/2 -translate-y-1/2 bg-white p-1 rounded-md shadow-sm">
-                <Search className="h-3.5 w-3.5 text-slate-400" />
-             </div>
-             <Input placeholder="Search TUE updates..." className="h-12 rounded-2xl border-transparent bg-slate-100 pl-11 text-sm font-semibold focus:bg-white focus:border-slate-200 transition-all" />
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 bg-white p-1 rounded-md shadow-sm">
+              <Search className="h-3.5 w-3.5 text-slate-400" />
+            </div>
+            <Input placeholder="Search TUE updates..." className="h-12 rounded-2xl border-transparent bg-slate-100 pl-11 text-sm font-semibold focus:bg-white focus:border-slate-200 transition-all" />
           </div>
-          
+
           <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full">
             {TUE_FILTERS.map((cat) => (
               <button
@@ -157,7 +157,7 @@ export default function TueProcessPage() {
       <ScrollArea className="flex-1 w-full bg-slate-50/50">
         <div className="p-4 pb-32 space-y-3">
           {filteredData.map((item) => (
-            <div 
+            <div
               key={item.id}
               onClick={() => setSelectedItem(item)}
               // THEME: Indigo/Medical
@@ -165,20 +165,20 @@ export default function TueProcessPage() {
             >
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600">
-                  {item.tag === 'CHECKLIST' ? <ClipboardList className="h-6 w-6" /> : 
-                   item.tag === 'RETROACTIVE' ? <Calendar className="h-6 w-6" /> : <Stethoscope className="h-6 w-6" />}
+                  {item.tag === 'CHECKLIST' ? <ClipboardList className="h-6 w-6" /> :
+                    item.tag === 'RETROACTIVE' ? <Calendar className="h-6 w-6" /> : <Stethoscope className="h-6 w-6" />}
                 </div>
-                
+
                 <div className="flex flex-col gap-1">
                   <h3 className="text-base font-bold text-slate-900 leading-tight">{item.title}</h3>
                   <div className="flex items-center gap-2">
-                     <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded uppercase">{item.date}</span>
-                     {item.actionRequired && <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded uppercase">Action</span>}
+                    <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded uppercase">{item.date}</span>
+                    {item.actionRequired && <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded uppercase">Action</span>}
                   </div>
                 </div>
               </div>
               <div className="flex flex-col items-end gap-1">
-                 <FileCheck className="h-4 w-4 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                <FileCheck className="h-4 w-4 text-slate-300 group-hover:text-indigo-500 transition-colors" />
               </div>
             </div>
           ))}
