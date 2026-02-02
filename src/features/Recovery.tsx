@@ -1,3 +1,5 @@
+"use client";
+
 import BottomNav from "@/components/shared/BottomNav";
 import Header from "@/components/shared/Header";
 import { Badge } from "@/components/ui/badge";
@@ -77,7 +79,8 @@ export default function RecoveryPage() {
   };
 
   return (
-    <div className="relative flex h-full w-full flex-col overflow-hidden bg-slate-950 font-sans text-slate-50">
+    // Changed h-full to h-[100dvh] to ensure visibility
+    <div className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-slate-950 font-sans text-slate-50">
 
       {/* 1. HEADER (Hides when playing) */}
       <div className={`absolute top-0 left-0 z-50 w-full transition-opacity duration-300 ${isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>

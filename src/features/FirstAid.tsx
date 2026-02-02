@@ -8,7 +8,9 @@ import {
   AlertCircle,
   ArrowLeft,
   Bone,
-  ChevronLeft, ChevronRight, HeartPulse,
+  ChevronLeft,
+  ChevronRight,
+  HeartPulse,
   Search,
   ShieldAlert,
   Stethoscope,
@@ -21,87 +23,99 @@ import { useNavigate } from 'react-router-dom';
 const firstAidData = [
   {
     id: 1, title: "Ankle Sprain", category: "Joints", severity: "Moderate",
-    icon: <Activity className="text-orange-500" />,
+    icon: <Activity className="text-white" />, // Icon color handled by container
     symptoms: ["Swelling", "Bruising", "Pain on weight", "Restricted motion"],
     treatment: ["R.I.C.E Protocol", "Ice 15-20 mins", "Compression wrap", "Elevate leg"],
-    warning: "Seek X-ray if unable to walk >4 steps."
+    warning: "Seek X-ray if unable to walk >4 steps.",
+    bg: "bg-orange-500"
   },
   {
     id: 2, title: "Muscle Cramp", category: "Muscle", severity: "Mild",
-    icon: <Activity className="text-yellow-500" />,
+    icon: <Activity className="text-white" />,
     symptoms: ["Sudden sharp pain", "Hard lump", "Muscle lock"],
     treatment: ["Stop activity", "Stretch & massage", "Apply heat/cold", "Hydrate"],
-    warning: "Do not force muscle if pain is excruciating."
+    warning: "Do not force muscle if pain is excruciating.",
+    bg: "bg-yellow-500"
   },
   {
     id: 3, title: "Concussion", category: "Head Trauma", severity: "Critical",
-    icon: <ShieldAlert className="text-red-600" />,
+    icon: <ShieldAlert className="text-white" />,
     symptoms: ["Confusion", "Dizziness", "Nausea", "Light sensitivity"],
     treatment: ["Remove from play", "Monitor condition", "Rest 24-48h", "No screens"],
-    warning: "Call 911 if unconscious or vomiting."
+    warning: "Call 911 if unconscious or vomiting.",
+    bg: "bg-red-600"
   },
   {
     id: 4, title: "Heat Exhaustion", category: "Environmental", severity: "High",
-    icon: <Thermometer className="text-red-500" />,
+    icon: <Thermometer className="text-white" />,
     symptoms: ["Heavy sweating", "Pale skin", "Dizziness", "Fainting"],
     treatment: ["Move to cool shade", "Loosen clothes", "Sip water", "Cool wet cloths"],
-    warning: "Can progress to Heat Stroke (Life Threatening)."
+    warning: "Can progress to Heat Stroke (Life Threatening).",
+    bg: "bg-red-500"
   },
   {
     id: 5, title: "Nosebleed", category: "Trauma", severity: "Mild",
-    icon: <HeartPulse className="text-red-400" />,
+    icon: <HeartPulse className="text-white" />,
     symptoms: ["Nostril bleeding", "Iron taste"],
     treatment: ["Lean forward", "Pinch nose soft part", "Breathe via mouth", "Ice bridge"],
-    warning: "Seek help if bleeding > 20 mins."
+    warning: "Seek help if bleeding > 20 mins.",
+    bg: "bg-rose-500"
   },
   {
     id: 6, title: "Bone Fracture", category: "Trauma", severity: "Severe",
-    icon: <Bone className="text-slate-500" />,
+    icon: <Bone className="text-white" />,
     symptoms: ["Deformity", "Swelling", "Grinding feel"],
     treatment: ["Immobilize/Splint", "Stop bleeding", "Ice packs", "Treat shock"],
-    warning: "Do not try to realign the bone yourself."
+    warning: "Do not try to realign the bone yourself.",
+    bg: "bg-slate-500"
   },
   {
     id: 7, title: "Blisters", category: "Skin", severity: "Mild",
-    icon: <Activity className="text-blue-400" />,
+    icon: <Activity className="text-white" />,
     symptoms: ["Fluid bubble", "Pain", "Redness"],
     treatment: ["Clean area", "Cover with pad", "Don't pop"],
-    warning: "If popped, apply antibiotic ointment."
+    warning: "If popped, apply antibiotic ointment.",
+    bg: "bg-blue-400"
   },
   {
     id: 8, title: "Dislocation", category: "Joints", severity: "Severe",
-    icon: <Bone className="text-orange-600" />,
+    icon: <Bone className="text-white" />,
     symptoms: ["Out of place", "Intense pain", "Immovable"],
     treatment: ["Don't move joint", "Ice area", "Immobilize as found"],
-    warning: "Seek medical help. Do not pop back in."
+    warning: "Seek medical help. Do not pop back in.",
+    bg: "bg-orange-600"
   },
   {
     id: 9, title: "Hypothermia", category: "Environmental", severity: "Critical",
-    icon: <Thermometer className="text-blue-600" />,
+    icon: <Thermometer className="text-white" />,
     symptoms: ["Shivering", "Confusion", "Slurred speech"],
     treatment: ["Warm area", "Remove wet clothes", "Warm center body", "Warm drink"],
-    warning: "Handle gently; rough handling risks cardiac arrest."
+    warning: "Handle gently; rough handling risks cardiac arrest.",
+    bg: "bg-blue-600"
   },
   {
     id: 10, title: "Asthma Attack", category: "Respiratory", severity: "High",
-    icon: <Activity className="text-purple-500" />,
+    icon: <Activity className="text-white" />,
     symptoms: ["Wheezing", "Short breath", "Chest tight"],
     treatment: ["Sit upright", "Use inhaler", "Keep calm"],
-    warning: "No improvement > 15 mins? Call Emergency."
+    warning: "No improvement > 15 mins? Call Emergency.",
+    bg: "bg-purple-500"
   },
   {
     id: 11, title: "Abrasion", category: "Skin", severity: "Mild",
-    icon: <HeartPulse className="text-pink-500" />,
+    icon: <HeartPulse className="text-white" />,
     symptoms: ["Raw skin", "Bleeding", "Stinging"],
     treatment: ["Clean debris", "Antibiotic ointment", "Non-stick bandage"],
-    warning: "Watch for signs of infection."
+    warning: "Watch for signs of infection.",
+    bg: "bg-pink-500"
   },
   {
     id: 12, title: "Choking", category: "Emergency", severity: "Critical",
-    icon: <AlertCircle className="text-red-600" />,
+    icon: <AlertCircle className="text-white" />,
     symptoms: ["Clutching throat", "Silent", "Blue lips"],
     treatment: ["5 Back blows", "5 Abdominal thrusts", "Repeat"],
-    warning: "Unconscious? Start CPR."
+    warning: "Unconscious? Start CPR.",
+    bg: "bg-red-700"
   }
 ];
 
@@ -111,7 +125,7 @@ export default function FirstAid() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedInjury, setSelectedInjury] = useState<typeof firstAidData[0] | null>(null);
 
-  const ITEMS_PER_PAGE = 8; // Increased slightly for compact grid
+  const ITEMS_PER_PAGE = 8;
 
   // --- Filter Logic ---
   const filteredData = firstAidData.filter(item =>
@@ -129,87 +143,114 @@ export default function FirstAid() {
     if (direction === 'prev' && currentPage > 1) setCurrentPage(p => p - 1);
   };
 
-  // --- VIEW: DETAIL PAGE (No Dialogs) ---
+  // --- VIEW: DETAIL PAGE (Medical Folder Look) ---
   if (selectedInjury) {
     return (
-      <div className="min-h-full bg-white text-zinc-900 font-sans animate-in slide-in-from-right-4 duration-300">
-        {/* Sticky Header */}
-        <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-zinc-100 px-4 h-14 flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 -ml-1 rounded-full hover:bg-zinc-100"
-            onClick={() => setSelectedInjury(null)}
-          >
-            <ArrowLeft className="h-5 w-5 text-zinc-600" />
-          </Button>
-          <span className="font-bold text-sm text-zinc-900">Emergency Guide</span>
+      <div className="min-h-full bg-slate-50 text-slate-900 font-sans animate-in slide-in-from-right-8 duration-300">
+
+        {/* Red Header Strip */}
+        <div className="bg-red-600 px-4 pt-4 pb-12 shadow-lg relative z-0">
+          <div className="flex items-center gap-3 mb-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSelectedInjury(null)}
+              className="text-white hover:bg-white/20 rounded-full h-8 w-8 -ml-2"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <h2 className="text-white font-bold text-lg">Medical Protocol</h2>
+          </div>
         </div>
 
-        <ScrollArea className="h-[calc(100vh-3.5rem)]">
-          <div className="p-5 pb-20 space-y-6">
-            {/* Title Section */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="h-10 w-10 bg-zinc-50 rounded-lg border border-zinc-100 flex items-center justify-center">
-                  {React.cloneElement(selectedInjury.icon as React.ReactElement<{ className?: string }>, { className: "h-5 w-5" })}
-                </div>
-                <Badge variant="outline" className={`text-[10px] px-2 py-0.5 border-none ${selectedInjury.severity === 'Critical' ? 'bg-red-100 text-red-700' :
-                  selectedInjury.severity === 'Severe' || selectedInjury.severity === 'High' ? 'bg-orange-100 text-orange-700' :
-                    'bg-blue-50 text-blue-700'
-                  }`}>
-                  {selectedInjury.severity}
-                </Badge>
-              </div>
+        {/* Content Card (Overlapping Header) */}
+        <ScrollArea className="h-[calc(100vh-5rem)] -mt-8 relative z-10 px-4">
+          <div className="bg-white rounded-t-3xl shadow-xl min-h-[85vh] p-6 pb-24">
+            {/* Icon & Title */}
+            <div className="flex items-start justify-between mb-8">
               <div>
-                <h1 className="text-2xl font-bold tracking-tight text-zinc-900">{selectedInjury.title}</h1>
-                <p className="text-xs font-medium text-zinc-400 mt-1 uppercase tracking-wide">{selectedInjury.category}</p>
+                <Badge variant="outline" className={`mb-2 border-none px-2 py-0.5 text-xs font-bold uppercase tracking-wider ${selectedInjury.severity === 'Critical' ? 'bg-red-100 text-red-700' :
+                    selectedInjury.severity === 'Severe' ? 'bg-orange-100 text-orange-700' :
+                      'bg-slate-100 text-slate-600'
+                  }`}>
+                  {selectedInjury.severity} Severity
+                </Badge>
+                <h1 className="text-3xl font-black text-slate-900 leading-none mb-1">{selectedInjury.title}</h1>
+                <p className="text-sm font-bold text-slate-400 uppercase tracking-wide">{selectedInjury.category}</p>
+              </div>
+              <div className={`h-16 w-16 rounded-2xl ${selectedInjury.bg} flex items-center justify-center shadow-lg transform rotate-3`}>
+                {React.cloneElement(selectedInjury.icon as React.ReactElement<{ className?: string }>, { className: "h-8 w-8 text-white" })}
               </div>
             </div>
 
-            {/* Critical Warning */}
-            <div className="bg-red-50/80 border border-red-100 p-3 rounded-lg flex gap-3">
-              <AlertCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
-              <p className="text-xs text-red-700 font-medium leading-relaxed">{selectedInjury.warning}</p>
-            </div>
+            {/* Sections */}
+            <div className="space-y-8">
 
-            {/* Symptoms */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider flex items-center gap-2">
-                <Stethoscope className="h-3 w-3 text-zinc-400" /> Symptoms
-              </h3>
-              <div className="grid grid-cols-2 gap-2">
-                {selectedInjury.symptoms.map((sym, i) => (
-                  <div key={i} className="bg-zinc-50 border border-zinc-100/50 p-2 rounded-md text-xs font-medium text-zinc-600">
-                    {sym}
-                  </div>
-                ))}
+              {/* 1. WARNING */}
+              <div className="p-4 bg-red-50 border-l-4 border-red-500 rounded-r-xl">
+                <div className="flex items-center gap-2 mb-1">
+                  <AlertCircle className="h-4 w-4 text-red-600" />
+                  <h3 className="text-xs font-extrabold text-red-700 uppercase tracking-widest">Crucial Warning</h3>
+                </div>
+                <p className="text-sm font-bold text-slate-800 leading-snug">
+                  {selectedInjury.warning}
+                </p>
               </div>
-            </div>
 
-            {/* Treatment */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider flex items-center gap-2">
-                <Activity className="h-3 w-3 text-zinc-400" /> Action Plan
-              </h3>
-              <div className="space-y-2">
-                {selectedInjury.treatment.map((step, i) => (
-                  <div key={i} className="flex gap-3 items-start p-3 bg-white border border-zinc-100 rounded-lg shadow-sm">
-                    <span className="flex-none flex items-center justify-center h-5 w-5 rounded-full bg-zinc-900 text-white text-[10px] font-bold">
-                      {i + 1}
-                    </span>
-                    <p className="text-sm text-zinc-700 font-medium leading-snug">{step}</p>
-                  </div>
-                ))}
+              {/* 2. SYMPTOMS */}
+              <div>
+                <h3 className="text-sm font-black text-slate-900 flex items-center gap-2 mb-3">
+                  <Stethoscope className="h-4 w-4 text-red-500" />
+                  SIGNS & SYMPTOMS
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {selectedInjury.symptoms.map((s, i) => (
+                    <div key={i} className="bg-slate-50 border border-slate-100 p-3 rounded-xl text-xs font-bold text-slate-600 flex items-center gap-2">
+                      <div className="h-1.5 w-1.5 rounded-full bg-slate-300" />
+                      {s}
+                    </div>
+                  ))}
+                </div>
               </div>
+
+              {/* 3. TREATMENT */}
+              <div>
+                <h3 className="text-sm font-black text-slate-900 flex items-center gap-2 mb-3">
+                  <Activity className="h-4 w-4 text-emerald-500" />
+                  ACTION PLAN
+                </h3>
+                <div className="space-y-3">
+                  {selectedInjury.treatment.map((step, i) => (
+                    <div key={i} className="flex gap-4">
+                      <div className="flex flex-col items-center">
+                        <div className="h-6 w-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold shadow-md z-10">
+                          {i + 1}
+                        </div>
+                        {i !== selectedInjury.treatment.length - 1 && (
+                          <div className="w-0.5 h-full bg-slate-100 -mb-2 mt-1" />
+                        )}
+                      </div>
+                      <div className="pb-4">
+                        <p className="text-sm font-medium text-slate-700 leading-snug pt-0.5 bg-white">
+                          {step}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
         </ScrollArea>
 
-        {/* Footer Action */}
-        <div className="fixed bottom-6 left-0 right-0 left-1/2 -translate-x-1/2 max-w-80 p-4  border-zinc-100">
-          <Button className="w-full h-10 bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg text-xs font-bold" onClick={() => setSelectedInjury(null)}>
-            Done
+        {/* Floating Done Button */}
+        <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center pointer-events-none">
+          <Button
+            onClick={() => setSelectedInjury(null)}
+            className="pointer-events-auto h-12 px-8 rounded-full bg-slate-900 text-white font-bold shadow-2xl hover:bg-slate-800 hover:scale-105 transition-all"
+          >
+            Close Protocol
           </Button>
         </div>
       </div>
@@ -218,91 +259,117 @@ export default function FirstAid() {
 
   // --- VIEW: MAIN LIST ---
   return (
-    <div className="min-h-full bg-zinc-50/50 pb-20 font-sans">
-      {/* Header */}
-      <div className="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-zinc-100 px-4 py-3 flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-8 w-8 -ml-2 rounded-full hover:bg-zinc-100 text-zinc-600">
+    <div className="min-h-full bg-slate-50 pb-20 font-sans">
+
+      {/* 1. Header Area */}
+      <div className="bg-white border-b border-slate-100 sticky top-0 z-30">
+        <div className="px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate(-1)}
+              className="h-8 w-8 -ml-2 rounded-full hover:bg-slate-100 text-slate-500"
+            >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-lg font-bold text-zinc-900 tracking-tight">First Aid</h1>
+            <div>
+              <h1 className="text-xl font-black text-slate-900 tracking-tight leading-none">First Aid</h1>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Emergency Guide</p>
+            </div>
           </div>
-          <div className="h-7 w-7 bg-red-50 rounded-full flex items-center justify-center border border-red-100">
-            <HeartPulse className="h-3.5 w-3.5 text-red-500" />
+          <div className="h-9 w-9 bg-red-50 rounded-xl flex items-center justify-center border border-red-100 shadow-sm">
+            <HeartPulse className="h-5 w-5 text-red-600" />
           </div>
         </div>
-        <div className="relative">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
-          <Input
-            placeholder="Search injury..."
-            value={searchTerm}
-            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-            className="pl-9 h-9 text-sm bg-zinc-50 border-zinc-200 rounded-lg focus-visible:ring-1 focus-visible:ring-zinc-900"
-          />
+
+        {/* Search Bar */}
+        <div className="px-4 pb-3">
+          <div className="relative group">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400 group-focus-within:text-red-500 transition-colors" />
+            <Input
+              placeholder="Search injury e.g. 'Sprain'..."
+              value={searchTerm}
+              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+              className="pl-9 h-10 bg-slate-100 border-transparent rounded-xl focus-visible:ring-red-500 font-medium transition-all"
+            />
+          </div>
         </div>
       </div>
 
-      {/* Grid Content */}
-      <div className="px-4 pt-4">
-        {filteredData.length === 0 ? (
-          <div className="py-20 text-center opacity-40">
-            <p className="text-sm font-medium text-zinc-500">No results found</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-2.5">
-            {currentItems.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => setSelectedInjury(item)}
-                className="bg-white p-3 rounded-2xl border border-zinc-100 shadow-sm active:scale-95 transition-transform duration-200 cursor-pointer flex flex-col justify-between h-28 relative overflow-hidden group"
-              >
-                <div className={`absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-transparent to-white/50 z-0 pointer-events-none rounded-bl-3xl opacity-50 ${item.severity === 'Critical' ? 'from-red-50/50' : 'from-zinc-50/50'
-                  }`} />
+      {/* 2. Grid Content */}
+      <ScrollArea className="flex-1">
+        <div className="p-4">
+          {filteredData.length === 0 ? (
+            <div className="py-20 text-center opacity-40">
+              <div className="mx-auto h-16 w-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                <Search className="h-6 w-6 text-slate-400" />
+              </div>
+              <p className="text-sm font-bold text-slate-500">No injuries found matching "{searchTerm}"</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              {currentItems.map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => setSelectedInjury(item)}
+                  className="group bg-white p-4 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-red-100 active:scale-95 transition-all duration-200 cursor-pointer flex flex-col justify-between h-36 relative overflow-hidden"
+                >
+                  {/* Decorative BG Icon */}
+                  <div className="absolute -right-4 -bottom-4 opacity-5 transform rotate-[-15deg] group-hover:scale-110 transition-transform">
+                    {React.cloneElement(item.icon as React.ReactElement<{ className?: string }>, { className: "h-24 w-24 text-slate-900" })}
+                  </div>
 
-                <div className="relative z-10">
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="text-zinc-400 group-hover:text-zinc-600 transition-colors">
-                      {React.cloneElement(item.icon as React.ReactElement<{ className?: string }>, { className: "h-4 w-4" })}
+                  <div className="flex justify-between items-start">
+                    <div className={`h-10 w-10 rounded-xl ${item.bg} flex items-center justify-center shadow-sm`}>
+                      {React.cloneElement(item.icon as React.ReactElement<{ className?: string }>, { className: "h-5 w-5 text-white" })}
                     </div>
-                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${item.severity === 'Critical' ? 'bg-red-50 text-red-600' : 'bg-zinc-50 text-zinc-500'
-                      }`}>
-                      {item.severity === 'Critical' ? 'CRITICAL' : item.severity}
+                    {item.severity === 'Critical' && (
+                      <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
+                    )}
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-sm leading-tight mb-1 group-hover:text-red-600 transition-colors">
+                      {item.title}
+                    </h3>
+                    <span className="inline-block px-1.5 py-0.5 bg-slate-50 rounded text-[9px] font-bold text-slate-400 uppercase tracking-wide border border-slate-100">
+                      {item.category}
                     </span>
                   </div>
-                  <h3 className="font-bold text-zinc-800 text-sm leading-tight mb-0.5">{item.title}</h3>
-                  <p className="text-[10px] text-zinc-400 font-medium">{item.category}</p>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
 
-      {/* Tiny Pagination */}
-      {filteredData.length > 0 && totalPages > 1 && (
-        <div className=" mx-auto flex justify-center mt-6 z-20">
-          <div className="flex items-center gap-3 bg-zinc-900/90 backdrop-blur text-white px-3 py-1.5 rounded-full shadow-lg shadow-zinc-900/20">
-            <button
-              onClick={() => handlePageChange('prev')}
-              disabled={currentPage === 1}
-              className="p-1 hover:text-zinc-300 disabled:opacity-30 disabled:hover:text-white transition-colors"
-            >
-              <ChevronLeft className="h-3 w-3" />
-            </button>
-            <span className="text-[10px] font-bold tabular-nums tracking-widest opacity-90">
-              {currentPage} / {totalPages}
-            </span>
-            <button
-              onClick={() => handlePageChange('next')}
-              disabled={currentPage === totalPages}
-              className="p-1 hover:text-zinc-300 disabled:opacity-30 disabled:hover:text-white transition-colors"
-            >
-              <ChevronRight className="h-3 w-3" />
-            </button>
-          </div>
+          {/* Pagination Pucks */}
+          {filteredData.length > 0 && totalPages > 1 && (
+            <div className="flex justify-center mt-8 gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange('prev')}
+                className="rounded-full h-8 w-8"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <div className="h-8 px-3 flex items-center bg-slate-900 text-white rounded-full text-xs font-bold shadow-lg">
+                {currentPage} <span className="text-slate-500 mx-1">/</span> {totalPages}
+              </div>
+              <Button
+                variant="outline"
+                size="icon"
+                disabled={currentPage === totalPages}
+                onClick={() => handlePageChange('next')}
+                className="rounded-full h-8 w-8"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
         </div>
-      )}
+      </ScrollArea>
 
       <BottomNav />
     </div>
