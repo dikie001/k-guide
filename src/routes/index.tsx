@@ -8,6 +8,7 @@ import Dashboard from "@/pages/Dashboard";
 import MapPage from "@/pages/MapPage";
 import NotFound from "@/pages/NotFound";
 import ProfilePage from "@/pages/ProfilePage";
+import Support from "@/pages/Support";
 import WadaPage from "@/pages/WadaPage";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
@@ -27,6 +28,7 @@ export const AppRoutes = () => {
           <Route path="/prohibited-list" element={<ProhibitedListPage />} />
           <Route path="/map" element={<MapPage />} />
           <Route path="/recovery" element={<RecoveryPage />} />
+          <Route path="/support" element={<Support />} />
 
         </Routes>
       </Router>

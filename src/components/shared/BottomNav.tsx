@@ -1,4 +1,4 @@
-import { CheckCircle, Home, MapIcon, User } from 'lucide-react';
+import { CheckCircle, HelpCircle, Home, MapIcon, User } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ const BottomNav = () => {
         { id: 'WADA', icon: CheckCircle, label: 'WADA', route: "/wada" },
         { id: 'Map', icon: MapIcon, label: 'Map', route: '/map' },
         { id: 'Profile', icon: User, label: 'Profile', route: '/profile' },
-        // { id: 'Support', icon: HelpCircle, label: 'Support', route: '/support' }
+        { id: 'Support', icon: HelpCircle, label: 'Support', route: '/support' }
     ];
 
 
@@ -20,7 +20,7 @@ const BottomNav = () => {
 
     return (
         <div className="fixed bottom-8 pb-2  left-1/2 -translate-x-1/2  px-6 z-50 max-w-90 w-full flex  justify-center  pointer-events-none">
-            <nav className="pointer-events-auto rounded-4xl w-full max-w-[400px] bg-white/90 backdrop-blur-xl border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-3xl p-1.5 flex justify-between items-center ring-1 ring-black/5">
+            <nav className="pointer-events-auto rounded-3xl w-full max-w-100 bg-white/90 backdrop-blur-xl border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-3xl p-1.5 flex justify-between items-center ring-1 ring-black/5">
                 {navItems.map((item) => {
                     const isActive = activeTab === item.id;
                     return (
