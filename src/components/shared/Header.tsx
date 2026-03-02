@@ -163,7 +163,7 @@ const Header = () => {
 
           <SheetContent
             side="right"
-            className="w-[300px] sm:w-[320px] p-0 flex flex-col"
+            className="w-[300px] sm:w-[320px] p-0 flex flex-col max-h-screen"
           >
             {/* Drawer Header */}
             <div className="flex items-center gap-3 px-5 py-5 border-b border-border/60">

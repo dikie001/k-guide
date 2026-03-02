@@ -7,11 +7,11 @@ import { Wifi, BatteryMedium, Signal } from "lucide-react";
 // The wrapper that creates the phone frame on MD+ screens only
 const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="min-h-screen md:max-h-screen w-full flex items-center justify-center md:bg-zinc-200 dark:md:bg-zinc-900 md:p-8">
+    <div className="min-h-screen w-full flex items-center justify-center md:bg-zinc-200 dark:md:bg-zinc-900 md:p-8">
       <div
-        className="relative w-full h-full bg-background
+        className="relative w-full h-screen md:h-auto md:max-h-screen bg-background
         md:w-[390px] md:h-[844px] md:border-[10px] md:border-zinc-900 md:rounded-[52px]
-        md:shadow-2xl md:overflow-hidden ring-1 ring-black/10 dark:ring-white/5"
+        md:shadow-2xl md:overflow-hidden ring-1 ring-black/10 dark:ring-white/5 flex flex-col"
       >
         {/* Dynamic Island */}
         <div className="hidden md:flex absolute top-0 left-1/2 -translate-x-1/2 h-[34px] w-[126px] bg-black rounded-b-[22px] z-50 items-center justify-center pointer-events-none">
@@ -36,7 +36,7 @@ const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         {/* Content */}
-        <div className="h-full w-full overflow-y-auto no-scrollbar md:pt-9">
+        <div className="flex-1 w-full overflow-y-auto no-scrollbar md:pt-9 flex flex-col">
           {children}
         </div>
 

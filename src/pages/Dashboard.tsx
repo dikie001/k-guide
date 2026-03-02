@@ -22,28 +22,6 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const handleRoute = (route: string) => navigate(route);
 
-  const tools = [
-    {
-      label: "Scan Meds",
-      icon: "ScanLine",
-      route: "scan-dopine",
-      accent: "text-primary bg-primary/10",
-    },
-    {
-      label: "First Aid",
-      icon: "HeartPulse",
-      route: "first-aid",
-      accent: "text-rose-600 bg-rose-50 dark:bg-rose-950/40 dark:text-rose-400",
-    },
-    {
-      label: "Recovery",
-      icon: "Stethoscope",
-      route: "recovery",
-      accent:
-        "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-400",
-    },
-  ];
-
   return (
     <div className="relative min-h-full bg-background text-foreground pb-24">
       <Header />
