@@ -12,406 +12,688 @@ import {
   Search,
   ShieldAlert,
   ShieldCheck,
+  TriangleAlert,
   X,
   Zap,
-  ZapOff
-} from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+  ZapOff,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-// Mock database for the "Working" manual search
-const MOCK_DB = [
-  { name: "Ibuprofen 200mg", brand: "Advil", status: "SAFE", type: "In-Competition", details: "Permitted under WADA 2026." },
-  { name: "Pseudoephedrine", brand: "Sudafed", status: "CAUTION", type: "In-Competition", details: "Prohibited >150 microgram/ml in urine." },
-  { name: "Clenbuterol", brand: "Spiropent", status: "BANNED", type: "Always Prohibited", details: "Anabolic agent. Zero tolerance." },
+// ─── Types ────────────────────────────────────────────────────────────────────
+type Status = "SAFE" | "CAUTION" | "BANNED";
+type ViewMode = "scan" | "manual" | "analyzing" | "result";
+
+interface DrugResult {
+  name: string;
+  brand: string;
+  status: Status;
+  type: string;
+  details: string;
+}
+
+// ─── Mock DB ──────────────────────────────────────────────────────────────────
+const MOCK_DB: DrugResult[] = [
+  {
+    name: "Ibuprofen 200mg",
+    brand: "Advil",
+    status: "SAFE",
+    type: "In-Competition",
+    details:
+      "Permitted under WADA 2026 prohibited list. No restrictions apply.",
+  },
+  {
+    name: "Pseudoephedrine",
+    brand: "Sudafed",
+    status: "CAUTION",
+    type: "In-Competition",
+    details:
+      "Prohibited above 150 micrograms per millilitre in urine. Therapeutic use may require TUE.",
+  },
+  {
+    name: "Clenbuterol",
+    brand: "Spiropent",
+    status: "BANNED",
+    type: "Always Prohibited",
+    details:
+      "Anabolic agent — zero tolerance in all competition and out-of-competition contexts.",
+  },
 ];
 
-export default function ScanDopine() {
-  // --- State ---
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [cameraFacingMode, setCameraFacingMode] = useState<'environment' | 'user'>('environment');
-  const [torchOn, setTorchOn] = useState(false);
+const QUICK_SEARCHES = ["Caffeine", "Aspirin", "Insulin", "Melatonin"];
 
-  // Modes: 'scan' | 'manual' | 'analyzing' | 'result'
-  const [viewMode, setViewMode] = useState<'scan' | 'manual' | 'analyzing' | 'result'>('scan');
-  const [scannedResult, setScannedResult] = useState<any>(null);
+// ─── Status Config ────────────────────────────────────────────────────────────
+const STATUS_CONFIG: Record<
+  Status,
+  {
+    pill: string;
+    icon: React.ReactNode;
+    glow: string;
+    card: string;
+    label: string;
+  }
+> = {
+  SAFE: {
+    pill: "bg-emerald-500/15 text-emerald-400 border-emerald-500/40 shadow-[0_0_16px_rgba(52,211,153,0.12)]",
+    icon: <ShieldCheck className="w-3.5 h-3.5" />,
+    glow: "shadow-[0_0_60px_rgba(52,211,153,0.15)]",
+    card: "from-emerald-500/8 to-transparent border-emerald-500/20",
+    label: "Permitted",
+  },
+  CAUTION: {
+    pill: "bg-amber-500/15 text-amber-400 border-amber-500/40 shadow-[0_0_16px_rgba(245,158,11,0.12)]",
+    icon: <TriangleAlert className="w-3.5 h-3.5" />,
+    glow: "shadow-[0_0_60px_rgba(245,158,11,0.15)]",
+    card: "from-amber-500/8 to-transparent border-amber-500/20",
+    label: "Use with caution",
+  },
+  BANNED: {
+    pill: "bg-red-500/15 text-red-400 border-red-500/40 shadow-[0_0_16px_rgba(239,68,68,0.12)]",
+    icon: <ShieldAlert className="w-3.5 h-3.5" />,
+    glow: "shadow-[0_0_60px_rgba(239,68,68,0.2)]",
+    card: "from-red-500/8 to-transparent border-red-500/20",
+    label: "Prohibited",
+  },
+};
+
+// ─── StatusBadge ─────────────────────────────────────────────────────────────
+const StatusBadge = ({ status }: { status: Status }) => {
+  const cfg = STATUS_CONFIG[status];
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold tracking-widest uppercase ${cfg.pill}`}
+    >
+      {cfg.icon}
+      {status}
+    </span>
+  );
+};
+
+// ─── Corner SVG ──────────────────────────────────────────────────────────────
+const Corner = ({ rotate }: { rotate: number }) => (
+  <svg
+    width="36"
+    height="36"
+    viewBox="0 0 36 36"
+    fill="none"
+    style={{ transform: `rotate(${rotate}deg)` }}
+    className="absolute"
+  >
+    <path
+      d="M4 32 L4 4 L32 4"
+      stroke="white"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+// ─── Main Component ───────────────────────────────────────────────────────────
+export default function ScanDopine() {
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [facingMode, setFacingMode] = useState<"environment" | "user">(
+    "environment",
+  );
+  const [torchOn, setTorchOn] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("scan");
+  const [result, setResult] = useState<DrugResult | null>(null);
   const [manualQuery, setManualQuery] = useState("");
+  const [scanPulse, setScanPulse] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
 
-  // --- 1. Navigation / Back Logic ---
-  const handleBack = () => {
-    if (viewMode === 'result' || viewMode === 'manual') {
-      resetScan();
-    } else {
-      // Check if history exists, otherwise helpful fallback
-      if (window.history.length > 1) {
-        window.history.back();
-      } else {
-        console.log("No history to go back to");
+  // ── Camera lifecycle ────────────────────────────────────────────────────────
+  useEffect(() => {
+    const isActive = viewMode === "scan" || viewMode === "analyzing";
+    if (!isActive) {
+      stopStream();
+      return;
+    }
+    startCamera();
+    return stopStream;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [facingMode, viewMode]);
+
+  const startCamera = async () => {
+    stopStream();
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode, width: { ideal: 1920 }, height: { ideal: 1080 } },
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        setHasPermission(true);
       }
+    } catch {
+      setHasPermission(false);
     }
   };
 
-  // --- 2. Camera Logic ---
-  useEffect(() => {
-    let stream: MediaStream | null = null;
+  const stopStream = () => {
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
+  };
 
-    const startCamera = async () => {
-      if (viewMode !== 'scan' && viewMode !== 'analyzing') return;
-
-      try {
-        if (stream) {
-          // @ts-ignore
-          stream.getTracks().forEach(track => track.stop());
-        }
-
-        const constraints = {
-          video: {
-            facingMode: cameraFacingMode,
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
-          }
-        };
-
-        stream = await navigator.mediaDevices.getUserMedia(constraints);
-
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          setHasPermission(true);
-        }
-      } catch (err) {
-        console.error("Camera Error:", err);
-        setHasPermission(false);
-      }
-    };
-
-    startCamera();
-
-    return () => {
-      // @ts-ignore
-      if (stream) stream.getTracks().forEach(track => track.stop());
-    };
-  }, [cameraFacingMode, viewMode]);
-
+  // ── Controls ────────────────────────────────────────────────────────────────
   const toggleCamera = () => {
-    setCameraFacingMode(prev => prev === 'environment' ? 'user' : 'environment');
-    setTorchOn(false); // Reset torch when flipping
+    setTorchOn(false);
+    setFacingMode((p) => (p === "environment" ? "user" : "environment"));
   };
 
   const toggleTorch = async () => {
-    if (videoRef.current?.srcObject) {
-      const stream = videoRef.current.srcObject as MediaStream;
-      const track = stream.getVideoTracks()[0];
-      // @ts-ignore
-      const capabilities = (track.getCapabilities ? track.getCapabilities() : {}) as any;
-
-      // Check if torch is supported on this device/track
-      if (capabilities.torch || 'torch' in track.getSettings()) {
-        try {
-          // @ts-ignore
-          await track.applyConstraints({ advanced: [{ torch: !torchOn }] });
-          setTorchOn(!torchOn);
-        } catch (e) {
-          console.log("Torch error or not supported on this specific lens", e);
-        }
-      } else {
-        console.log("Torch capability not reported by browser");
-      }
+    const track = streamRef.current?.getVideoTracks()[0];
+    if (!track) return;
+    const caps = track.getCapabilities?.() as
+      | Record<string, unknown>
+      | undefined;
+    if (!caps?.torch) return;
+    try {
+      await track.applyConstraints({
+        advanced: [{ torch: !torchOn } as MediaTrackConstraintSet],
+      });
+      setTorchOn((p) => !p);
+    } catch {
+      /* unsupported */
     }
   };
 
-  // --- 3. Actions ---
-  const handleScanTrigger = () => {
-    if (navigator.vibrate) navigator.vibrate(50); // Haptic feedback
-    setViewMode('analyzing');
-
-    // Simulate API latency
-    setTimeout(() => {
-      const randomResult = MOCK_DB[0]; // Default to Safe for demo
-      setScannedResult(randomResult);
-      setViewMode('result');
-      if (navigator.vibrate) navigator.vibrate([100, 50, 100]); // Success haptics
-    }, 1500);
+  const handleBack = () => {
+    if (viewMode === "result" || viewMode === "manual") {
+      resetScan();
+    } else if (window.history.length > 1) {
+      window.history.back();
+    }
   };
+
+  // ── Actions ─────────────────────────────────────────────────────────────────
+  const triggerAnalysis = (query?: string) => {
+    setScanPulse(true);
+    setViewMode("analyzing");
+    navigator.vibrate?.(50);
+
+    setTimeout(() => {
+      const found = query
+        ? (MOCK_DB.find(
+            (d) =>
+              d.name.toLowerCase().includes(query.toLowerCase()) ||
+              d.brand.toLowerCase().includes(query.toLowerCase()),
+          ) ?? MOCK_DB[0])
+        : MOCK_DB[Math.floor(Math.random() * MOCK_DB.length)];
+
+      setResult(found);
+      setViewMode("result");
+      setScanPulse(false);
+      navigator.vibrate?.([80, 40, 80]);
+    }, 1600);
+  };
+
+  const handleScanTrigger = () => triggerAnalysis();
 
   const handleManualSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setViewMode('analyzing');
-
-    setTimeout(() => {
-      // Simple mock filter
-      const result = MOCK_DB.find(item =>
-        item.name.toLowerCase().includes(manualQuery.toLowerCase()) ||
-        item.brand.toLowerCase().includes(manualQuery.toLowerCase())
-      ) || MOCK_DB[0];
-
-      setScannedResult(result);
-      setViewMode('result');
-    }, 1000);
+    if (manualQuery.trim()) triggerAnalysis(manualQuery.trim());
   };
 
   const resetScan = () => {
-    setViewMode('scan');
-    setScannedResult(null);
+    setResult(null);
     setManualQuery("");
+    setViewMode("scan");
   };
 
-  // --- 4. Sub-Components (Status Badges) ---
-  const StatusBadge = ({ status }: { status: string }) => {
-    const styles = {
-      SAFE: "bg-green-500/20 text-green-400 border-green-500/50",
-      CAUTION: "bg-yellow-500/20 text-yellow-400 border-yellow-500/50",
-      BANNED: "bg-red-500/20 text-red-400 border-red-500/50",
-    };
-    const icons = {
-      SAFE: <ShieldCheck className="w-4 h-4 mr-1" />,
-      CAUTION: <ShieldAlert className="w-4 h-4 mr-1" />,
-      BANNED: <X className="w-4 h-4 mr-1" />,
-    };
-    // @ts-ignore
-    const activeStyle = styles[status] || styles.SAFE;
-    // @ts-ignore
-    const activeIcon = icons[status] || icons.SAFE;
-
-    return (
-      <div className={`inline-flex items-center px-3 py-1 border rounded-full backdrop-blur-md ${activeStyle}`}>
-        {activeIcon}
-        <span className="text-[10px] font-bold tracking-widest uppercase">{status}</span>
-      </div>
-    );
-  };
-
+  // ── Permission denied ────────────────────────────────────────────────────────
   if (hasPermission === false) {
     return (
-      <div className="h-screen w-full bg-zinc-950 flex flex-col items-center justify-center text-white p-6">
-        <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-6">
-          <Camera className="h-8 w-8 text-red-500" />
+      <div className="h-screen w-full bg-[#080810] flex flex-col items-center justify-center text-white p-8 gap-6">
+        <div className="w-20 h-20 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+          <Camera className="h-9 w-9 text-red-400" />
         </div>
-        <h2 className="text-xl font-bold mb-2">Camera Access Denied</h2>
-        <Button onClick={() => window.location.reload()} variant="outline" className="mt-4 cursor-pointer">
-          Try Again
-        </Button>
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-2">Camera access denied</h2>
+          <p className="text-sm text-white/40">
+            Please allow camera access in your browser settings.
+          </p>
+        </div>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-6 py-2.5 rounded-xl border border-white/10 text-sm font-medium hover:bg-white/5 transition-colors"
+        >
+          Try again
+        </button>
       </div>
     );
   }
 
-  return (
-    <div className="h-full w-full bg-zinc-950 overflow-hidden font-sans text-slate-50">
+  const isCamera = viewMode === "scan" || viewMode === "analyzing";
 
-      {/* --- LAYER 1: CAMERA FEED --- */}
-      {(viewMode === 'scan' || viewMode === 'analyzing') && (
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+        .sd-root { font-family: 'DM Sans', sans-serif; }
+        .sd-title { font-family: 'Syne', sans-serif; }
+
+        /* Scan line animation */
+        @keyframes scan-sweep {
+          0%   { transform: translateY(0);    opacity: 0; }
+          8%   { opacity: 1; }
+          92%  { opacity: 1; }
+          100% { transform: translateY(260px); opacity: 0; }
+        }
+        .scan-line-anim { animation: scan-sweep 2.2s cubic-bezier(0.4,0,0.6,1) infinite; }
+
+        /* Corner pulse */
+        @keyframes corner-pulse {
+          0%, 100% { opacity: 0.6; }
+          50% { opacity: 1; }
+        }
+        .corner-pulse { animation: corner-pulse 2s ease-in-out infinite; }
+
+        /* Spinner */
+        @keyframes spin-smooth { to { transform: rotate(360deg); } }
+        .spin-smooth { animation: spin-smooth 1s linear infinite; }
+
+        /* Counter-spin for inner ring */
+        @keyframes spin-rev { to { transform: rotate(-360deg); } }
+        .spin-rev { animation: spin-rev 1.4s linear infinite; }
+
+        /* Fade-slide in */
+        @keyframes fade-up {
+          from { opacity: 0; transform: translateY(20px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fade-up 0.35s cubic-bezier(0.34,1.2,0.64,1) forwards; }
+
+        /* Sheet slide */
+        @keyframes sheet-in {
+          from { transform: translateY(100%); }
+          to   { transform: translateY(0); }
+        }
+        .sheet-in { animation: sheet-in 0.4s cubic-bezier(0.32,0.72,0,1) forwards; }
+
+        /* Shutter ring pulse on trigger */
+        @keyframes ring-flash {
+          0%   { box-shadow: 0 0 0 0 rgba(255,255,255,0.6); }
+          100% { box-shadow: 0 0 0 22px rgba(255,255,255,0); }
+        }
+        .ring-flash { animation: ring-flash 0.5s ease-out; }
+
+        /* Vignette overlay */
+        .vignette {
+          background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%);
+        }
+
+        /* Torch glow */
+        @keyframes torch-pulse {
+          0%, 100% { opacity: 0.8; }
+          50% { opacity: 1; }
+        }
+        .torch-active { animation: torch-pulse 1.5s ease-in-out infinite; }
+
+        /* Scan pulse overlay */
+        @keyframes scan-flash {
+          0% { opacity: 0.3; }
+          100% { opacity: 0; }
+        }
+        .scan-flash { animation: scan-flash 0.4s ease-out forwards; }
+
+        /* Safe area helpers */
+        .pt-safe { padding-top: max(16px, env(safe-area-inset-top, 16px)); }
+        .pb-safe { padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)); }
+      `}</style>
+
+      <div className="sd-root relative h-[100dvh] w-full bg-[#080810] overflow-hidden text-white select-none">
+        {/* ── CAMERA FEED ─────────────────────────────────────────────────── */}
         <video
           ref={videoRef}
           autoPlay
           playsInline
           muted
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${viewMode === 'analyzing' ? 'opacity-40 blur-sm' : 'opacity-100'}`}
+          className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ${
+            isCamera ? "opacity-100" : "opacity-0 pointer-events-none"
+          } ${viewMode === "analyzing" ? "scale-105 blur-[2px]" : "scale-100"}`}
         />
-      )}
 
-      {/* --- LAYER 2: HEADER (Always Visible) --- */}
-      <div className="absolute top-0 left-0 right-0 z-50 pt-safe-top p-4 flex items-center justify-between bg-gradient-to-b from-black/80 to-transparent">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleBack}
-          className="rounded-full mt-1 cursor-pointer bg-black/20 backdrop-blur-md text-white hover:bg-white/10 border border-white/5"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
+        {/* Vignette */}
+        {isCamera && (
+          <div className="vignette absolute inset-0 z-[1] pointer-events-none" />
+        )}
 
-        <div className="flex items-center gap-2">
-          {viewMode === 'scan' && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTorch}
-              className="rounded-full cursor-pointer text-white hover:bg-white/10"
-            >
-              {torchOn ? <Zap className="h-5 w-5 text-yellow-400 fill-yellow-400" /> : <ZapOff className="h-5 w-5 opacity-70" />}
-            </Button>
-          )}
-          {viewMode === 'scan' && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleCamera}
-              className="rounded-full cursor-pointer text-white hover:bg-white/10"
-            >
-              <FlipHorizontal className="h-5 w-5 opacity-70" />
-            </Button>
-          )}
+        {/* Scan flash on trigger */}
+        {viewMode === "analyzing" && scanPulse && (
+          <div className="scan-flash absolute inset-0 z-[2] bg-white/10 pointer-events-none" />
+        )}
+
+        {/* ── TOP HEADER ─────────────────────────────────────────────────── */}
+        <div className="absolute top-0 left-0 right-0 z-50 pt-safe px-4 pb-3 flex items-center justify-between bg-gradient-to-b from-black/70 via-black/30 to-transparent">
+          <button
+            onClick={handleBack}
+            className="h-10 w-10 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center hover:bg-white/15 active:scale-95 transition-all"
+          >
+            <ArrowLeft className="h-4.5 w-4.5" strokeWidth={2} />
+          </button>
+
+          <p className="sd-title text-sm font-bold tracking-[0.12em] uppercase text-white/70">
+            Scan·Dopine
+          </p>
+
+          <div className="flex items-center gap-2">
+            {viewMode === "scan" && (
+              <>
+                <button
+                  onClick={toggleTorch}
+                  className={`h-10 w-10 rounded-2xl backdrop-blur-xl border flex items-center justify-center active:scale-95 transition-all ${
+                    torchOn
+                      ? "bg-yellow-400/20 border-yellow-400/40 torch-active"
+                      : "bg-white/10 border-white/10 hover:bg-white/15"
+                  }`}
+                >
+                  {torchOn ? (
+                    <Zap className="h-4 w-4 text-yellow-300 fill-yellow-300" />
+                  ) : (
+                    <ZapOff className="h-4 w-4 text-white/60" />
+                  )}
+                </button>
+
+                <button
+                  onClick={toggleCamera}
+                  className="h-10 w-10 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center hover:bg-white/15 active:scale-95 transition-all"
+                >
+                  <FlipHorizontal className="h-4 w-4 text-white/60" />
+                </button>
+              </>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* --- LAYER 3: SCANNER UI --- */}
-      {viewMode === 'scan' && (
-        <div className="absolute inset-0 z-10 flex flex-col pt-20 pb-safe-bottom">
+        {/* ── SCAN VIEW ──────────────────────────────────────────────────── */}
+        {viewMode === "scan" && (
+          <div className="absolute inset-0 z-10 flex flex-col">
+            {/* Viewfinder area */}
+            <div className="flex-1 flex items-center justify-center px-10">
+              <div className="relative w-full max-w-[270px] aspect-square">
+                {/* Dim overlay outside the frame */}
+                <div className="absolute -inset-[9999px] bg-black/50 z-0" />
+                <div className="absolute inset-0 z-10" />
 
-          {/* Viewfinder */}
-          <div className="flex-1 flex flex-col items-center justify-center relative px-8">
-            <div className="relative w-full aspect-square max-w-[300px]">
-              {/* Corners */}
-              <div className="absolute top-0 left-0 w-12 h-12 border-t-[3px] border-l-[3px] border-white rounded-tl-2xl shadow-[0_0_10px_rgba(0,0,0,0.5)]"></div>
-              <div className="absolute top-0 right-0 w-12 h-12 border-t-[3px] border-r-[3px] border-white rounded-tr-2xl shadow-[0_0_10px_rgba(0,0,0,0.5)]"></div>
-              <div className="absolute bottom-0 left-0 w-12 h-12 border-b-[3px] border-l-[3px] border-white rounded-bl-2xl shadow-[0_0_10px_rgba(0,0,0,0.5)]"></div>
-              <div className="absolute bottom-0 right-0 w-12 h-12 border-b-[3px] border-r-[3px] border-white rounded-br-2xl shadow-[0_0_10px_rgba(0,0,0,0.5)]"></div>
+                {/* Corner brackets */}
+                <div className="corner-pulse absolute top-0 left-0">
+                  <Corner rotate={0} />
+                </div>
+                <div className="corner-pulse absolute top-0 right-0">
+                  <Corner rotate={90} />
+                </div>
+                <div className="corner-pulse absolute bottom-0 left-0">
+                  <Corner rotate={270} />
+                </div>
+                <div className="corner-pulse absolute bottom-0 right-0">
+                  <Corner rotate={180} />
+                </div>
 
-              {/* Scan Line Animation */}
-              <div className="absolute top-1/2 left-4 right-4 h-[1px] bg-red-500 shadow-[0_0_20px_2px_rgba(239,68,68,0.6)] animate-[scan-vertical_2s_ease-in-out_infinite]"></div>
+                {/* Scan line */}
+                <div className="absolute inset-x-3 top-3 bottom-3 overflow-hidden z-20 pointer-events-none">
+                  <div className="scan-line-anim absolute left-0 right-0 top-0">
+                    <div className="h-px bg-gradient-to-r from-transparent via-[#00d4ff] to-transparent opacity-90 shadow-[0_0_12px_2px_rgba(0,212,255,0.5)]" />
+                    <div className="h-12 bg-gradient-to-b from-[#00d4ff]/10 to-transparent" />
+                  </div>
+                </div>
 
-              <p className="absolute -bottom-12 left-0 right-0 text-center text-white/70 text-sm font-medium">
-                Align code within frame
+                {/* Frame label */}
+                <p className="absolute -bottom-10 left-0 right-0 text-center text-[11px] font-medium tracking-wider text-white/50 uppercase">
+                  Align barcode within frame
+                </p>
+              </div>
+            </div>
+
+            {/* Bottom controls */}
+            <div className="pb-safe px-8 pt-6 flex flex-col gap-5 bg-gradient-to-t from-black/90 via-black/60 to-transparent">
+              <div className="flex items-center justify-between px-4">
+                {/* Manual */}
+                <button
+                  onClick={() => setViewMode("manual")}
+                  className="flex flex-col items-center gap-2"
+                >
+                  <div className="h-12 w-12 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-white/15 active:scale-95 transition-all">
+                    <Keyboard className="h-5 w-5 text-white/70" />
+                  </div>
+                  <span className="text-[9px] font-semibold uppercase tracking-widest text-white/40">
+                    Manual
+                  </span>
+                </button>
+
+                {/* Shutter */}
+                <button
+                  onClick={handleScanTrigger}
+                  className="group relative h-[76px] w-[76px] flex items-center justify-center active:scale-95 transition-transform"
+                >
+                  {/* Outer ring */}
+                  <div className="absolute inset-0 rounded-full border-[2.5px] border-white/25 group-active:border-white/50 transition-colors" />
+                  {/* Inner button */}
+                  <div className="h-[58px] w-[58px] bg-white rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(255,255,255,0.3)] group-active:shadow-[0_0_15px_rgba(255,255,255,0.5)] transition-all group-active:scale-90">
+                    <ScanLine
+                      className="h-5 w-5 text-black/60"
+                      strokeWidth={2.5}
+                    />
+                  </div>
+                </button>
+
+                {/* History */}
+                <button className="flex flex-col items-center gap-2">
+                  <div className="h-12 w-12 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:bg-white/15 active:scale-95 transition-all">
+                    <History className="h-5 w-5 text-white/70" />
+                  </div>
+                  <span className="text-[9px] font-semibold uppercase tracking-widest text-white/40">
+                    Recent
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── ANALYZING ──────────────────────────────────────────────────── */}
+        {viewMode === "analyzing" && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8">
+            {/* Spinner */}
+            <div className="relative w-24 h-24">
+              <div className="spin-smooth absolute inset-0 rounded-full border-[2px] border-transparent border-t-[#00d4ff] border-r-[#00d4ff]/30" />
+              <div className="spin-rev absolute inset-3 rounded-full border-[2px] border-transparent border-b-[#a78bfa] border-l-[#a78bfa]/30" />
+              <div className="absolute inset-[18px] rounded-full bg-white/5 backdrop-blur-sm border border-white/10 flex items-center justify-center">
+                <ScanLine className="h-5 w-5 text-white/60" strokeWidth={1.8} />
+              </div>
+            </div>
+
+            <div className="text-center fade-up">
+              <p className="sd-title text-lg font-bold tracking-wide">
+                Analyzing Compound
+              </p>
+              <p className="text-sm text-white/40 mt-1">
+                Cross-referencing WADA 2026 list…
               </p>
             </div>
-          </div>
 
-          {/* Bottom Controls */}
-          <div className="p-6 pb-10 flex flex-col gap-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
-            <div className="flex items-center justify-center gap-12">
-              <div className="flex flex-col items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setViewMode('manual')}
-                  className="h-12 w-12 rounded-full cursor-pointer border-white/20 bg-white/5 hover:bg-white/10 text-white backdrop-blur-sm"
-                >
-                  <Keyboard className="h-5 w-5" />
-                </Button>
-                <span className="text-[10px] uppercase font-bold text-white/50 tracking-wider">Manual</span>
-              </div>
-
-              {/* Shutter Button */}
-              <button
-                onClick={handleScanTrigger}
-                className="group relative h-20 w-20 flex items-center justify-center cursor-pointer"
-              >
-                <div className="absolute inset-0 rounded-full border-4 border-white/30 group-active:scale-95 transition-transform duration-100"></div>
-                <div className="h-16 w-16 bg-white rounded-full shadow-[0_0_20px_rgba(255,255,255,0.3)] group-active:scale-90 transition-transform duration-100"></div>
-              </button>
-
-              <div className="flex flex-col items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-12 w-12 rounded-full cursor-pointer border-white/20 bg-white/5 hover:bg-white/10 text-white backdrop-blur-sm"
-                >
-                  <History className="h-5 w-5" />
-                </Button>
-                <span className="text-[10px] uppercase font-bold text-white/50 tracking-wider">Recent</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* --- LAYER 4: ANALYZING STATE --- */}
-      {viewMode === 'analyzing' && (
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="relative">
-            <div className="h-20 w-20 rounded-full border-4 border-white/10 border-t-blue-500 animate-spin"></div>
-            <ScanLine className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-white/50 animate-pulse" />
-          </div>
-          <p className="mt-6 text-lg font-medium text-white tracking-tight animate-pulse">Analyzing Compound...</p>
-        </div>
-      )}
-
-      {/* --- LAYER 5: MANUAL ENTRY FORM --- */}
-      {viewMode === 'manual' && (
-        <div className="absolute inset-0 z-30 bg-zinc-950 flex flex-col pt-24 px-6">
-          <h1 className="text-3xl font-bold text-white mb-2">Search Database</h1>
-          <p className="text-zinc-400 mb-8">Enter the medication name or serial number to check WADA compliance.</p>
-
-          <form onSubmit={handleManualSearch} className="flex flex-col gap-4">
-            <div className="relative">
-              <Search className="absolute left-4 top-3.5 h-5 w-5 text-zinc-500" />
-              <Input
-                autoFocus
-                placeholder="e.g. Advil, Ibuprofen..."
-                value={manualQuery}
-                onChange={(e) => setManualQuery(e.target.value)}
-                className="h-12 pl-12 bg-zinc-900 border-zinc-800 text-white rounded-xl focus-visible:ring-blue-600"
-              />
-            </div>
-            <Button type="submit" className="h-12 rounded-xl cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold">
-              Check Compliance
-            </Button>
-          </form>
-
-          <div className="mt-8">
-            <p className="text-xs font-bold text-zinc-600 uppercase tracking-widest mb-4">Quick Searches</p>
-            <div className="flex flex-wrap gap-2">
-              {["Caffeine", "Aspirin", "Insulin", "Melatonin"].map(item => (
-                <button
-                  key={item}
-                  onClick={() => { setManualQuery(item); }}
-                  className="px-4 py-2 rounded-lg cursor-pointer bg-zinc-900 text-zinc-300 text-sm font-medium hover:bg-zinc-800 transition-colors"
-                >
-                  {item}
-                </button>
+            {/* Progress dots */}
+            <div className="flex gap-1.5">
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="w-1.5 h-1.5 rounded-full bg-white/30"
+                  style={{
+                    animation: `corner-pulse 1.2s ease-in-out ${i * 0.2}s infinite`,
+                  }}
+                />
               ))}
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* --- LAYER 6: RESULT CARD --- */}
-      {viewMode === 'result' && scannedResult && (
-        <div className="absolute inset-0 z-40 bg-zinc-950/90 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-6 animate-in fade-in duration-200">
+        {/* ── MANUAL ENTRY ───────────────────────────────────────────────── */}
+        {viewMode === "manual" && (
+          <div className="absolute inset-0 z-30 bg-[#080810] flex flex-col pt-safe">
+            <div className="flex-1 overflow-y-auto px-6 pt-20 pb-8">
+              <div className="fade-up">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#00d4ff]/70 mb-3">
+                  Database Search
+                </p>
+                <h1 className="sd-title text-3xl font-extrabold leading-tight mb-2">
+                  Find a substance
+                </h1>
+                <p className="text-sm text-white/40 mb-8 leading-relaxed">
+                  Enter the medication, supplement, or substance name to check
+                  against WADA 2026 guidelines.
+                </p>
 
-          <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl animate-in slide-in-from-bottom-10 duration-300">
+                <form
+                  onSubmit={handleManualSearch}
+                  className="flex flex-col gap-3 mb-8"
+                >
+                  <div className="relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+                    <Input
+                      autoFocus
+                      placeholder="e.g. Ibuprofen, Clenbuterol…"
+                      value={manualQuery}
+                      onChange={(e) => setManualQuery(e.target.value)}
+                      className="h-13 pl-11 bg-white/5 border-white/10 text-white placeholder:text-white/25 rounded-2xl text-sm focus-visible:ring-[#00d4ff]/50 focus-visible:border-[#00d4ff]/40"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="h-13 rounded-2xl bg-[#00d4ff]/10 border border-[#00d4ff]/30 text-[#00d4ff] font-semibold text-sm hover:bg-[#00d4ff]/15 active:scale-[0.98] transition-all"
+                  >
+                    Check compliance
+                  </button>
+                </form>
 
-            {/* Card Header */}
-            <div className="bg-zinc-100 p-6 border-b border-zinc-200">
-              <div className="flex justify-between items-start mb-4">
-                <StatusBadge status={scannedResult.status} />
-                <Button variant="ghost" size="icon" onClick={resetScan} className="h-8 w-8 -mr-2 cursor-pointer text-zinc-400 hover:text-zinc-900">
-                  <X className="h-5 w-5" />
-                </Button>
-              </div>
-              <h2 className="text-2xl font-bold text-zinc-900">{scannedResult.name}</h2>
-              <p className="text-zinc-500 font-medium">{scannedResult.brand}</p>
-            </div>
-
-            {/* Card Body */}
-            <div className="p-6 space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-100">
-                  <p className="text-[10px] uppercase font-bold text-zinc-400 mb-1">Competition</p>
-                  <p className="text-sm font-semibold text-zinc-900">{scannedResult.type}</p>
-                </div>
-                <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-100">
-                  <p className="text-[10px] uppercase font-bold text-zinc-400 mb-1">Detection ID</p>
-                  <div className="flex items-center gap-1">
-                    <Barcode className="h-3 w-3 text-zinc-400" />
-                    <p className="text-sm font-semibold text-zinc-900">8839201</p>
+                {/* Quick searches */}
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/25 mb-3">
+                    Quick searches
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {QUICK_SEARCHES.map((item) => (
+                      <button
+                        key={item}
+                        onClick={() => setManualQuery(item)}
+                        className="px-4 py-2 rounded-xl bg-white/5 border border-white/8 text-white/60 text-sm font-medium hover:bg-white/8 hover:text-white/80 active:scale-95 transition-all"
+                      >
+                        {item}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        )}
 
-              <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                <h4 className="text-sm font-bold text-blue-900 mb-1">WADA Guidelines</h4>
-                <p className="text-sm text-blue-700/80 leading-relaxed">
-                  {scannedResult.details}
+        {/* ── RESULT SHEET ────────────────────────────────────────────────── */}
+        {viewMode === "result" && result && (
+          <div className="absolute inset-0 z-40 flex items-end sm:items-center justify-center sm:p-6">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={resetScan}
+            />
+
+            {/* Sheet */}
+            <div
+              className={`sheet-in relative w-full max-w-md rounded-t-[32px] sm:rounded-[32px] overflow-hidden ${STATUS_CONFIG[result.status].glow}`}
+            >
+              {/* Status gradient header */}
+              <div
+                className={`bg-gradient-to-br ${STATUS_CONFIG[result.status].card} border-b border-white/5 p-6 pt-7 bg-[#0f0f18]`}
+              >
+                {/* Drag handle */}
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 rounded-full bg-white/15 sm:hidden" />
+
+                <div className="flex items-start justify-between mb-5">
+                  <StatusBadge status={result.status} />
+                  <button
+                    onClick={resetScan}
+                    className="h-8 w-8 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center hover:bg-white/12 active:scale-95 transition-all -mr-1"
+                  >
+                    <X className="h-3.5 w-3.5 text-white/50" />
+                  </button>
+                </div>
+
+                <h2 className="sd-title text-2xl font-extrabold text-white leading-snug">
+                  {result.name}
+                </h2>
+                <p className="text-white/45 font-medium text-sm mt-1">
+                  {result.brand}
                 </p>
               </div>
 
-              <Button onClick={resetScan} className="w-full h-12 rounded-full cursor-pointer bg-zinc-900 text-white hover:bg-zinc-800 font-bold shadow-lg">
-                Scan Next Item <ChevronRight className="ml-1 h-4 w-4" />
-              </Button>
+              {/* Body */}
+              <div className="bg-[#0f0f18] p-6 space-y-4">
+                {/* Info grid */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-4 rounded-2xl bg-white/4 border border-white/7">
+                    <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/30 mb-1.5">
+                      Competition
+                    </p>
+                    <p className="text-sm font-semibold text-white/85">
+                      {result.type}
+                    </p>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white/4 border border-white/7">
+                    <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/30 mb-1.5">
+                      Detection ID
+                    </p>
+                    <div className="flex items-center gap-1.5">
+                      <Barcode className="h-3 w-3 text-white/30 flex-shrink-0" />
+                      <p className="text-sm font-semibold text-white/85 font-mono">
+                        {Math.floor(Math.random() * 9000000 + 1000000)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Guidelines */}
+                <div
+                  className={`p-4 rounded-2xl border bg-gradient-to-br ${STATUS_CONFIG[result.status].card}`}
+                >
+                  <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-white/40 mb-2">
+                    WADA 2026 Ruling
+                  </p>
+                  <p className="text-sm text-white/70 leading-relaxed">
+                    {result.details}
+                  </p>
+                </div>
+
+                {/* Verdict pill */}
+                <div className="flex items-center gap-2 p-3 rounded-2xl bg-white/3 border border-white/7">
+                  <div
+                    className={`h-2 w-2 rounded-full flex-shrink-0 ${
+                      result.status === "SAFE"
+                        ? "bg-emerald-400"
+                        : result.status === "CAUTION"
+                          ? "bg-amber-400"
+                          : "bg-red-400"
+                    } shadow-[0_0_8px_currentColor]`}
+                  />
+                  <p className="text-xs text-white/50">
+                    {STATUS_CONFIG[result.status].label} — always verify with
+                    your team physician.
+                  </p>
+                </div>
+
+                {/* CTA */}
+                <button
+                  onClick={resetScan}
+                  className="w-full h-13 rounded-2xl bg-white/8 border border-white/10 text-white font-semibold text-sm hover:bg-white/12 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                >
+                  Scan next item
+                  <ChevronRight className="h-4 w-4 text-white/50" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-
-      <style>{`
-        @keyframes scan-vertical {
-          0% { top: 10%; opacity: 0; }
-          15% { opacity: 1; }
-          85% { opacity: 1; }
-          100% { top: 90%; opacity: 0; }
-        }
-      `}</style>
-    </div>
+        )}
+      </div>
+    </>
   );
 }

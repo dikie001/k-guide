@@ -97,13 +97,13 @@ export default function StretchingPage() {
   const getIntensityColor = (intensity: string) => {
     switch (intensity) {
       case "light":
-        return "bg-green-100 text-green-700";
+        return "bg-green-500/10 dark:bg-green-950/40 text-green-600 dark:text-green-400";
       case "moderate":
-        return "bg-orange-100 text-orange-700";
+        return "bg-orange-500/10 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400";
       case "intense":
-        return "bg-red-100 text-red-700";
+        return "bg-red-500/10 dark:bg-red-950/40 text-red-600 dark:text-red-400";
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-muted text-muted-foreground";
     }
   };
 
@@ -131,17 +131,19 @@ export default function StretchingPage() {
         <div className="p-4 space-y-6">
           {/* Stats Cards */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white rounded-2xl p-4 border border-slate-100">
-              <p className="text-2xl font-bold text-slate-900">
+            <div className="bg-card rounded-2xl p-4 border border-border">
+              <p className="text-2xl font-bold text-foreground">
                 {today.length}
               </p>
-              <p className="text-xs text-slate-500 font-bold">Today</p>
+              <p className="text-xs text-muted-foreground font-bold">Today</p>
             </div>
-            <div className="bg-green-50 rounded-2xl p-4 border border-green-100">
-              <p className="text-2xl font-bold text-green-600">
+            <div className="bg-green-500/10 dark:bg-green-950/40 rounded-2xl p-4 border border-green-500/20 dark:border-green-500/30">
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                 {completed.length}
               </p>
-              <p className="text-xs text-green-700 font-bold">Completed</p>
+              <p className="text-xs text-green-700 dark:text-green-300 font-bold">
+                Completed
+              </p>
             </div>
           </div>
 
@@ -151,17 +153,17 @@ export default function StretchingPage() {
             onValueChange={setSelectedTab}
             className="w-full"
           >
-            <TabsList className="grid w-full grid-cols-2 rounded-xl h-auto p-1 bg-white border border-slate-100">
+            <TabsList className="grid w-full grid-cols-2 rounded-xl h-auto p-1 bg-muted border border-border">
               <TabsTrigger
                 value="today"
-                className="rounded-lg data-[state=active]:bg-blue-50"
+                className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground"
               >
                 <Clock className="h-4 w-4 mr-1.5" />
                 My Routines
               </TabsTrigger>
               <TabsTrigger
                 value="browse"
-                className="rounded-lg data-[state=active]:bg-blue-50"
+                className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground"
               >
                 <Plus className="h-4 w-4 mr-1.5" />
                 Browse
@@ -171,8 +173,10 @@ export default function StretchingPage() {
             <TabsContent value="today" className="space-y-3 mt-4">
               {routines.length === 0 ? (
                 <div className="text-center py-8">
-                  <Zap className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-                  <p className="text-sm text-slate-400">No routines yet</p>
+                  <Zap className="h-8 w-8 text-muted-foreground/50 mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">
+                    No routines yet
+                  </p>
                 </div>
               ) : (
                 routines.map((routine) => (
@@ -180,16 +184,18 @@ export default function StretchingPage() {
                     key={routine.id}
                     className={`p-4 rounded-2xl border transition-all cursor-pointer ${
                       routine.completed
-                        ? "bg-green-50 border-green-100"
-                        : "bg-white border-slate-100 hover:shadow-md"
+                        ? "bg-green-500/10 dark:bg-green-950/40 border-green-500/20 dark:border-green-500/30"
+                        : "bg-card border-border hover:shadow-md"
                     }`}
                   >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1">
-                        <h4 className="text-sm font-bold text-slate-900">
+                        <h4 className="text-sm font-bold text-foreground">
                           {routine.name}
                         </h4>
-                        <p className="text-xs text-slate-500">{routine.date}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {routine.date}
+                        </p>
                       </div>
                       <button
                         onClick={(e) => {
@@ -222,7 +228,7 @@ export default function StretchingPage() {
                         <Badge
                           key={part}
                           variant="outline"
-                          className="text-xs bg-slate-50"
+                          className="text-xs bg-muted"
                         >
                           {part}
                         </Badge>
@@ -246,16 +252,16 @@ export default function StretchingPage() {
             </TabsContent>
 
             <TabsContent value="browse" className="space-y-3 mt-4">
-              <p className="text-xs text-slate-500 font-bold uppercase tracking-wide px-1">
+              <p className="text-xs text-muted-foreground font-bold uppercase tracking-wide px-1">
                 Available Routines
               </p>
               {STRETCHING_ROUTINES.map((routine, idx) => (
                 <div
                   key={idx}
-                  className="flex items-start justify-between p-4 bg-white rounded-2xl border border-slate-100 hover:shadow-md transition-shadow"
+                  className="flex items-start justify-between p-4 bg-card rounded-2xl border border-border hover:shadow-md transition-shadow"
                 >
                   <div className="flex-1">
-                    <h4 className="text-sm font-bold text-slate-900 mb-2">
+                    <h4 className="text-sm font-bold text-foreground mb-2">
                       {routine.name}
                     </h4>
                     <div className="flex items-center gap-2 mb-3">
@@ -277,7 +283,7 @@ export default function StretchingPage() {
                         <Badge
                           key={part}
                           variant="outline"
-                          className="text-xs bg-slate-50"
+                          className="text-xs bg-muted"
                         >
                           {part}
                         </Badge>
@@ -297,11 +303,11 @@ export default function StretchingPage() {
           </Tabs>
 
           {/* Tips */}
-          <div className="bg-purple-50 rounded-2xl p-4 border border-purple-100 space-y-2">
-            <h4 className="text-xs font-bold text-purple-900 uppercase tracking-wide">
+          <div className="bg-primary/10 dark:bg-primary/5 rounded-2xl p-4 border border-primary/20 dark:border-primary/10 space-y-2">
+            <h4 className="text-xs font-bold text-primary/90 dark:text-primary/80 uppercase tracking-wide">
               Stretching Tips
             </h4>
-            <ul className="text-xs text-purple-800 space-y-1 list-disc list-inside">
+            <ul className="text-xs text-primary/80 dark:text-primary/70 space-y-1 list-disc list-inside">
               <li>Stretch after warming up muscles</li>
               <li>Hold each stretch for 30 seconds</li>
               <li>Never bounce or force too hard</li>
@@ -315,5 +321,3 @@ export default function StretchingPage() {
     </div>
   );
 }
-
-

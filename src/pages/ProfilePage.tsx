@@ -64,13 +64,13 @@ export default function ProfilePage() {
           {/* Profile Card */}
           <div className="relative overflow-hidden rounded-[2rem] border border-border/60 bg-card shadow-sm">
             {/* Gradient Background */}
-            <div className="absolute top-0 left-0 h-28 w-full bg-linear-to-b from-blue-100/50 to-transparent pointer-events-none" />
+            <div className="absolute top-0 left-0 h-28 w-full bg-linear-to-b from-primary/10 to-transparent pointer-events-none" />
 
             <div className="relative flex flex-col items-center pt-8 p-5">
               {/* Avatar */}
               <div className="group relative mb-3 cursor-pointer">
                 <div className="h-24 w-24 rounded-full bg-linear-to-tr from-blue-500 to-indigo-500 p-0.75 shadow-lg shadow-blue-500/20">
-                  <div className="h-full w-full overflow-hidden rounded-full border-[3px] border-white bg-white">
+                  <div className="h-full w-full overflow-hidden rounded-full border-[3px] border-background bg-background">
                     <img
                       src="https://images.unsplash.com/photo-1595475207225-428b62bda831?auto=format&fit=crop&q=80&w=200&h=200"
                       alt="Profile"
@@ -79,7 +79,7 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 {/* Status Badge */}
-                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex items-center gap-1 rounded-full border-2 border-white bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-md">
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex items-center gap-1 rounded-full border-2 border-background bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-md">
                   <User className="h-3 w-3 fill-white/20" /> SAFE
                 </div>
               </div>
@@ -87,38 +87,40 @@ export default function ProfilePage() {
               {/* Name & Title */}
               <div className="text-center mb-6">
                 <div className="flex items-center justify-center gap-1.5 mb-1">
-                  <h2 className="text-xl font-extrabold tracking-tight text-slate-900">
+                  <h2 className="text-xl font-extrabold tracking-tight text-foreground">
                     Lucy Cherono
                   </h2>
                   <span className="text-lg shadow-sm rounded-sm overflow-hidden">
                     🇰🇪
                   </span>
                 </div>
-                <p className="max-w-65 mx-auto text-xs font-medium leading-relaxed text-slate-500">
+                <p className="max-w-65 mx-auto text-xs font-medium leading-relaxed text-muted-foreground">
                   Marathoner | Iten, Home of Champions 🏃🏾‍♀️💨 <br />
-                  <span className="italic text-slate-400">
+                  <span className="italic text-muted-foreground/70">
                     "Pain is temporary, Pride is forever"
                   </span>
                 </p>
               </div>
 
               {/* Stats Row */}
-              <div className="mb-6 grid w-full grid-cols-3 divide-x divide-slate-100">
+              <div className="mb-6 grid w-full grid-cols-3 divide-x divide-border">
                 <div className="text-center">
-                  <p className="text-lg font-extrabold text-slate-900">87</p>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  <p className="text-lg font-extrabold text-foreground">87</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
                     Scans
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-lg font-extrabold text-slate-900">142</p>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  <p className="text-lg font-extrabold text-foreground">142</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
                     Streak
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-lg font-extrabold text-slate-900">Elite</p>
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  <p className="text-lg font-extrabold text-foreground">
+                    Elite
+                  </p>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
                     Level
                   </p>
                 </div>
@@ -128,20 +130,20 @@ export default function ProfilePage() {
               <div className="flex w-full gap-2">
                 <Button
                   variant="outline"
-                  className="h-10 flex-1 rounded-xl border-slate-200 bg-slate-50/50 text-xs font-bold hover:bg-slate-100 hover:text-slate-900"
+                  className="h-10 flex-1 rounded-xl border-border bg-muted/50 text-xs font-bold hover:bg-muted hover:text-foreground"
                 >
                   Edit Profile
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-10 flex-1 rounded-xl border-slate-200 bg-slate-50/50 text-xs font-bold hover:bg-slate-100 hover:text-slate-900"
+                  className="h-10 flex-1 rounded-xl border-border bg-muted/50 text-xs font-bold hover:bg-muted hover:text-foreground"
                 >
                   Share
                 </Button>
                 <Button
                   size="icon"
                   variant="outline"
-                  className="h-10 w-10 shrink-0 rounded-xl border-slate-200 bg-slate-50/50 hover:bg-slate-100 hover:text-slate-900"
+                  className="h-10 w-10 shrink-0 rounded-xl border-border bg-muted/50 hover:bg-muted hover:text-foreground"
                 >
                   <Zap className="h-4 w-4" />
                 </Button>
@@ -149,14 +151,14 @@ export default function ProfilePage() {
             </div>
           </div>
           {/* Cycle Graph Card */}
-          <div className="rounded-[2rem] border border-slate-100 bg-white p-5 shadow-sm">
+          <div className="rounded-[2rem] border border-border bg-card p-5 shadow-sm">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+              <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
                 My Cycle & Training
               </h3>
-              <div className="flex items-center gap-1.5 rounded-full bg-pink-50 px-2 py-0.5 border border-pink-100">
+              <div className="flex items-center gap-1.5 rounded-full bg-pink-500/10 px-2 py-0.5 border border-pink-500/20 dark:bg-pink-950/40 dark:border-pink-500/30">
                 <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-pink-500" />
-                <span className="text-[10px] font-bold text-pink-600">
+                <span className="text-[10px] font-bold text-pink-600 dark:text-pink-400">
                   Active
                 </span>
               </div>
@@ -165,9 +167,9 @@ export default function ProfilePage() {
             <div className="relative h-32 w-full">
               {/* Simplified Graph Background */}
               <div className="absolute inset-0 flex flex-col justify-between opacity-[0.03]">
-                <div className="h-px w-full bg-slate-900" />
-                <div className="h-px w-full bg-slate-900" />
-                <div className="h-px w-full bg-slate-900" />
+                <div className="h-px w-full bg-foreground" />
+                <div className="h-px w-full bg-foreground" />
+                <div className="h-px w-full bg-foreground" />
               </div>
 
               <svg
@@ -224,10 +226,10 @@ export default function ProfilePage() {
             </div>
 
             <div className="mt-2 text-center sm:text-left">
-              <p className="text-xs font-bold text-slate-900">
+              <p className="text-xs font-bold text-foreground">
                 Day 14: Strength Focus
               </p>
-              <p className="text-[10px] font-medium text-slate-500">
+              <p className="text-[10px] font-medium text-muted-foreground">
                 High intensity & resistance training recommended.
               </p>
             </div>
@@ -238,16 +240,16 @@ export default function ProfilePage() {
             className="w-full"
             onValueChange={setActiveTab}
           >
-            <TabsList className="mb-4 h-12 w-full rounded-2xl bg-slate-100 p-1">
+            <TabsList className="mb-4 h-12 w-full rounded-2xl bg-muted p-1">
               <TabsTrigger
                 value="grid"
-                className="flex-1 rounded-xl py-2 text-xs font-bold transition-all data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm"
+                className="flex-1 rounded-xl py-2 text-xs font-bold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
               >
                 Scan History
               </TabsTrigger>
               <TabsTrigger
                 value="list"
-                className="flex-1 rounded-xl py-2 text-xs font-bold transition-all data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm"
+                className="flex-1 rounded-xl py-2 text-xs font-bold transition-all data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
               >
                 Injury Logs
               </TabsTrigger>
@@ -261,15 +263,15 @@ export default function ProfilePage() {
                 {scans.map((scan) => (
                   <div
                     key={scan.id}
-                    className="group relative flex aspect-square flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border border-slate-100 bg-white p-2 shadow-sm transition-all hover:border-slate-200 hover:shadow-md"
+                    className="group relative flex aspect-square flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-sm transition-all hover:border-border/80 hover:shadow-md"
                   >
                     <div
                       className={`absolute right-0 top-0 rounded-bl-xl p-1.5 ${
                         scan.result === "SAFE"
-                          ? "bg-green-50 text-green-600"
+                          ? "bg-green-500/10 text-green-600 dark:text-green-400"
                           : scan.result === "BANNED"
-                            ? "bg-red-50 text-red-600"
-                            : "bg-orange-50 text-orange-600"
+                            ? "bg-red-500/10 text-red-600 dark:text-red-400"
+                            : "bg-orange-500/10 text-orange-600 dark:text-orange-400"
                       }`}
                     >
                       {scan.result === "SAFE" ? (
@@ -279,21 +281,21 @@ export default function ProfilePage() {
                       )}
                     </div>
 
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-400 group-hover:bg-slate-100 group-hover:text-slate-600 transition-colors">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-muted-foreground group-hover:bg-muted/80 group-hover:text-foreground transition-colors">
                       <Zap className="h-5 w-5" />
                     </div>
-                    <p className="line-clamp-2 text-center text-[10px] font-bold leading-tight text-slate-700">
+                    <p className="line-clamp-2 text-center text-[10px] font-bold leading-tight text-foreground/80">
                       {scan.name}
                     </p>
                   </div>
                 ))}
 
                 {/* 'View All' Button */}
-                <button className="flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-300 bg-slate-50/50 p-2 transition-colors hover:bg-slate-100">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm">
-                    <ChevronRight className="h-4 w-4 text-slate-400" />
+                <button className="flex aspect-square flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border bg-muted/30 p-2 transition-colors hover:bg-muted/50">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-card shadow-sm">
+                    <ChevronRight className="h-4 w-4 text-muted-foreground/70" />
                   </div>
-                  <span className="text-[9px] font-bold uppercase text-slate-400">
+                  <span className="text-[9px] font-bold uppercase text-muted-foreground/70">
                     View All
                   </span>
                 </button>
@@ -304,22 +306,22 @@ export default function ProfilePage() {
               value="list"
               className="mt-0 animate-in fade-in slide-in-from-bottom-2 duration-200"
             >
-              <div className="overflow-hidden rounded-[2rem] border border-slate-100 bg-white shadow-sm">
-                <div className="divide-y divide-slate-50">
+              <div className="overflow-hidden rounded-[2rem] border border-border bg-card shadow-sm">
+                <div className="divide-y divide-border">
                   {injuries.map((injury) => (
                     <div
                       key={injury.id}
-                      className="flex items-center justify-between p-4 transition-colors hover:bg-slate-50/50"
+                      className="flex items-center justify-between p-4 transition-colors hover:bg-muted/30"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-500">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-500/10 dark:bg-red-950/40 text-red-500 dark:text-red-400">
                           <HeartPulse className="h-5 w-5" />
                         </div>
                         <div>
-                          <h4 className="text-sm font-bold text-slate-900">
+                          <h4 className="text-sm font-bold text-foreground">
                             {injury.title}
                           </h4>
-                          <p className="text-[10px] font-medium text-slate-400">
+                          <p className="text-[10px] font-medium text-muted-foreground/70">
                             {injury.date}
                           </p>
                         </div>
@@ -328,8 +330,8 @@ export default function ProfilePage() {
                         variant="outline"
                         className={`border-0 px-2 py-0.5 text-[10px] font-bold ${
                           injury.status === "Active"
-                            ? "bg-orange-50 text-orange-600"
-                            : "bg-green-50 text-green-600"
+                            ? "bg-orange-500/10 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400"
+                            : "bg-green-500/10 dark:bg-green-950/40 text-green-600 dark:text-green-400"
                         }`}
                       >
                         {injury.status}
@@ -337,8 +339,8 @@ export default function ProfilePage() {
                     </div>
                   ))}
                 </div>
-                <div className="border-t border-slate-100 bg-slate-50 p-3 text-center">
-                  <button className="text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors">
+                <div className="border-t border-border bg-muted/30 p-3 text-center">
+                  <button className="text-xs font-bold text-muted-foreground hover:text-foreground transition-colors">
                     + Log New Injury
                   </button>
                 </div>
@@ -346,8 +348,8 @@ export default function ProfilePage() {
             </TabsContent>
           </Tabs>
         </div>
-        <BottomNav />
       </ScrollArea>
+      <BottomNav />
     </div>
   );
 }

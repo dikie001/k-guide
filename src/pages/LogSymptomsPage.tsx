@@ -79,13 +79,13 @@ export default function LogSymptomsPage() {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case "mild":
-        return "bg-yellow-100 text-yellow-700";
+        return "bg-yellow-500/10 dark:bg-yellow-950/40 text-yellow-600 dark:text-yellow-400";
       case "moderate":
-        return "bg-orange-100 text-orange-700";
+        return "bg-orange-500/10 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400";
       case "severe":
-        return "bg-red-100 text-red-700";
+        return "bg-red-500/10 dark:bg-red-950/40 text-red-600 dark:text-red-400";
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-muted text-muted-foreground";
     }
   };
 
@@ -116,23 +116,27 @@ export default function LogSymptomsPage() {
         <div className="p-4 space-y-6">
           {/* Overview Cards */}
           <div className="grid grid-cols-3 gap-2">
-            <div className="bg-white rounded-2xl p-3 border border-slate-100 text-center">
-              <p className="text-2xl font-bold text-slate-900">
+            <div className="bg-card rounded-2xl p-3 border border-border text-center">
+              <p className="text-2xl font-bold text-foreground">
                 {symptoms.length}
               </p>
-              <p className="text-xs text-slate-500 font-bold">Total</p>
+              <p className="text-xs text-muted-foreground font-bold">Total</p>
             </div>
-            <div className="bg-yellow-50 rounded-2xl p-3 border border-yellow-100 text-center">
-              <p className="text-2xl font-bold text-yellow-600">
+            <div className="bg-yellow-500/10 dark:bg-yellow-950/40 rounded-2xl p-3 border border-yellow-500/20 dark:border-yellow-500/30 text-center">
+              <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
                 {severityCount.mild}
               </p>
-              <p className="text-xs text-yellow-700 font-bold">Mild</p>
+              <p className="text-xs text-yellow-700 dark:text-yellow-300 font-bold">
+                Mild
+              </p>
             </div>
-            <div className="bg-red-50 rounded-2xl p-3 border border-red-100 text-center">
-              <p className="text-2xl font-bold text-red-600">
+            <div className="bg-red-500/10 dark:bg-red-950/40 rounded-2xl p-3 border border-red-500/20 dark:border-red-500/30 text-center">
+              <p className="text-2xl font-bold text-red-600 dark:text-red-400">
                 {severityCount.severe}
               </p>
-              <p className="text-xs text-red-700 font-bold">Severe</p>
+              <p className="text-xs text-red-700 dark:text-red-300 font-bold">
+                Severe
+              </p>
             </div>
           </div>
 
@@ -142,17 +146,17 @@ export default function LogSymptomsPage() {
             onValueChange={setSelectedTab}
             className="w-full"
           >
-            <TabsList className="grid w-full grid-cols-2 rounded-xl h-auto p-1 bg-white border border-slate-100">
+            <TabsList className="grid w-full grid-cols-2 rounded-xl h-auto p-1 bg-muted border border-border">
               <TabsTrigger
                 value="recent"
-                className="rounded-lg data-[state=active]:bg-blue-50"
+                className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground"
               >
                 <Clock className="h-4 w-4 mr-1.5" />
                 Recent
               </TabsTrigger>
               <TabsTrigger
                 value="add"
-                className="rounded-lg data-[state=active]:bg-blue-50"
+                className="rounded-lg data-[state=active]:bg-card data-[state=active]:text-foreground"
               >
                 <Plus className="h-4 w-4 mr-1.5" />
                 Add New
@@ -162,8 +166,8 @@ export default function LogSymptomsPage() {
             <TabsContent value="recent" className="space-y-3 mt-4">
               {symptoms.length === 0 ? (
                 <div className="text-center py-8">
-                  <Heart className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-                  <p className="text-sm text-slate-400">
+                  <Heart className="h-8 w-8 text-muted-foreground/50 mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">
                     No symptoms logged today
                   </p>
                 </div>
@@ -171,11 +175,11 @@ export default function LogSymptomsPage() {
                 symptoms.map((symptom) => (
                   <div
                     key={symptom.id}
-                    className="flex items-start justify-between p-3 bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
+                    className="flex items-start justify-between p-3 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow"
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h4 className="text-sm font-bold text-slate-900">
+                        <h4 className="text-sm font-bold text-foreground">
                           {symptom.name}
                         </h4>
                         <Badge
@@ -187,7 +191,7 @@ export default function LogSymptomsPage() {
                           </span>
                         </Badge>
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-slate-500">
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {symptom.time}
@@ -207,7 +211,7 @@ export default function LogSymptomsPage() {
             </TabsContent>
 
             <TabsContent value="add" className="space-y-3 mt-4">
-              <p className="text-xs text-slate-500 font-bold uppercase tracking-wide px-1">
+              <p className="text-xs text-muted-foreground font-bold uppercase tracking-wide px-1">
                 Select Symptom
               </p>
               <div className="grid grid-cols-2 gap-2">
@@ -216,10 +220,10 @@ export default function LogSymptomsPage() {
                     key={option.name}
                     onClick={() => handleAddSymptom(option.name)}
                     variant="outline"
-                    className="h-20 rounded-xl border-slate-200 hover:border-blue-200 hover:bg-blue-50 flex flex-col items-center gap-2"
+                    className="h-20 rounded-xl border-border hover:border-primary/50 hover:bg-primary/5 flex flex-col items-center gap-2"
                   >
                     <span className="text-2xl">{option.icon}</span>
-                    <span className="text-xs font-bold text-slate-700">
+                    <span className="text-xs font-bold text-foreground/80">
                       {option.name}
                     </span>
                   </Button>
@@ -229,11 +233,11 @@ export default function LogSymptomsPage() {
           </Tabs>
 
           {/* Severity Scale Info */}
-          <div className="bg-blue-50 rounded-2xl p-4 border border-blue-100 space-y-2">
-            <h4 className="text-xs font-bold text-blue-900 uppercase tracking-wide">
+          <div className="bg-primary/10 dark:bg-primary/5 rounded-2xl p-4 border border-primary/20 dark:border-primary/10 space-y-2">
+            <h4 className="text-xs font-bold text-primary/90 dark:text-primary/80 uppercase tracking-wide">
               Symptom Severity
             </h4>
-            <div className="space-y-1.5 text-xs text-blue-800">
+            <div className="space-y-1.5 text-xs text-primary/80 dark:text-primary/70">
               <div className="flex items-center gap-2">
                 <div className="h-2 rounded-full w-2 bg-yellow-500"></div>
                 <span>
@@ -261,5 +265,3 @@ export default function LogSymptomsPage() {
     </div>
   );
 }
-
-
