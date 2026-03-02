@@ -148,7 +148,7 @@ export default function Support() {
               className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors group"
             >
               {/* Avatar */}
-              <div className="relative mr-4 flex-shrink-0">
+              <div className="relative mr-4 shrink-0">
                 {chat.avatarType === "image" ? (
                   <img
                     src={chat.avatarSrc}
@@ -175,7 +175,7 @@ export default function Support() {
                     </span>
                   </h2>
                   <span
-                    className={`text-xs ml-2 flex-shrink-0 ${chat.metaColor}`}
+                    className={`text-xs ml-2 shrink-0 ${chat.metaColor}`}
                   >
                     {chat.meta}
                   </span>
@@ -216,7 +216,7 @@ export default function Support() {
               </button>
 
               {/* Icon */}
-              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-amber-300 to-amber-600 rounded-full flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(245,158,11,0.4)]">
+              <div className="mx-auto w-16 h-16 bg-linear-to-br from-amber-300 to-amber-600 rounded-full flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(245,158,11,0.4)]">
                 <Crown className="w-8 h-8 text-slate-900" />
               </div>
 
