@@ -1,4 +1,4 @@
-import BottomNav from "@/components/shared/BottomNav";
+﻿import BottomNav from "@/components/shared/BottomNav";
 import Header from "@/components/shared/Header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -133,7 +133,7 @@ export default function ResourcesPage() {
   };
 
   return (
-    <div className="relative min-h-full bg-slate-50 font-sans text-slate-900 pb-28">
+    <div className="relative min-h-full bg-background text-foreground pb-24">
       <Header />
 
       <ScrollArea className="w-full h-[calc(100vh-80px)] flex-1">
@@ -268,3 +268,5 @@ export default function ResourcesPage() {
     </div>
   );
 }
+
+

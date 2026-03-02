@@ -1,4 +1,4 @@
-import BottomNav from "@/components/shared/BottomNav";
+﻿import BottomNav from "@/components/shared/BottomNav";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -58,7 +58,7 @@ const FILTERS = [
 export default function MapSafetyPage() {
   const navigate = useNavigate();
   return (
-    <div className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-slate-50 font-sans text-slate-900">
+    <div className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-background text-foreground">
 
       {/* 1. HEADER & SEARCH OVERLAY */}
       <div className="pointer-events-none absolute left-0 right-0 top-0 z-50 px-4 pb-4 pt-6">

@@ -1,4 +1,4 @@
-import BottomNav from "@/components/shared/BottomNav";
+﻿import BottomNav from "@/components/shared/BottomNav";
 import Header from "@/components/shared/Header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,14 +24,14 @@ interface Symptom {
 }
 
 const SYMPTOM_OPTIONS = [
-  { name: "Headache", icon: "🤕", category: "Pain" },
-  { name: "Fatigue", icon: "😴", category: "Energy" },
-  { name: "Muscle Soreness", icon: "💪", category: "Muscle" },
-  { name: "Dizziness", icon: "🌀", category: "Nervous" },
-  { name: "Nausea", icon: "🤢", category: "GI" },
-  { name: "Joint Pain", icon: "🦵", category: "Joints" },
-  { name: "Fever", icon: "🌡️", category: "Infection" },
-  { name: "Shortness of Breath", icon: "😮‍💨", category: "Respiratory" },
+  { name: "Headache", icon: "ðŸ¤•", category: "Pain" },
+  { name: "Fatigue", icon: "ðŸ˜´", category: "Energy" },
+  { name: "Muscle Soreness", icon: "ðŸ’ª", category: "Muscle" },
+  { name: "Dizziness", icon: "ðŸŒ€", category: "Nervous" },
+  { name: "Nausea", icon: "ðŸ¤¢", category: "GI" },
+  { name: "Joint Pain", icon: "ðŸ¦µ", category: "Joints" },
+  { name: "Fever", icon: "ðŸŒ¡ï¸", category: "Infection" },
+  { name: "Shortness of Breath", icon: "ðŸ˜®â€ðŸ’¨", category: "Respiratory" },
 ];
 
 export default function LogSymptomsPage() {
@@ -109,7 +109,7 @@ export default function LogSymptomsPage() {
   };
 
   return (
-    <div className="relative min-h-full bg-slate-50 font-sans text-slate-900 pb-28">
+    <div className="relative min-h-full bg-background text-foreground pb-24">
       <Header />
 
       <ScrollArea className="w-full h-[calc(100vh-80px)] flex-1">
@@ -192,7 +192,7 @@ export default function LogSymptomsPage() {
                           <Clock className="h-3 w-3" />
                           {symptom.time}
                         </span>
-                        {symptom.notes && <span>• {symptom.notes}</span>}
+                        {symptom.notes && <span>â€¢ {symptom.notes}</span>}
                       </div>
                     </div>
                     <button
@@ -261,3 +261,5 @@ export default function LogSymptomsPage() {
     </div>
   );
 }
+
+

@@ -1,4 +1,4 @@
-import BottomNav from "@/components/shared/BottomNav";
+﻿import BottomNav from "@/components/shared/BottomNav";
 import Header from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -126,7 +126,7 @@ export default function NotificationsPage() {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <div className="relative min-h-full bg-slate-50 font-sans text-slate-900 pb-28">
+    <div className="relative min-h-full bg-background text-foreground pb-24">
       <Header />
 
       <ScrollArea className="w-full h-[calc(100vh-80px)] flex-1">
@@ -239,7 +239,7 @@ export default function NotificationsPage() {
                         }}
                         className="text-slate-300 hover:text-red-500 transition-colors shrink-0"
                       >
-                        ✕
+                        âœ•
                       </button>
                     </div>
                   </div>
@@ -292,7 +292,7 @@ export default function NotificationsPage() {
                         }}
                         className="text-slate-300 hover:text-red-500 transition-colors shrink-0"
                       >
-                        ✕
+                        âœ•
                       </button>
                     </div>
                   </div>
@@ -307,3 +307,5 @@ export default function NotificationsPage() {
     </div>
   );
 }
+
+
