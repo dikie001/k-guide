@@ -55,12 +55,12 @@ export default function HydrationPage() {
       <ScrollArea className="w-full h-[calc(100vh-80px)] flex-1">
         <div className="p-4 space-y-6">
           {/* Hydration Status Card */}
-          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-6 border border-blue-100 shadow-sm space-y-4">
+          <div className="bg-gradient-to-br from-blue-950/30 to-cyan-950/30 rounded-3xl p-6 border border-blue-700/30 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-slate-900">
+              <h2 className="text-lg font-bold text-foreground">
                 Daily Hydration
               </h2>
-              <Droplets className="h-6 w-6 text-blue-600" />
+              <Droplets className="h-6 w-6 text-cyan-400" />
             </div>
 
             {/* Progress Circle */}
@@ -75,7 +75,7 @@ export default function HydrationPage() {
                     cy="60"
                     r="50"
                     fill="none"
-                    stroke="#e2e8f0"
+                    stroke="#475569"
                     strokeWidth="8"
                   />
                   <circle
@@ -83,7 +83,7 @@ export default function HydrationPage() {
                     cy="60"
                     r="50"
                     fill="none"
-                    stroke="#06b6d4"
+                    stroke="#22d3ee"
                     strokeWidth="8"
                     strokeDasharray={`${percentage * 3.14} 314`}
                     strokeLinecap="round"
@@ -91,21 +91,21 @@ export default function HydrationPage() {
                   />
                 </svg>
                 <div className="absolute flex flex-col items-center">
-                  <span className="text-2xl font-bold text-slate-900">
+                  <span className="text-2xl font-bold text-foreground">
                     {totalIntake}
                   </span>
-                  <span className="text-xs text-slate-500">ml</span>
+                  <span className="text-xs text-muted-foreground">ml</span>
                 </div>
               </div>
 
               <div className="flex-1 space-y-2">
                 <div>
-                  <p className="text-sm font-bold text-slate-700 mb-1">
+                  <p className="text-sm font-bold text-foreground mb-1">
                     Goal: {dailyGoal}ml
                   </p>
                   <Progress value={percentage} className="h-2" />
                 </div>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted-foreground">
                   {dailyGoal - totalIntake > 0
                     ? `${dailyGoal - totalIntake}ml to go`
                     : "Goal reached! ðŸŽ‰"}
@@ -116,12 +116,12 @@ export default function HydrationPage() {
 
           {/* Quick Add Buttons */}
           <div className="space-y-2">
-            <h3 className="text-sm font-bold text-slate-900 pl-1">Quick Add</h3>
+            <h3 className="text-sm font-bold text-foreground pl-1">Quick Add</h3>
             <div className="grid grid-cols-3 gap-2">
               <Button
                 onClick={() => handleAddWater(250)}
                 variant="outline"
-                className="h-12 rounded-xl border-slate-200 hover:border-blue-200 hover:bg-blue-50"
+                className="h-12 rounded-xl border-slate-600/40 hover:border-cyan-600/50 hover:bg-cyan-500/10"
               >
                 <Droplets className="h-4 w-4 mr-1.5" />
                 250ml
@@ -129,7 +129,7 @@ export default function HydrationPage() {
               <Button
                 onClick={() => handleAddWater(500)}
                 variant="outline"
-                className="h-12 rounded-xl border-slate-200 hover:border-blue-200 hover:bg-blue-50"
+                className="h-12 rounded-xl border-slate-600/40 hover:border-cyan-600/50 hover:bg-cyan-500/10"
               >
                 <Droplets className="h-4 w-4 mr-1.5" />
                 500ml
@@ -137,7 +137,7 @@ export default function HydrationPage() {
               <Button
                 onClick={() => handleAddWater(1000)}
                 variant="outline"
-                className="h-12 rounded-xl border-slate-200 hover:border-blue-200 hover:bg-blue-50"
+                className="h-12 rounded-xl border-slate-600/40 hover:border-cyan-600/50 hover:bg-cyan-500/10"
               >
                 <Droplets className="h-4 w-4 mr-1.5" />
                 1L
@@ -148,7 +148,7 @@ export default function HydrationPage() {
           {/* Hydration Log */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-slate-900">Today's Log</h3>
+              <h3 className="text-sm font-bold text-foreground">Today's Log</h3>
               <Badge variant="secondary">
                 <BarChart3 className="h-3 w-3 mr-1" />
                 {logs.length} entries
@@ -158,8 +158,8 @@ export default function HydrationPage() {
             <div className="space-y-2">
               {logs.length === 0 ? (
                 <div className="text-center py-8">
-                  <Droplets className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-                  <p className="text-sm text-slate-400">
+                  <Droplets className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">
                     No logs yet. Start hydrating!
                   </p>
                 </div>
@@ -167,22 +167,22 @@ export default function HydrationPage() {
                 logs.map((log) => (
                   <div
                     key={log.id}
-                    className="flex items-center justify-between p-3 bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
+                    className="flex items-center justify-between p-3 bg-card rounded-xl border border-slate-600/40 shadow-sm hover:shadow-md transition-shadow"
                   >
                     <div className="flex items-center gap-3 flex-1">
-                      <div className="h-10 w-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                        <Droplets className="h-5 w-5 text-blue-600" />
+                      <div className="h-10 w-10 rounded-xl bg-cyan-500/20 flex items-center justify-center">
+                        <Droplets className="h-5 w-5 text-cyan-400" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs font-bold text-slate-900">
+                        <p className="text-xs font-bold text-foreground">
                           {log.amount}ml
                         </p>
-                        <p className="text-xs text-slate-500">{log.time}</p>
+                        <p className="text-xs text-muted-foreground">{log.time}</p>
                       </div>
                     </div>
                     <button
                       onClick={() => handleDeleteLog(log.id)}
-                      className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 hover:bg-red-950/40 rounded-lg transition-colors"
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />
                     </button>
@@ -193,11 +193,11 @@ export default function HydrationPage() {
           </div>
 
           {/* Tips */}
-          <div className="bg-blue-50 rounded-2xl p-4 border border-blue-100 space-y-2">
-            <h4 className="text-xs font-bold text-blue-900 uppercase tracking-wide">
+          <div className="bg-cyan-950/20 rounded-2xl p-4 border border-cyan-700/30 space-y-2">
+            <h4 className="text-xs font-bold text-cyan-300 uppercase tracking-wide">
               Hydration Tips
             </h4>
-            <ul className="text-xs text-blue-800 space-y-1 list-disc list-inside">
+            <ul className="text-xs text-cyan-100/70 space-y-1 list-disc list-inside">
               <li>Drink 500ml every 15-20 minutes during training</li>
               <li>Drink 500ml within 2 hours after exercise</li>
               <li>Pre-hydrate: 400-600ml 2-3 hours before exercise</li>

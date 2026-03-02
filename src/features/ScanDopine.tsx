@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import BottomNav from "@/components/shared/BottomNav";
 import {
   ArrowLeft,
   Barcode,
@@ -344,7 +344,18 @@ export default function ScanDopine() {
         .pb-safe { padding-bottom: max(20px, env(safe-area-inset-bottom, 20px)); }
       `}</style>
 
-      <div className="sd-root relative h-[100dvh] w-full bg-[#080810] overflow-hidden text-white select-none">
+      <div className="sd-root relative h-[100dvh] w-full bg-[#080810] overflow-hidden text-white select-none flex flex-col">
+        {/* ── TOP HEADER WITH LOGO ─────────────────────────────────────────── */}
+        <div className="absolute top-0 left-0 right-0 z-50 pt-4 px-4 pb-2 flex items-center justify-between bg-gradient-to-b from-black/70 via-black/30 to-transparent">
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-black text-cyan-400">K</span>
+            <span className="text-lg font-bold text-white">-Guide</span>
+          </div>
+          <p className="sd-title text-xs font-bold tracking-[0.12em] uppercase text-white/70">
+            Scan·Dopine
+          </p>
+          <div className="w-6" />
+        </div>
         {/* ── CAMERA FEED ─────────────────────────────────────────────────── */}
         <video
           ref={videoRef}
@@ -628,7 +639,7 @@ export default function ScanDopine() {
               </div>
 
               {/* Body */}
-              <div className="bg-[#0f0f18] p-6 space-y-4">
+              <div className="bg-[#0f0f18] p-6 space-y-4 pb-20">
                 {/* Info grid */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="p-4 rounded-2xl bg-white/4 border border-white/7">
@@ -694,6 +705,9 @@ export default function ScanDopine() {
           </div>
         )}
       </div>
+
+      {/* ── BOTTOM NAV ──────────────────────────────────────────────────── */}
+      <BottomNav />
     </>
   );
 }

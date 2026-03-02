@@ -62,15 +62,15 @@ export default function ActivitiesPage() {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "scan":
-        return "bg-blue-100 text-blue-700";
+        return "bg-blue-900/40 text-blue-300";
       case "injury":
-        return "bg-red-100 text-red-700";
+        return "bg-red-900/40 text-red-300";
       case "activity":
-        return "bg-green-100 text-green-700";
+        return "bg-green-900/40 text-green-300";
       case "log":
-        return "bg-orange-100 text-orange-700";
+        return "bg-orange-900/40 text-orange-300";
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-slate-700/40 text-slate-300";
     }
   };
 
@@ -97,23 +97,23 @@ export default function ActivitiesPage() {
         <div className="p-4 space-y-6">
           {/* Stats */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white rounded-2xl p-4 border border-slate-100 text-center">
-              <p className="text-2xl font-bold text-slate-900">
+            <div className="bg-card rounded-2xl p-4 border border-slate-600/40 text-center">
+              <p className="text-2xl font-bold text-foreground">
                 {MOCK_ACTIVITIES.length}
               </p>
-              <p className="text-xs text-slate-500 font-bold">
+              <p className="text-xs text-muted-foreground font-bold">
                 Total Activities
               </p>
             </div>
-            <div className="bg-blue-50 rounded-2xl p-4 border border-blue-100 text-center">
-              <p className="text-2xl font-bold text-blue-600">3</p>
-              <p className="text-xs text-blue-700 font-bold">This Week</p>
+            <div className="bg-gradient-to-br from-blue-950/30 to-cyan-950/30 rounded-2xl p-4 border border-blue-700/30 text-center">
+              <p className="text-2xl font-bold text-cyan-400">3</p>
+              <p className="text-xs text-cyan-300 font-bold">This Week</p>
             </div>
           </div>
 
           {/* Timeline */}
           <div className="space-y-2">
-            <h3 className="text-sm font-bold text-slate-900 px-1">
+            <h3 className="text-sm font-bold text-foreground px-1">
               Activity Timeline
             </h3>
 
@@ -123,7 +123,7 @@ export default function ActivitiesPage() {
                   {/* Timeline Line */}
                   <div className="flex flex-col items-center">
                     <div
-                      className={`h-3 w-3 rounded-full border-2 border-slate-900 ${
+                      className={`h-3 w-3 rounded-full border-2 border-foreground/40 ${
                         activity.category === "scan"
                           ? "bg-blue-500"
                           : activity.category === "injury"
@@ -134,15 +134,15 @@ export default function ActivitiesPage() {
                       }`}
                     />
                     {index !== MOCK_ACTIVITIES.length - 1 && (
-                      <div className="w-0.5 h-16 bg-slate-200 my-2" />
+                      <div className="w-0.5 h-16 bg-slate-600/30 my-2" />
                     )}
                   </div>
 
                   {/* Activity Card */}
                   <div className="flex-1 pb-2">
-                    <div className="p-3 bg-white rounded-xl border border-slate-100 hover:shadow-md transition-shadow">
+                    <div className="p-3 bg-card rounded-xl border border-slate-600/40 hover:shadow-md transition-shadow">
                       <div className="flex items-start justify-between mb-2">
-                        <h4 className="text-sm font-bold text-slate-900">
+                        <h4 className="text-sm font-bold text-foreground">
                           {activity.title}
                         </h4>
                         <Badge
@@ -151,10 +151,10 @@ export default function ActivitiesPage() {
                           {getCategoryLabel(activity.category)}
                         </Badge>
                       </div>
-                      <p className="text-xs text-slate-600 mb-2">
+                      <p className="text-xs text-muted-foreground mb-2">
                         {activity.description}
                       </p>
-                      <p className="text-[10px] text-slate-400">
+                      <p className="text-[10px] text-muted-foreground/60">
                         {activity.timestamp}
                       </p>
                     </div>
@@ -166,12 +166,12 @@ export default function ActivitiesPage() {
 
           {/* Empty State for Filters */}
           <div className="space-y-3 text-center py-4">
-            <p className="text-xs text-slate-500 font-bold uppercase tracking-wide">
+            <p className="text-xs text-muted-foreground font-bold uppercase tracking-wide">
               Showing all activities
             </p>
             <Button
               variant="outline"
-              className="w-full rounded-lg border-slate-200 hover:border-blue-200 hover:bg-blue-50"
+              className="w-full rounded-lg border-slate-600/40 hover:border-cyan-600/50 hover:bg-cyan-500/10"
             >
               <Users className="h-4 w-4 mr-2" />
               Filter by Type
