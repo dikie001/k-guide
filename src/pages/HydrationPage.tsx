@@ -116,7 +116,9 @@ export default function HydrationPage() {
 
           {/* Quick Add Buttons */}
           <div className="space-y-2">
-            <h3 className="text-sm font-bold text-foreground pl-1">Quick Add</h3>
+            <h3 className="text-sm font-bold text-foreground pl-1">
+              Quick Add
+            </h3>
             <div className="grid grid-cols-3 gap-2">
               <Button
                 onClick={() => handleAddWater(250)}
@@ -177,7 +179,9 @@ export default function HydrationPage() {
                         <p className="text-xs font-bold text-foreground">
                           {log.amount}ml
                         </p>
-                        <p className="text-xs text-muted-foreground">{log.time}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {log.time}
+                        </p>
                       </div>
                     </div>
                     <button
@@ -210,5 +214,3 @@ export default function HydrationPage() {
     </div>
   );
 }
-
-

@@ -15,138 +15,215 @@ import {
   Search,
   ShieldAlert,
   Stethoscope,
-  Thermometer
-} from 'lucide-react';
-import React, { useState } from 'react';
+  Thermometer,
+} from "lucide-react";
+import React, { useState } from "react";
 
 // --- MOCK DATA ---
 const firstAidData = [
   {
-    id: 1, title: "Ankle Sprain", category: "Joints", severity: "Moderate",
+    id: 1,
+    title: "Ankle Sprain",
+    category: "Joints",
+    severity: "Moderate",
     icon: <Activity className="text-white" />, // Icon color handled by container
     symptoms: ["Swelling", "Bruising", "Pain on weight", "Restricted motion"],
-    treatment: ["R.I.C.E Protocol", "Ice 15-20 mins", "Compression wrap", "Elevate leg"],
+    treatment: [
+      "R.I.C.E Protocol",
+      "Ice 15-20 mins",
+      "Compression wrap",
+      "Elevate leg",
+    ],
     warning: "Seek X-ray if unable to walk >4 steps.",
-    bg: "bg-orange-500"
+    bg: "bg-orange-500",
   },
   {
-    id: 2, title: "Muscle Cramp", category: "Muscle", severity: "Mild",
+    id: 2,
+    title: "Muscle Cramp",
+    category: "Muscle",
+    severity: "Mild",
     icon: <Activity className="text-white" />,
     symptoms: ["Sudden sharp pain", "Hard lump", "Muscle lock"],
-    treatment: ["Stop activity", "Stretch & massage", "Apply heat/cold", "Hydrate"],
+    treatment: [
+      "Stop activity",
+      "Stretch & massage",
+      "Apply heat/cold",
+      "Hydrate",
+    ],
     warning: "Do not force muscle if pain is excruciating.",
-    bg: "bg-yellow-500"
+    bg: "bg-yellow-500",
   },
   {
-    id: 3, title: "Concussion", category: "Head Trauma", severity: "Critical",
+    id: 3,
+    title: "Concussion",
+    category: "Head Trauma",
+    severity: "Critical",
     icon: <ShieldAlert className="text-white" />,
     symptoms: ["Confusion", "Dizziness", "Nausea", "Light sensitivity"],
-    treatment: ["Remove from play", "Monitor condition", "Rest 24-48h", "No screens"],
+    treatment: [
+      "Remove from play",
+      "Monitor condition",
+      "Rest 24-48h",
+      "No screens",
+    ],
     warning: "Call 911 if unconscious or vomiting.",
-    bg: "bg-red-600"
+    bg: "bg-red-600",
   },
   {
-    id: 4, title: "Heat Exhaustion", category: "Environmental", severity: "High",
+    id: 4,
+    title: "Heat Exhaustion",
+    category: "Environmental",
+    severity: "High",
     icon: <Thermometer className="text-white" />,
     symptoms: ["Heavy sweating", "Pale skin", "Dizziness", "Fainting"],
-    treatment: ["Move to cool shade", "Loosen clothes", "Sip water", "Cool wet cloths"],
+    treatment: [
+      "Move to cool shade",
+      "Loosen clothes",
+      "Sip water",
+      "Cool wet cloths",
+    ],
     warning: "Can progress to Heat Stroke (Life Threatening).",
-    bg: "bg-red-500"
+    bg: "bg-red-500",
   },
   {
-    id: 5, title: "Nosebleed", category: "Trauma", severity: "Mild",
+    id: 5,
+    title: "Nosebleed",
+    category: "Trauma",
+    severity: "Mild",
     icon: <HeartPulse className="text-white" />,
     symptoms: ["Nostril bleeding", "Iron taste"],
-    treatment: ["Lean forward", "Pinch nose soft part", "Breathe via mouth", "Ice bridge"],
+    treatment: [
+      "Lean forward",
+      "Pinch nose soft part",
+      "Breathe via mouth",
+      "Ice bridge",
+    ],
     warning: "Seek help if bleeding > 20 mins.",
-    bg: "bg-rose-500"
+    bg: "bg-rose-500",
   },
   {
-    id: 6, title: "Bone Fracture", category: "Trauma", severity: "Severe",
+    id: 6,
+    title: "Bone Fracture",
+    category: "Trauma",
+    severity: "Severe",
     icon: <Bone className="text-white" />,
     symptoms: ["Deformity", "Swelling", "Grinding feel"],
-    treatment: ["Immobilize/Splint", "Stop bleeding", "Ice packs", "Treat shock"],
+    treatment: [
+      "Immobilize/Splint",
+      "Stop bleeding",
+      "Ice packs",
+      "Treat shock",
+    ],
     warning: "Do not try to realign the bone yourself.",
-    bg: "bg-slate-500"
+    bg: "bg-slate-500",
   },
   {
-    id: 7, title: "Blisters", category: "Skin", severity: "Mild",
+    id: 7,
+    title: "Blisters",
+    category: "Skin",
+    severity: "Mild",
     icon: <Activity className="text-white" />,
     symptoms: ["Fluid bubble", "Pain", "Redness"],
     treatment: ["Clean area", "Cover with pad", "Don't pop"],
     warning: "If popped, apply antibiotic ointment.",
-    bg: "bg-blue-400"
+    bg: "bg-blue-400",
   },
   {
-    id: 8, title: "Dislocation", category: "Joints", severity: "Severe",
+    id: 8,
+    title: "Dislocation",
+    category: "Joints",
+    severity: "Severe",
     icon: <Bone className="text-white" />,
     symptoms: ["Out of place", "Intense pain", "Immovable"],
     treatment: ["Don't move joint", "Ice area", "Immobilize as found"],
     warning: "Seek medical help. Do not pop back in.",
-    bg: "bg-orange-600"
+    bg: "bg-orange-600",
   },
   {
-    id: 9, title: "Hypothermia", category: "Environmental", severity: "Critical",
+    id: 9,
+    title: "Hypothermia",
+    category: "Environmental",
+    severity: "Critical",
     icon: <Thermometer className="text-white" />,
     symptoms: ["Shivering", "Confusion", "Slurred speech"],
-    treatment: ["Warm area", "Remove wet clothes", "Warm center body", "Warm drink"],
+    treatment: [
+      "Warm area",
+      "Remove wet clothes",
+      "Warm center body",
+      "Warm drink",
+    ],
     warning: "Handle gently; rough handling risks cardiac arrest.",
-    bg: "bg-blue-600"
+    bg: "bg-blue-600",
   },
   {
-    id: 10, title: "Asthma Attack", category: "Respiratory", severity: "High",
+    id: 10,
+    title: "Asthma Attack",
+    category: "Respiratory",
+    severity: "High",
     icon: <Activity className="text-white" />,
     symptoms: ["Wheezing", "Short breath", "Chest tight"],
     treatment: ["Sit upright", "Use inhaler", "Keep calm"],
     warning: "No improvement > 15 mins? Call Emergency.",
-    bg: "bg-purple-500"
+    bg: "bg-purple-500",
   },
   {
-    id: 11, title: "Abrasion", category: "Skin", severity: "Mild",
+    id: 11,
+    title: "Abrasion",
+    category: "Skin",
+    severity: "Mild",
     icon: <HeartPulse className="text-white" />,
     symptoms: ["Raw skin", "Bleeding", "Stinging"],
     treatment: ["Clean debris", "Antibiotic ointment", "Non-stick bandage"],
     warning: "Watch for signs of infection.",
-    bg: "bg-pink-500"
+    bg: "bg-pink-500",
   },
   {
-    id: 12, title: "Choking", category: "Emergency", severity: "Critical",
+    id: 12,
+    title: "Choking",
+    category: "Emergency",
+    severity: "Critical",
     icon: <AlertCircle className="text-white" />,
     symptoms: ["Clutching throat", "Silent", "Blue lips"],
     treatment: ["5 Back blows", "5 Abdominal thrusts", "Repeat"],
     warning: "Unconscious? Start CPR.",
-    bg: "bg-red-700"
-  }
+    bg: "bg-red-700",
+  },
 ];
 
 export default function FirstAid() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedInjury, setSelectedInjury] = useState<typeof firstAidData[0] | null>(null);
+  const [selectedInjury, setSelectedInjury] = useState<
+    (typeof firstAidData)[0] | null
+  >(null);
 
   const ITEMS_PER_PAGE = 8;
 
   // --- Filter Logic ---
-  const filteredData = firstAidData.filter(item =>
-    item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.category.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredData = firstAidData.filter(
+    (item) =>
+      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // --- Pagination Logic ---
   const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentItems = filteredData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const currentItems = filteredData.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE,
+  );
 
-  const handlePageChange = (direction: 'next' | 'prev') => {
-    if (direction === 'next' && currentPage < totalPages) setCurrentPage(p => p + 1);
-    if (direction === 'prev' && currentPage > 1) setCurrentPage(p => p - 1);
+  const handlePageChange = (direction: "next" | "prev") => {
+    if (direction === "next" && currentPage < totalPages)
+      setCurrentPage((p) => p + 1);
+    if (direction === "prev" && currentPage > 1) setCurrentPage((p) => p - 1);
   };
 
   // --- VIEW: DETAIL PAGE (Medical Folder Look) ---
   if (selectedInjury) {
     return (
       <div className="min-h-full bg-background text-foreground font-sans animate-in slide-in-from-right-8 duration-300">
-
         {/* Red Header Strip */}
         <div className="bg-red-600 px-4 pt-4 pb-12 shadow-lg relative z-0">
           <div className="flex items-center gap-3 mb-2">
@@ -168,28 +245,46 @@ export default function FirstAid() {
             {/* Icon & Title */}
             <div className="flex items-start justify-between mb-8">
               <div>
-                <Badge variant="outline" className={`mb-2 border-none px-2 py-0.5 text-xs font-bold uppercase tracking-wider ${selectedInjury.severity === 'Critical' ? 'bg-red-900/40 text-red-300' :
-                    selectedInjury.severity === 'Severe' ? 'bg-orange-900/40 text-orange-300' :
-                      'bg-slate-600/40 text-slate-300'
-                  }`}>
+                <Badge
+                  variant="outline"
+                  className={`mb-2 border-none px-2 py-0.5 text-xs font-bold uppercase tracking-wider ${
+                    selectedInjury.severity === "Critical"
+                      ? "bg-red-900/40 text-red-300"
+                      : selectedInjury.severity === "Severe"
+                        ? "bg-orange-900/40 text-orange-300"
+                        : "bg-slate-600/40 text-slate-300"
+                  }`}
+                >
                   {selectedInjury.severity} Severity
                 </Badge>
-                <h1 className="text-3xl font-black text-foreground leading-none mb-1">{selectedInjury.title}</h1>
-                <p className="text-sm font-bold text-muted-foreground uppercase tracking-wide">{selectedInjury.category}</p>
+                <h1 className="text-3xl font-black text-foreground leading-none mb-1">
+                  {selectedInjury.title}
+                </h1>
+                <p className="text-sm font-bold text-muted-foreground uppercase tracking-wide">
+                  {selectedInjury.category}
+                </p>
               </div>
-              <div className={`h-16 w-16 rounded-2xl ${selectedInjury.bg} flex items-center justify-center shadow-lg transform rotate-3`}>
-                {React.cloneElement(selectedInjury.icon as React.ReactElement<{ className?: string }>, { className: "h-8 w-8 text-white" })}
+              <div
+                className={`h-16 w-16 rounded-2xl ${selectedInjury.bg} flex items-center justify-center shadow-lg transform rotate-3`}
+              >
+                {React.cloneElement(
+                  selectedInjury.icon as React.ReactElement<{
+                    className?: string;
+                  }>,
+                  { className: "h-8 w-8 text-white" },
+                )}
               </div>
             </div>
 
             {/* Sections */}
             <div className="space-y-8">
-
               {/* 1. WARNING */}
               <div className="p-4 bg-red-950/30 border-l-4 border-red-500 rounded-r-xl">
                 <div className="flex items-center gap-2 mb-1">
                   <AlertCircle className="h-4 w-4 text-red-400" />
-                  <h3 className="text-xs font-extrabold text-red-300 uppercase tracking-widest">Crucial Warning</h3>
+                  <h3 className="text-xs font-extrabold text-red-300 uppercase tracking-widest">
+                    Crucial Warning
+                  </h3>
                 </div>
                 <p className="text-sm font-bold text-red-100/80 leading-snug">
                   {selectedInjury.warning}
@@ -204,7 +299,10 @@ export default function FirstAid() {
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
                   {selectedInjury.symptoms.map((s, i) => (
-                    <div key={i} className="bg-slate-700/40 border border-slate-600/50 p-3 rounded-xl text-xs font-bold text-slate-200 flex items-center gap-2">
+                    <div
+                      key={i}
+                      className="bg-slate-700/40 border border-slate-600/50 p-3 rounded-xl text-xs font-bold text-slate-200 flex items-center gap-2"
+                    >
                       <div className="h-1.5 w-1.5 rounded-full bg-slate-400" />
                       {s}
                     </div>
@@ -238,7 +336,6 @@ export default function FirstAid() {
                   ))}
                 </div>
               </div>
-
             </div>
           </div>
         </ScrollArea>
@@ -269,7 +366,10 @@ export default function FirstAid() {
             <Input
               placeholder="Search injury e.g. 'Sprain'..."
               value={searchTerm}
-              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
               className="pl-9 h-10 bg-slate-700/40 border-slate-600/50 rounded-xl focus-visible:ring-red-500 font-medium transition-all"
             />
           </div>
@@ -281,7 +381,9 @@ export default function FirstAid() {
               <div className="mx-auto h-16 w-16 bg-slate-700/40 rounded-full flex items-center justify-center mb-4">
                 <Search className="h-6 w-6 text-slate-500" />
               </div>
-              <p className="text-sm font-bold text-slate-500">No injuries found matching "{searchTerm}"</p>
+              <p className="text-sm font-bold text-slate-500">
+                No injuries found matching "{searchTerm}"
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-3">
@@ -293,14 +395,22 @@ export default function FirstAid() {
                 >
                   {/* Decorative BG Icon */}
                   <div className="absolute -right-4 -bottom-4 opacity-5 transform rotate-[-15deg] group-hover:scale-110 transition-transform">
-                    {React.cloneElement(item.icon as React.ReactElement<{ className?: string }>, { className: "h-24 w-24 text-foreground" })}
+                    {React.cloneElement(
+                      item.icon as React.ReactElement<{ className?: string }>,
+                      { className: "h-24 w-24 text-foreground" },
+                    )}
                   </div>
 
                   <div className="flex justify-between items-start">
-                    <div className={`h-10 w-10 rounded-xl ${item.bg} flex items-center justify-center shadow-sm`}>
-                      {React.cloneElement(item.icon as React.ReactElement<{ className?: string }>, { className: "h-5 w-5 text-white" })}
+                    <div
+                      className={`h-10 w-10 rounded-xl ${item.bg} flex items-center justify-center shadow-sm`}
+                    >
+                      {React.cloneElement(
+                        item.icon as React.ReactElement<{ className?: string }>,
+                        { className: "h-5 w-5 text-white" },
+                      )}
                     </div>
-                    {item.severity === 'Critical' && (
+                    {item.severity === "Critical" && (
                       <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
                     )}
                   </div>
@@ -325,19 +435,21 @@ export default function FirstAid() {
                 variant="outline"
                 size="icon"
                 disabled={currentPage === 1}
-                onClick={() => handlePageChange('prev')}
+                onClick={() => handlePageChange("prev")}
                 className="rounded-full h-8 w-8"
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
               <div className="h-8 px-3 flex items-center bg-foreground text-background rounded-full text-xs font-bold shadow-lg">
-                {currentPage} <span className="text-muted-foreground mx-1">/</span> {totalPages}
+                {currentPage}{" "}
+                <span className="text-muted-foreground mx-1">/</span>{" "}
+                {totalPages}
               </div>
               <Button
                 variant="outline"
                 size="icon"
                 disabled={currentPage === totalPages}
-                onClick={() => handlePageChange('next')}
+                onClick={() => handlePageChange("next")}
                 className="rounded-full h-8 w-8"
               >
                 <ChevronRight className="h-4 w-4" />

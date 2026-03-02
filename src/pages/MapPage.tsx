@@ -12,7 +12,7 @@ import {
   Crosshair,
   Menu,
   Search,
-  User
+  User,
 } from "lucide-react";
 
 const LOCATIONS = [
@@ -112,13 +112,14 @@ export default function MapSafetyPage() {
 
       {/* 3. BOTTOM SHEET */}
       <div className="absolute bottom-0 left-0 right-0 z-10 flex h-[45%] flex-col rounded-t-[2.5rem] bg-card border-t border-slate-600/40 shadow-[0_-10px_50px_rgba(0,0,0,0.15)]">
-
         {/* Drag Handle */}
         <div className="mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-slate-600/60" />
 
         {/* Header/Filters */}
         <div className="shrink-0 px-6 pb-0 pt-5">
-          <h2 className="mb-5 text-[1.35rem] font-black tracking-tight text-foreground">Your Safety Network</h2>
+          <h2 className="mb-5 text-[1.35rem] font-black tracking-tight text-foreground">
+            Your Safety Network
+          </h2>
 
           <div className="scrollbar-hide -mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-5 [scrollbar-width:'none'] [-ms-overflow-style:'none'] [&::-webkit-scrollbar]:hidden">
             {FILTERS.map((f) => (
@@ -128,7 +129,7 @@ export default function MapSafetyPage() {
                   "flex-shrink-0 snap-start rounded-full border px-5 py-2.5 text-xs font-bold transition-all duration-200",
                   f.active
                     ? "scale-105 border-cyan-600/50 bg-cyan-950/40 text-cyan-300 shadow-sm"
-                    : "border-slate-600/40 bg-slate-700/30 text-slate-400 hover:border-slate-600/60"
+                    : "border-slate-600/40 bg-slate-700/30 text-slate-400 hover:border-slate-600/60",
                 )}
               >
                 {f.label}
@@ -142,19 +143,29 @@ export default function MapSafetyPage() {
           <ScrollArea className="h-full w-full px-6 [scrollbar-width:'none'] [-ms-overflow-style:'none'] [&::-webkit-scrollbar]:hidden">
             <div className="space-y-3 pb-32">
               {LOCATIONS.map((loc) => (
-                <div key={loc.id} className="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-600/40 bg-slate-700/30 p-4 shadow-sm transition-shadow hover:shadow-md active:scale-[0.99]">
+                <div
+                  key={loc.id}
+                  className="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-600/40 bg-slate-700/30 p-4 shadow-sm transition-shadow hover:shadow-md active:scale-[0.99]"
+                >
                   <div className="flex flex-col gap-1.5">
-                    <h3 className="text-sm font-bold leading-none text-foreground">{loc.name}</h3>
-                    <span className="text-xs font-medium text-muted-foreground">{loc.sub}</span>
+                    <h3 className="text-sm font-bold leading-none text-foreground">
+                      {loc.name}
+                    </h3>
+                    <span className="text-xs font-medium text-muted-foreground">
+                      {loc.sub}
+                    </span>
 
                     <div className="mt-0.5">
-                      {loc.tagType === 'SAFE' ? (
+                      {loc.tagType === "SAFE" ? (
                         <Badge className="h-6 gap-1 border border-green-700/50 bg-green-950/40 py-0.5 pl-1.5 pr-2.5 text-[10px] font-extrabold text-green-300 shadow-none">
                           <CheckCircle2 className="h-3 w-3 fill-green-500 text-foreground" />
                           {loc.tag}
                         </Badge>
                       ) : (
-                        <Badge variant="secondary" className="h-6 border border-slate-600/40 bg-slate-700/30 px-2.5 py-0.5 text-[10px] font-bold text-slate-400 shadow-none">
+                        <Badge
+                          variant="secondary"
+                          className="h-6 border border-slate-600/40 bg-slate-700/30 px-2.5 py-0.5 text-[10px] font-bold text-slate-400 shadow-none"
+                        >
                           {loc.tag}
                         </Badge>
                       )}
@@ -162,7 +173,9 @@ export default function MapSafetyPage() {
                   </div>
 
                   <div className="flex min-w-[80px] flex-col items-end gap-3">
-                    <span className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{loc.distance}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+                      {loc.distance}
+                    </span>
                     <Button className="h-9 w-full rounded-full bg-cyan-600 text-xs font-bold shadow-sm transition-all hover:scale-105 hover:bg-cyan-500">
                       Navigate
                     </Button>
@@ -180,7 +193,6 @@ export default function MapSafetyPage() {
           <BottomNav />
         </div>
       </div>
-
     </div>
   );
 }
