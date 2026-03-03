@@ -6,7 +6,6 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 // ─── Live Clock ────────────────────────────────────────────────
 const LiveClock = () => {
   const [time, setTime] = useState("");
-
   useEffect(() => {
     const tick = () => {
       const now = new Date();
@@ -20,7 +19,6 @@ const LiveClock = () => {
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, []);
-
   return (
     <span className="font-bold tabular-nums tracking-tight text-[12px]">
       {time}
@@ -85,7 +83,6 @@ const BatteryIcon = ({
       : level <= 30
         ? "#f97316"
         : "currentColor";
-
   return (
     <div className="flex items-center gap-0.5">
       {charging && (
@@ -166,8 +163,12 @@ const PhoneStatusBar = () => {
   }, []);
 
   return (
-    <div className="flex justify-between items-center px-9 pt-3 pb-1 w-full text-foreground select-none pointer-events-none">
-      <LiveClock />
+    // h-9 = 36px — must match md:pt-9 on the content wrapper
+    <div className="flex justify-between items-center h-9 w-full px-5 text-foreground select-none pointer-events-none">
+      {/* pl-8 nudges the time right to clear the centred punch-hole */}
+      <div className="pl-8">
+        <LiveClock />
+      </div>
       <div className="flex items-center gap-2">
         <SignalBars strength={4} />
         <WifiIcon />
@@ -186,13 +187,40 @@ const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
     <div className="min-h-screen w-full flex items-center justify-center md:bg-zinc-200 md:p-8">
       <div
         className="relative w-full lg:-mt-8 h-screen md:h-auto md:max-h-screen bg-background
-        md:w-[390px] md:h-[844px] md:border-[10px] md:border-zinc-900 md:rounded-[52px]
+        md:w-[390px] md:h-[844px] md:border-[10px] md:border-zinc-900 md:rounded-[44px]
         md:shadow-2xl md:overflow-hidden ring-1 ring-black/10 dark:ring-white/5 flex flex-col"
       >
-        {/* Dynamic Island */}
-        <div className="hidden md:flex absolute top-0 left-1/2 -translate-x-1/2 h-[34px] w-[126px] bg-black rounded-b-[22px] z-50 items-center justify-center pointer-events-none">
-          <div className="w-[68px] h-[18px] bg-black rounded-full" />
-          <div className="absolute right-3.5 w-3 h-3 rounded-full bg-zinc-900 ring-1 ring-zinc-800/50" />
+        {/*
+         * ── Samsung-style centred punch-hole camera ─────────────
+         * A single small dark circle centred at the top of the
+         * screen — exactly like Galaxy S / A series.
+         * z-50 keeps it above all content at all times.
+         */}
+        <div
+          className="hidden md:flex absolute z-50 pointer-events-none items-center justify-center"
+          style={{
+            top: "10px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "14px",
+            height: "14px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle at 38% 33%, #1c1c28 0%, #040407 70%)",
+            boxShadow:
+              "0 0 0 1.5px rgba(255,255,255,0.07), inset 0 1px 3px rgba(0,0,0,0.95), 0 2px 8px rgba(0,0,0,0.7)",
+          }}
+        >
+          {/* Subtle lens-glint highlight */}
+          <div
+            style={{
+              width: "4px",
+              height: "4px",
+              borderRadius: "50%",
+              background:
+                "radial-gradient(circle at 30% 28%, rgba(255,255,255,0.25) 0%, transparent 60%)",
+            }}
+          />
         </div>
 
         {/* Side Buttons */}
@@ -201,12 +229,12 @@ const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
         <div className="hidden md:block absolute -left-[18px] top-[252px] h-[64px] w-[3px] bg-zinc-800 rounded-l-full" />
         <div className="hidden md:block absolute -right-[18px] top-[188px] h-[96px] w-[3px] bg-zinc-800 rounded-r-full" />
 
-        {/* ── Status Bar: real live clock + real battery ── */}
+        {/* ── Live Status Bar (desktop phone frame only) ── */}
         <div className="hidden md:flex bg-background absolute top-0 z-40 w-full">
           <PhoneStatusBar />
         </div>
 
-        {/* Content */}
+        {/* Content — md:pt-9 (36px) so nothing slides under the status bar */}
         <div className="flex-1 w-full overflow-y-auto no-scrollbar md:pt-9 flex flex-col">
           {children}
         </div>
