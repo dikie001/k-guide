@@ -66,26 +66,6 @@ export default function MapSafetyPage() {
       <div className="pointer-events-none absolute left-0 right-0 top-16 z-40 px-4 pb-4 pt-2">
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background/90 via-background/50 to-transparent pb-20" />
 
-        <div className="pointer-events-auto mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-1 rounded-xl bg-card/50 px-3 py-1.5 backdrop-blur-md border border-slate-600/30">
-            <button
-              onClick={() => navigate(-1)}
-              className="mr-2 rounded-full p-1 hover:bg-slate-700/50 active:scale-95 transition-all"
-            >
-              <ChevronLeft className="h-5 w-5 text-foreground" />
-            </button>
-            <span className="text-2xl font-black text-cyan-400">K</span>
-            <span className="text-2xl font-bold text-foreground">-Guide</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <button className="rounded-full border border-slate-600/30 bg-card/50 p-2.5 text-muted-foreground shadow-sm transition-transform active:scale-95 backdrop-blur-md">
-              <User className="h-6 w-6" />
-            </button>
-            <button className="p-1 text-foreground">
-              <Menu className="h-8 w-8" />
-            </button>
-          </div>
-        </div>
 
         <div className="group pointer-events-auto relative rounded-full shadow-[0_8px_30px_-8px_rgba(0,0,0,0.15)]">
           <div className="absolute left-5 top-1/2 -translate-y-1/2">

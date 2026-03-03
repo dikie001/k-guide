@@ -1,295 +1,291 @@
 import { Home, ScanLine, Shield, MapIcon, User } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
-const navItems = [
+const leftItems = [
   { id: "home", icon: Home, label: "Home", route: "/" },
-  { id: "scan", icon: ScanLine, label: "Scan", route: "/scan-dopine" },
   { id: "wada", icon: Shield, label: "WADA", route: "/wada" },
+];
+
+const rightItems = [
   { id: "map", icon: MapIcon, label: "Map", route: "/map" },
   { id: "profile", icon: User, label: "Profile", route: "/profile" },
 ];
 
+const centerItem = {
+  id: "scan",
+  icon: ScanLine,
+  label: "Scan",
+  route: "/scan-dopine",
+};
+
 const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [ripple, setRipple] = useState<{ id: string; key: number } | null>(
-    null,
-  );
-  const rippleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [pressed, setPressed] = useState<string | null>(null);
 
-  const activeIndex = navItems.findIndex(({ route }) =>
+  const isActive = (route: string) =>
     route === "/"
       ? location.pathname === "/"
-      : location.pathname.startsWith(route),
-  );
+      : location.pathname.startsWith(route);
 
   const handleClick = (id: string, route: string) => {
-    if (rippleTimer.current) clearTimeout(rippleTimer.current);
-    setRipple({ id, key: Date.now() });
-    rippleTimer.current = setTimeout(() => setRipple(null), 500);
+    setPressed(id);
+    setTimeout(() => setPressed(null), 250);
     navigate(route);
   };
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap');
-
-        .bnav-root {
-          font-family: 'DM Sans', sans-serif;
+        .bn2-wrap {
           position: fixed;
+          bottom: calc(env(safe-area-inset-bottom, 0px) + 18px);
           left: 50%;
           transform: translateX(-50%);
-          z-index: 50;
-          bottom: 0;
-          width: 100%;
-          max-width: 430px;
-          padding: 0 14px calc(env(safe-area-inset-bottom, 0px) + 10px);
-        }
-
-        @media (min-width: 768px) {
-          .bnav-root {
-            bottom: 28px;
-            max-width: 320px;
-            padding: 0;
-          }
-        }
-
-        .bnav-glass {
+          z-index: 100;
           display: flex;
-          align-items: center;
-          position: relative;
-          background: rgba(8, 8, 12, 0.88);
-          backdrop-filter: blur(28px) saturate(200%);
-          -webkit-backdrop-filter: blur(28px) saturate(200%);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 28px;
-          padding: 6px 4px;
-          box-shadow:
-            0 0 0 0.5px rgba(255,255,255,0.04) inset,
-            0 2px 0 rgba(255,255,255,0.03) inset,
-            0 -1px 30px rgba(0,0,0,0.5),
-            0 12px 50px rgba(0,0,0,0.55),
-            0 4px 16px rgba(0,0,0,0.4);
-        }
-
-        @media (min-width: 768px) {
-          .bnav-glass {
-            padding: 4px 3px;
-            border-radius: 22px;
-            /* Extra ambient glow on desktop */
-            box-shadow:
-              0 0 0 0.5px rgba(255,255,255,0.05) inset,
-              0 2px 0 rgba(255,255,255,0.04) inset,
-              0 0 0 1px rgba(99,102,241,0.12),
-              0 8px 32px rgba(0,0,0,0.6),
-              0 0 60px rgba(99,102,241,0.08),
-              0 20px 60px rgba(0,0,0,0.5);
-          }
-        }
-
-        .bnav-slider {
-          position: absolute;
-          top: 6px;
-          bottom: 6px;
-          border-radius: 22px;
-          background: linear-gradient(140deg,
-            rgba(99, 102, 241, 0.22) 0%,
-            rgba(168, 85, 247, 0.14) 100%
-          );
-          border: 1px solid rgba(139, 92, 246, 0.28);
-          box-shadow:
-            0 0 24px rgba(99, 102, 241, 0.18),
-            0 0 8px rgba(139, 92, 246, 0.12) inset;
-          transition:
-            left  0.38s cubic-bezier(0.34, 1.52, 0.64, 1),
-            width 0.38s cubic-bezier(0.34, 1.52, 0.64, 1);
-          pointer-events: none;
-        }
-
-        @media (min-width: 768px) {
-          .bnav-slider { top: 4px; bottom: 4px; }
-        }
-
-        .bnav-item {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 3px;
-          padding: 9px 4px 8px;
+        }
+
+        /* Pill bar */
+        .bn2-bar {
+          display: flex;
+          align-items: center;
+          background: rgba(18, 18, 28, 0.85);
+          backdrop-filter: blur(32px) saturate(200%);
+          -webkit-backdrop-filter: blur(32px) saturate(200%);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 999px;
+          padding: 8px 10px;
+          gap: 4px;
+          box-shadow:
+            0 0 0 0.5px rgba(255,255,255,0.04) inset,
+            0 8px 32px rgba(0,0,0,0.55),
+            0 2px 8px rgba(0,0,0,0.3);
+          position: relative;
+        }
+
+        /* Divider gap for center button */
+        .bn2-gap {
+          width: 64px;
+          height: 44px;
+          flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+          .bn2-gap { width: 52px; height: 36px; }
+        }
+
+        /* Regular icon buttons */
+        .bn2-btn {
+          width: 44px;
+          height: 44px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           border: none;
           background: transparent;
           cursor: pointer;
-          outline: none;
-          -webkit-tap-highlight-color: transparent;
+          border-radius: 999px;
           position: relative;
-          border-radius: 22px;
-          overflow: hidden;
-          transition: transform 0.13s ease;
-          user-select: none;
+          -webkit-tap-highlight-color: transparent;
+          outline: none;
+          transition: background 0.15s ease, transform 0.15s ease;
+          flex-shrink: 0;
         }
-
-        .bnav-item:active { transform: scale(0.91); }
 
         @media (min-width: 768px) {
-          .bnav-item { padding: 6px 4px 5px; gap: 2px; }
+          .bn2-btn { width: 36px; height: 36px; }
         }
 
-        .bnav-icon-wrap {
-          position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 26px;
-          height: 26px;
+        .bn2-btn:active,
+        .bn2-btn.bn2-pressed {
+          transform: scale(0.88);
+          background: rgba(255,255,255,0.06);
         }
 
-        .bnav-icon {
-          transition:
-            transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1),
-            color      0.2s ease,
-            filter     0.2s ease;
+        .bn2-btn-icon {
+          transition: color 0.2s ease, filter 0.2s ease;
           width: 20px;
           height: 20px;
         }
 
         @media (min-width: 768px) {
-          .bnav-icon { width: 16px; height: 16px; }
-          .bnav-icon-wrap { width: 20px; height: 20px; }
+          .bn2-btn-icon { width: 16px; height: 16px; }
         }
 
-        .bnav-item.active .bnav-icon {
-          transform: translateY(-1.5px) scale(1.14);
-          color: #a78bfa;
-          filter: drop-shadow(0 0 9px rgba(167, 139, 250, 0.65));
+        .bn2-btn.bn2-on .bn2-btn-icon {
+          color: #fff;
+          filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
         }
 
-        .bnav-item:not(.active) .bnav-icon {
+        .bn2-btn:not(.bn2-on) .bn2-btn-icon {
           color: rgba(255,255,255,0.32);
-          transform: translateY(0) scale(1);
         }
 
-        .bnav-label {
-          font-size: 9.5px;
-          font-weight: 600;
-          letter-spacing: 0.025em;
-          line-height: 1;
-          transition: color 0.2s ease, opacity 0.2s ease;
-        }
-
-        @media (min-width: 768px) {
-          .bnav-label { font-size: 8px; letter-spacing: 0.03em; }
-        }
-
-        .bnav-item.active .bnav-label     { color: #c4b5fd; opacity: 1; }
-        .bnav-item:not(.active) .bnav-label { color: rgba(255,255,255,0.28); opacity: 1; }
-
-        .bnav-dot {
+        /* Active dot */
+        .bn2-dot {
           position: absolute;
-          bottom: -2px;
+          bottom: 4px;
           left: 50%;
+          transform: translateX(-50%);
           width: 3px;
           height: 3px;
           border-radius: 50%;
-          background: #a78bfa;
-          box-shadow: 0 0 7px rgba(167, 139, 250, 0.9);
-          animation: bnav-dot-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          background: #fff;
+          opacity: 0;
+          transition: opacity 0.2s ease;
         }
 
-        @keyframes bnav-dot-in {
-          from { opacity: 0; transform: translateX(-50%) scale(0); }
-          to   { opacity: 1; transform: translateX(-50%) scale(1); }
-        }
+        .bn2-btn.bn2-on .bn2-dot { opacity: 0.7; }
 
-        .bnav-ripple {
+        /* Center FAB button — floats above the bar */
+        .bn2-fab-wrap {
           position: absolute;
-          inset: 0;
-          border-radius: 22px;
-          background: radial-gradient(circle at center, rgba(167,139,250,0.18) 0%, transparent 70%);
-          transform: scale(0);
-          animation: bnav-ripple-out 0.5s ease-out forwards;
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           pointer-events: none;
         }
 
-        @keyframes bnav-ripple-out {
-          to { transform: scale(2.4); opacity: 0; }
+        .bn2-fab {
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          border: none;
+          cursor: pointer;
+          pointer-events: all;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(145deg, #a855f7, #7c3aed);
+          box-shadow:
+            0 0 0 3px rgba(168, 85, 247, 0.2),
+            0 4px 20px rgba(124, 58, 237, 0.6),
+            0 2px 6px rgba(0,0,0,0.4);
+          -webkit-tap-highlight-color: transparent;
+          outline: none;
+          transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+          position: relative;
         }
 
-        /* Ambient underlight on desktop */
         @media (min-width: 768px) {
-          .bnav-root::after {
-            content: '';
-            position: absolute;
-            bottom: -16px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 55%;
-            height: 18px;
-            background: radial-gradient(ellipse at center, rgba(99,102,241,0.3), transparent 70%);
-            filter: blur(10px);
-            pointer-events: none;
-            border-radius: 50%;
-          }
+          .bn2-fab { width: 42px; height: 42px; }
+          .bn2-fab-wrap { bottom: 5px; }
+        }
+
+        .bn2-fab:active,
+        .bn2-fab.bn2-fab-pressed {
+          transform: scale(0.9);
+          box-shadow:
+            0 0 0 3px rgba(168, 85, 247, 0.3),
+            0 2px 10px rgba(124, 58, 237, 0.5);
+        }
+
+        .bn2-fab.bn2-fab-active {
+          background: linear-gradient(145deg, #c084fc, #9333ea);
+          box-shadow:
+            0 0 0 4px rgba(192, 132, 252, 0.3),
+            0 6px 24px rgba(147, 51, 234, 0.7);
+        }
+
+        .bn2-fab-icon {
+          width: 22px;
+          height: 22px;
+          color: #fff;
+          transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @media (min-width: 768px) {
+          .bn2-fab-icon { width: 17px; height: 17px; }
+        }
+
+        .bn2-fab:active .bn2-fab-icon {
+          transform: scale(0.85);
+        }
+
+        /* Subtle pulse on FAB */
+        .bn2-fab-pulse {
+          position: absolute;
+          inset: -4px;
+          border-radius: 50%;
+          border: 1.5px solid rgba(168, 85, 247, 0.35);
+          animation: bn2-pulse 2.8s ease-out infinite;
+          pointer-events: none;
+        }
+
+        @keyframes bn2-pulse {
+          0%   { opacity: 0.6; transform: scale(1); }
+          65%  { opacity: 0;   transform: scale(1.45); }
+          100% { opacity: 0;   transform: scale(1.45); }
         }
       `}</style>
 
-      <nav className="bnav-root" role="navigation" aria-label="Main navigation">
-        <div className="bnav-glass">
-          <SliderPill activeIndex={activeIndex} total={navItems.length} />
-
-          {navItems.map(({ id, icon: Icon, label, route }, i) => {
-            const active = i === activeIndex;
-            const isRippling = ripple?.id === id;
-
+      <nav className="bn2-wrap" role="navigation" aria-label="Main navigation">
+        <div className="bn2-bar">
+          {/* Left items */}
+          {leftItems.map(({ id, icon: Icon, label, route }) => {
+            const active = isActive(route);
             return (
               <button
                 key={id}
                 onClick={() => handleClick(id, route)}
                 aria-label={label}
                 aria-current={active ? "page" : undefined}
-                className={`bnav-item${active ? " active" : ""}`}
+                className={`bn2-btn${active ? " bn2-on" : ""}${pressed === id ? " bn2-pressed" : ""}`}
               >
-                {isRippling && (
-                  <span className="bnav-ripple" key={ripple?.key} />
-                )}
-
-                <span className="bnav-icon-wrap">
-                  <Icon
-                    className="bnav-icon"
-                    strokeWidth={active ? 2.25 : 1.6}
-                  />
-                  {active && <span className="bnav-dot" />}
-                </span>
-
-                <span className="bnav-label">{label}</span>
+                <Icon
+                  className="bn2-btn-icon"
+                  strokeWidth={active ? 2.2 : 1.7}
+                />
+                <span className="bn2-dot" />
               </button>
             );
           })}
+
+          {/* Gap for FAB */}
+          <div className="bn2-gap" />
+
+          {/* Right items */}
+          {rightItems.map(({ id, icon: Icon, label, route }) => {
+            const active = isActive(route);
+            return (
+              <button
+                key={id}
+                onClick={() => handleClick(id, route)}
+                aria-label={label}
+                aria-current={active ? "page" : undefined}
+                className={`bn2-btn${active ? " bn2-on" : ""}${pressed === id ? " bn2-pressed" : ""}`}
+              >
+                <Icon
+                  className="bn2-btn-icon"
+                  strokeWidth={active ? 2.2 : 1.7}
+                />
+                <span className="bn2-dot" />
+              </button>
+            );
+          })}
+
+          {/* Floating center FAB */}
+          <div className="bn2-fab-wrap">
+            <button
+              onClick={() => handleClick(centerItem.id, centerItem.route)}
+              aria-label={centerItem.label}
+              aria-current={isActive(centerItem.route) ? "page" : undefined}
+              className={`bn2-fab${isActive(centerItem.route) ? " bn2-fab-active" : ""}${pressed === centerItem.id ? " bn2-fab-pressed" : ""}`}
+            >
+              <span className="bn2-fab-pulse" />
+              <centerItem.icon className="bn2-fab-icon" strokeWidth={2} />
+            </button>
+          </div>
         </div>
       </nav>
     </>
-  );
-};
-
-const SliderPill = ({
-  activeIndex,
-  total,
-}: {
-  activeIndex: number;
-  total: number;
-}) => {
-  const pct = 100 / total;
-  return (
-    <span
-      className="bnav-slider"
-      style={{
-        left: `calc(${activeIndex * pct}% + 4px)`,
-        width: `calc(${pct}% - 8px)`,
-      }}
-    />
   );
 };
 

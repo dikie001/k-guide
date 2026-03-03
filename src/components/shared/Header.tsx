@@ -84,7 +84,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md border-b border-border/60 flex items-center justify-between px-4 py-3 transition-all duration-200">
+    <header className="sticky top-0  z-50 w-full  bg-background/95 backdrop-blur-md border-b border-border/60 flex items-center justify-between px-4 py-3 transition-all duration-200">
       {/* ── Left: Brand / Back ── */}
       <div className="flex items-center gap-2">
         {!isHome ? (
