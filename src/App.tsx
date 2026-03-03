@@ -7,7 +7,7 @@ import { Wifi, BatteryMedium, Signal } from "lucide-react";
 // The wrapper that creates the phone frame on MD+ screens only
 const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="min-h-screen w-full flex items-center justify-center md:bg-zinc-200 dark:md:bg-zinc-900 md:p-8">
+    <div className="min-h-screen w-full flex items-center justify-center md:bg-zinc-200  md:p-8">
       <div
         className="relative w-full lg:-mt-8 h-screen md:h-auto md:max-h-screen bg-background
         md:w-[390px] md:h-[844px] md:border-[10px] md:border-zinc-900 md:rounded-[52px]
