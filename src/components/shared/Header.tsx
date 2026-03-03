@@ -84,7 +84,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md border-b border-border/60 flex items-center justify-between px-4 py-3 transition-all duration-200">
+    <header className="sticky top-0  z-50 w-full  bg-background/95 backdrop-blur-md border-b border-border/60 flex items-center justify-between px-4 py-3 transition-all duration-200">
       {/* ── Left: Brand / Back ── */}
       <div className="flex items-center gap-2">
         {!isHome ? (
@@ -161,10 +161,48 @@ const Header = () => {
             </Button>
           </SheetTrigger>
 
+          {/*
+           * On mobile  → slides in from the right (default Sheet behaviour).
+           * On large screens → centered modal with rounded corners.
+           *
+           * We override shadcn's positional classes with lg: responsive
+           * variants and a forced transform via inline style on lg.
+           *
+           * Key overrides:
+           *   lg:inset-auto          – cancels `inset-y-0`
+           *   lg:right-auto          – cancels `right-0`
+           *   lg:left-1/2 lg:top-1/2 – anchor to viewport centre
+           *   [style] transform      – exact 50 % translate on lg
+           *   lg:rounded-2xl         – rounded corners
+           *   lg:max-h-[85vh]        – cap height so it doesn't fill screen
+           *   lg:h-auto              – let content dictate height
+           */}
           <SheetContent
             side="right"
-            className="w-[300px] sm:w-[320px] p-0 flex flex-col max-h-screen"
+            className={[
+              // ── Base (mobile) ──────────────────────────────────
+              "w-[300px] sm:w-[320px] p-0 flex flex-col max-h-screen",
+              // ── Large-screen overrides ─────────────────────────
+              "lg:w-[360px]",
+              "lg:inset-auto lg:right-auto", // reset right-slide position
+              "lg:fixed lg:left-1/2 lg:top-1/2", // anchor to centre
+              "lg:max-h-[85vh] lg:h-auto", // constrain height
+              "lg:rounded-2xl lg:overflow-hidden", // rounded card look
+              "lg:shadow-2xl lg:border lg:border-border/60",
+              // Tailwind can't do arbitrary translate with responsive prefix,
+              // so we add a utility class defined below via a small <style> tag.
+              "lg:centered-sheet",
+            ].join(" ")}
           >
+            {/* Inline style block that handles the -50% / -50% translate on lg */}
+            <style>{`
+              @media (min-width: 1024px) {
+                .lg\\:centered-sheet {
+                  transform: translate(-50%, -50%) !important;
+                }
+              }
+            `}</style>
+
             {/* Drawer Header */}
             <div className="flex items-center gap-3 px-5 py-5 border-b border-border/60">
               <div className="h-9 w-9 bg-primary rounded-xl flex items-center justify-center shadow-sm shadow-primary/30">
