@@ -4,6 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   AlertCircle,
   Clock,
@@ -23,16 +31,40 @@ interface Symptom {
   notes?: string;
 }
 
-const SYMPTOM_OPTIONS = [
-  { name: "Headache", icon: "ðŸ¤•", category: "Pain" },
-  { name: "Fatigue", icon: "ðŸ˜´", category: "Energy" },
-  { name: "Muscle Soreness", icon: "ðŸ’ª", category: "Muscle" },
-  { name: "Dizziness", icon: "ðŸŒ€", category: "Nervous" },
-  { name: "Nausea", icon: "ðŸ¤¢", category: "GI" },
-  { name: "Joint Pain", icon: "ðŸ¦µ", category: "Joints" },
-  { name: "Fever", icon: "ðŸŒ¡ï¸", category: "Infection" },
-  { name: "Shortness of Breath", icon: "ðŸ˜®â€ðŸ’¨", category: "Respiratory" },
-];
+// Custom Textarea
+function CustomTextarea({
+  value,
+  onChange,
+  placeholder,
+}: {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  placeholder?: string;
+}) {
+  return (
+    <textarea
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      className="
+        w-full
+        p-3
+        rounded-xl
+        border
+        border-border
+        bg-card
+        text-foreground
+        placeholder:text-muted-foreground
+        focus:outline-none
+        focus:ring-2
+        focus:ring-primary/50
+        focus:border-primary
+        resize-none
+      "
+      rows={4}
+    />
+  );
+}
 
 export default function LogSymptomsPage() {
   const [symptoms, setSymptoms] = useState<Symptom[]>([
@@ -51,9 +83,18 @@ export default function LogSymptomsPage() {
       notes: "General tiredness",
     },
   ]);
+
   const [selectedTab, setSelectedTab] = useState("recent");
 
-  const handleAddSymptom = (symptomName: string) => {
+  const [form, setForm] = useState({
+    name: "",
+    severity: "mild" as "mild" | "moderate" | "severe",
+    notes: "",
+  });
+
+  const handleAddSymptom = () => {
+    if (!form.name.trim()) return;
+
     const now = new Date();
     const timeString = now.toLocaleTimeString("en-US", {
       hour: "2-digit",
@@ -65,11 +106,15 @@ export default function LogSymptomsPage() {
       ...symptoms,
       {
         id: Date.now(),
-        name: symptomName,
-        severity: "mild",
+        name: form.name,
+        severity: form.severity,
         time: timeString,
+        notes: form.notes,
       },
     ]);
+
+    setForm({ name: "", severity: "mild", notes: "" });
+    setSelectedTab("recent");
   };
 
   const handleDeleteSymptom = (id: number) => {
@@ -163,6 +208,7 @@ export default function LogSymptomsPage() {
               </TabsTrigger>
             </TabsList>
 
+            {/* Recent Logs */}
             <TabsContent value="recent" className="space-y-3 mt-4">
               {symptoms.length === 0 ? (
                 <div className="text-center py-8">
@@ -196,7 +242,7 @@ export default function LogSymptomsPage() {
                           <Clock className="h-3 w-3" />
                           {symptom.time}
                         </span>
-                        {symptom.notes && <span>â€¢ {symptom.notes}</span>}
+                        {symptom.notes && <span>• {symptom.notes}</span>}
                       </div>
                     </div>
                     <button
@@ -210,24 +256,62 @@ export default function LogSymptomsPage() {
               )}
             </TabsContent>
 
-            <TabsContent value="add" className="space-y-3 mt-4">
-              <p className="text-xs text-muted-foreground font-bold uppercase tracking-wide px-1">
-                Select Symptom
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {SYMPTOM_OPTIONS.map((option) => (
-                  <Button
-                    key={option.name}
-                    onClick={() => handleAddSymptom(option.name)}
-                    variant="outline"
-                    className="h-20 rounded-xl border-border hover:border-primary/50 hover:bg-primary/5 flex flex-col items-center gap-2"
+            {/* Add Manual Symptom */}
+            <TabsContent value="add" className="space-y-4 mt-4">
+              <div className="space-y-4 bg-card p-4 rounded-2xl border border-border">
+                <div className="space-y-2">
+                  <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                    Symptom Name
+                  </p>
+                  <Input
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    placeholder="e.g. Lower back pain"
+                    className="rounded-xl"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                    Severity
+                  </p>
+                  <Select
+                    value={form.severity}
+                    onValueChange={(value: "mild" | "moderate" | "severe") =>
+                      setForm({ ...form, severity: value })
+                    }
                   >
-                    <span className="text-2xl">{option.icon}</span>
-                    <span className="text-xs font-bold text-foreground/80">
-                      {option.name}
-                    </span>
-                  </Button>
-                ))}
+                    <SelectTrigger className="rounded-xl">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="mild">Mild</SelectItem>
+                      <SelectItem value="moderate">Moderate</SelectItem>
+                      <SelectItem value="severe">Severe</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                    Notes (Optional)
+                  </p>
+                  <CustomTextarea
+                    value={form.notes}
+                    onChange={(e) =>
+                      setForm({ ...form, notes: e.target.value })
+                    }
+                    placeholder="Add context if necessary..."
+                  />
+                </div>
+
+                <Button
+                  onClick={handleAddSymptom}
+                  className="w-full rounded-xl cursor-pointer"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Log Symptom
+                </Button>
               </div>
             </TabsContent>
           </Tabs>

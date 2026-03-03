@@ -3,7 +3,6 @@ import AppRoutes from "./routes";
 import InstallPrompt from "@/features/pwa/InstallPrompt";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 
-// ─── Live Clock ────────────────────────────────────────────────
 const LiveClock = () => {
   const [time, setTime] = useState("");
   useEffect(() => {
@@ -26,7 +25,6 @@ const LiveClock = () => {
   );
 };
 
-// ─── Signal Bars ───────────────────────────────────────────────
 const SignalBars = ({ strength = 4 }: { strength?: number }) => (
   <div className="flex items-end gap-[2px] h-[13px]">
     {[1, 2, 3, 4].map((bar) => (
@@ -43,7 +41,6 @@ const SignalBars = ({ strength = 4 }: { strength?: number }) => (
   </div>
 );
 
-// ─── WiFi Icon ─────────────────────────────────────────────────
 const WifiIcon = () => (
   <svg width="14" height="11" viewBox="0 0 14 11" fill="none">
     <path
@@ -68,7 +65,6 @@ const WifiIcon = () => (
   </svg>
 );
 
-// ─── Battery Icon ──────────────────────────────────────────────
 const BatteryIcon = ({
   level,
   charging,
@@ -137,7 +133,14 @@ const BatteryIcon = ({
   );
 };
 
-// ─── Phone Status Bar ──────────────────────────────────────────
+// Two tiny dots — blue for message, red for missed call. That's it.
+const NotifDots = () => (
+  <div className="flex items-center gap-[4px]">
+    <div className="w-[5px] h-[5px] rounded-full bg-blue-500 opacity-90" />
+    <div className="w-[5px] h-[5px] rounded-full bg-red-500 opacity-90" />
+  </div>
+);
+
 const PhoneStatusBar = () => {
   const [battery, setBattery] = useState({ level: 100, charging: false });
   const [supported, setSupported] = useState(false);
@@ -163,13 +166,20 @@ const PhoneStatusBar = () => {
   }, []);
 
   return (
-    // h-9 = 36px — must match md:pt-9 on the content wrapper
-    <div className="flex justify-between items-center h-9 w-full px-5 text-foreground select-none pointer-events-none">
-      {/* pl-8 nudges the time right to clear the centred punch-hole */}
-      <div className="pl-8">
-        <LiveClock />
+    <div className="flex items-center h-9 w-full px-5 text-foreground select-none pointer-events-none">
+      {/* LEFT: time — always anchored left, never moves */}
+      <LiveClock />
+
+      {/* CENTRE: two notif dots float naturally in the middle space,
+          shifted slightly left so the punch-hole circle doesn't cover them */}
+      <div className="flex-1 flex items-center justify-center">
+        <div style={{ marginRight: "18px" }}>
+          <NotifDots />
+        </div>
       </div>
-      <div className="flex items-center gap-2">
+
+      {/* RIGHT: signal + wifi + battery */}
+      <div className="flex items-center gap-[6px]">
         <SignalBars strength={4} />
         <WifiIcon />
         <BatteryIcon
@@ -181,72 +191,62 @@ const PhoneStatusBar = () => {
   );
 };
 
-// ─── Phone Frame ───────────────────────────────────────────────
-const PhoneFrame = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="min-h-screen w-full flex items-center justify-center md:bg-zinc-200 md:p-8">
+const PhoneFrame = ({ children }: { children: React.ReactNode }) => (
+  <div className="min-h-screen w-full flex items-center justify-center md:bg-zinc-200 md:p-8">
+    <div
+      className="relative w-full lg:-mt-8 h-screen md:h-auto md:max-h-screen bg-background
+      md:w-[390px] md:h-[844px] md:border-[10px] md:border-zinc-900 md:rounded-[44px]
+      md:shadow-2xl md:overflow-hidden ring-1 ring-black/10 dark:ring-white/5 flex flex-col"
+    >
+      {/* Samsung centred punch-hole */}
       <div
-        className="relative w-full lg:-mt-8 h-screen md:h-auto md:max-h-screen bg-background
-        md:w-[390px] md:h-[844px] md:border-[10px] md:border-zinc-900 md:rounded-[44px]
-        md:shadow-2xl md:overflow-hidden ring-1 ring-black/10 dark:ring-white/5 flex flex-col"
+        className="hidden md:flex absolute z-50 pointer-events-none items-center justify-center"
+        style={{
+          top: "10px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "14px",
+          height: "14px",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle at 38% 33%, #1c1c28 0%, #040407 70%)",
+          boxShadow:
+            "0 0 0 1.5px rgba(255,255,255,0.07), inset 0 1px 3px rgba(0,0,0,0.95), 0 2px 8px rgba(0,0,0,0.7)",
+        }}
       >
-        {/*
-         * ── Samsung-style centred punch-hole camera ─────────────
-         * A single small dark circle centred at the top of the
-         * screen — exactly like Galaxy S / A series.
-         * z-50 keeps it above all content at all times.
-         */}
         <div
-          className="hidden md:flex absolute z-50 pointer-events-none items-center justify-center"
           style={{
-            top: "10px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "14px",
-            height: "14px",
+            width: "4px",
+            height: "4px",
             borderRadius: "50%",
             background:
-              "radial-gradient(circle at 38% 33%, #1c1c28 0%, #040407 70%)",
-            boxShadow:
-              "0 0 0 1.5px rgba(255,255,255,0.07), inset 0 1px 3px rgba(0,0,0,0.95), 0 2px 8px rgba(0,0,0,0.7)",
+              "radial-gradient(circle at 30% 28%, rgba(255,255,255,0.25) 0%, transparent 60%)",
           }}
-        >
-          {/* Subtle lens-glint highlight */}
-          <div
-            style={{
-              width: "4px",
-              height: "4px",
-              borderRadius: "50%",
-              background:
-                "radial-gradient(circle at 30% 28%, rgba(255,255,255,0.25) 0%, transparent 60%)",
-            }}
-          />
-        </div>
-
-        {/* Side Buttons */}
-        <div className="hidden md:block absolute -left-[18px] top-[108px] h-[34px] w-[3px] bg-zinc-800 rounded-l-full" />
-        <div className="hidden md:block absolute -left-[18px] top-[168px] h-[64px] w-[3px] bg-zinc-800 rounded-l-full" />
-        <div className="hidden md:block absolute -left-[18px] top-[252px] h-[64px] w-[3px] bg-zinc-800 rounded-l-full" />
-        <div className="hidden md:block absolute -right-[18px] top-[188px] h-[96px] w-[3px] bg-zinc-800 rounded-r-full" />
-
-        {/* ── Live Status Bar (desktop phone frame only) ── */}
-        <div className="hidden md:flex bg-background absolute top-0 z-40 w-full">
-          <PhoneStatusBar />
-        </div>
-
-        {/* Content — md:pt-9 (36px) so nothing slides under the status bar */}
-        <div className="flex-1 w-full overflow-y-auto no-scrollbar md:pt-9 flex flex-col">
-          {children}
-        </div>
-
-        {/* Home Indicator */}
-        <div className="hidden md:block absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] bg-foreground/70 rounded-full z-50 pointer-events-none" />
+        />
       </div>
-    </div>
-  );
-};
 
-// ─── App ───────────────────────────────────────────────────────
+      {/* Side Buttons */}
+      <div className="hidden md:block absolute -left-[18px] top-[108px] h-[34px] w-[3px] bg-zinc-800 rounded-l-full" />
+      <div className="hidden md:block absolute -left-[18px] top-[168px] h-[64px] w-[3px] bg-zinc-800 rounded-l-full" />
+      <div className="hidden md:block absolute -left-[18px] top-[252px] h-[64px] w-[3px] bg-zinc-800 rounded-l-full" />
+      <div className="hidden md:block absolute -right-[18px] top-[188px] h-[96px] w-[3px] bg-zinc-800 rounded-r-full" />
+
+      {/* Status Bar */}
+      <div className="hidden md:flex bg-background absolute top-0 z-40 w-full">
+        <PhoneStatusBar />
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 w-full overflow-y-auto no-scrollbar md:pt-9 flex flex-col">
+        {children}
+      </div>
+
+      {/* Home Indicator */}
+      <div className="hidden md:block absolute bottom-2 left-1/2 -translate-x-1/2 w-[134px] h-[5px] bg-foreground/70 rounded-full z-50 pointer-events-none" />
+    </div>
+  </div>
+);
+
 const App = () => (
   <ThemeProvider>
     <PhoneFrame>
