@@ -235,7 +235,7 @@ export default function FirstAid() {
           </div>
         </div> */}
 
-        <ScrollArea className="h-[calc(100vh-5rem)] -mt-4 relative z-10 px-4">
+        <ScrollArea className="h-[calc(100vh-5rem)] -mt-2 relative z-10 px-4">
           <div className="bg-card rounded-t-3xl shadow-xl min-h-[85vh] p-6 pb-24 space-y-8">
             <div className="flex items-start justify-between mb-8">
               <div>
