@@ -148,7 +148,6 @@ export default function RecoveryPage() {
   };
 
   return (
-    // Added max-w-md and mx-auto to restrict mobile width on desktop, making it feel like an app.
     <div className="mx-auto flex h-[100dvh] w-full max-w-md flex-col overflow-hidden bg-slate-950 text-white relative shadow-2xl sm:border-x sm:border-slate-800">
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
@@ -168,7 +167,6 @@ export default function RecoveryPage() {
       </div>
 
       {/* HERO SECTION */}
-      {/* Adjusted height to be more fluid: 40vh instead of strict 46, with a min-height */}
       <div className="relative w-full shrink-0 h-[40vh] min-h-[280px]">
         {playing ? (
           <div className="relative h-full w-full bg-black ">
@@ -191,7 +189,7 @@ export default function RecoveryPage() {
         ) : (
           <div className="relative h-full w-full overflow-hidden bg-slate-900">
             {!imgLoaded && (
-              <div className="absolute inset-0 animate-pulse bg-slate-800 wrap-break-word" />
+              <div className="absolute inset-0 animate-pulse bg-slate-800" />
             )}
             <img
               key={active.youtubeId}
@@ -241,7 +239,8 @@ export default function RecoveryPage() {
                   {active.intensity}
                 </span>
               </div>
-              <h1 className="line-clamp-2 text-2xl font-black leading-tight tracking-tight text-white drop-shadow-md">
+              {/* FIX 1: Added break-words to hero title */}
+              <h1 className="line-clamp-2 break-words text-2xl font-black leading-tight tracking-tight text-white drop-shadow-md">
                 {active.title}
               </h1>
               <div className="mt-2 flex items-center justify-between">
@@ -262,7 +261,7 @@ export default function RecoveryPage() {
       </div>
 
       {/* PLAYLIST CARD */}
-      <div className="relative z-20 -mt-6 flex min-h-0 flex-1 flex-col rounded-t-3xl border-t border-white/10 bg-slate-950 shadow-[0_-12px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+      <div className="relative z-20 -mt-2 flex min-h-0 flex-1 flex-col rounded-t-3xl border-t border-white/10 bg-slate-950 shadow-[0_-12px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl">
         <div className="mx-auto mt-3 h-1 w-12 rounded-full bg-white/20" />
 
         <div className="shrink-0 px-5 pt-4">
@@ -294,7 +293,6 @@ export default function RecoveryPage() {
         </div>
 
         <ScrollArea className="min-h-0 flex-1">
-          {/* Added pb-28 so the bottom nav doesn't cut off the last item */}
           <div className=" space-y-2 px-4 pb-28 pt-1">
             {list.length === 0 && (
               <div className="py-12 text-center">
@@ -370,8 +368,9 @@ export default function RecoveryPage() {
 
                   {/* Info */}
                   <div className="flex min-w-0 flex-1 flex-col">
+                    {/* FIX 2: Replaced 'truncate' with 'line-clamp-2 break-words' */}
                     <p
-                      className={`truncate text-sm font-bold leading-tight ${
+                      className={`line-clamp-2 break-words text-sm font-bold leading-tight ${
                         isActive ? "text-blue-300" : "text-slate-200"
                       }`}
                     >
