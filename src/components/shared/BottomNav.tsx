@@ -1,4 +1,4 @@
-import { Home, ScanLine, Shield, MapIcon, User } from "lucide-react";
+import { Home, ScanLine, Shield, MapIcon, User, Info } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 
@@ -10,6 +10,7 @@ const leftItems = [
 const rightItems = [
   { id: "map", icon: MapIcon, label: "Map", route: "/map" },
   { id: "profile", icon: User, label: "Profile", route: "/profile" },
+  { id: "support", icon: Info, label: "Support", route: "/support" },
 ];
 
 const centerItem = {
