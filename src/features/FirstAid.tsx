@@ -26,7 +26,7 @@ const firstAidData = [
     title: "Ankle Sprain",
     category: "Joints",
     severity: "Moderate",
-    icon: <Activity className="text-white" />, // Icon color handled by container
+    icon: <Activity className="text-white" />,
     symptoms: ["Swelling", "Bruising", "Pain on weight", "Restricted motion"],
     treatment: [
       "R.I.C.E Protocol",
@@ -199,14 +199,12 @@ export default function FirstAid() {
 
   const ITEMS_PER_PAGE = 8;
 
-  // --- Filter Logic ---
   const filteredData = firstAidData.filter(
     (item) =>
       item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.category.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  // --- Pagination Logic ---
   const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentItems = filteredData.slice(
@@ -220,12 +218,10 @@ export default function FirstAid() {
     if (direction === "prev" && currentPage > 1) setCurrentPage((p) => p - 1);
   };
 
-  // --- VIEW: DETAIL PAGE (Medical Folder Look) ---
   if (selectedInjury) {
     return (
-      <div className="min-h-full bg-background text-foreground font-sans animate-in slide-in-from-right-8 duration-300">
-        {/* Red Header Strip */}
-        <div className="bg-red-600 px-4 pt-4 pb-12 shadow-lg relative z-0">
+      <div className="min-h-screen bg-background text-foreground font-sans animate-in slide-in-from-right-8 duration-300">
+        {/* <div className="bg-red-600 px-4 pt-4 pb-12 shadow-lg relative z-0">
           <div className="flex items-center gap-3 mb-2">
             <Button
               variant="ghost"
@@ -237,12 +233,10 @@ export default function FirstAid() {
             </Button>
             <h2 className="text-white font-bold text-lg">Medical Protocol</h2>
           </div>
-        </div>
+        </div> */}
 
-        {/* Content Card (Overlapping Header) */}
-        <ScrollArea className="h-[calc(100vh-5rem)] -mt-8 relative z-10 px-4">
-          <div className="bg-card rounded-t-3xl shadow-xl min-h-[85vh] p-6 pb-24">
-            {/* Icon & Title */}
+        <ScrollArea className="h-[calc(100vh-5rem)] -mt-4 relative z-10 px-4">
+          <div className="bg-card rounded-t-3xl shadow-xl min-h-[85vh] p-6 pb-24 space-y-8">
             <div className="flex items-start justify-between mb-8">
               <div>
                 <Badge
@@ -276,9 +270,7 @@ export default function FirstAid() {
               </div>
             </div>
 
-            {/* Sections */}
-            <div className="space-y-8">
-              {/* 1. WARNING */}
+            <div className="space-y-6">
               <div className="p-4 bg-red-950/30 border-l-4 border-red-500 rounded-r-xl">
                 <div className="flex items-center gap-2 mb-1">
                   <AlertCircle className="h-4 w-4 text-red-400" />
@@ -291,13 +283,12 @@ export default function FirstAid() {
                 </p>
               </div>
 
-              {/* 2. SYMPTOMS */}
               <div>
                 <h3 className="text-sm font-black text-foreground flex items-center gap-2 mb-3">
                   <Stethoscope className="h-4 w-4 text-red-500" />
                   SIGNS & SYMPTOMS
                 </h3>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {selectedInjury.symptoms.map((s, i) => (
                     <div
                       key={i}
@@ -310,7 +301,6 @@ export default function FirstAid() {
                 </div>
               </div>
 
-              {/* 3. TREATMENT */}
               <div>
                 <h3 className="text-sm font-black text-foreground flex items-center gap-2 mb-3">
                   <Activity className="h-4 w-4 text-emerald-500" />
@@ -328,7 +318,7 @@ export default function FirstAid() {
                         )}
                       </div>
                       <div className="pb-4">
-                        <p className="text-sm font-medium text-muted-foreground leading-snug pt-0.5 bg-transparent">
+                        <p className="text-sm font-medium text-muted-foreground leading-snug pt-0.5">
                           {step}
                         </p>
                       </div>
@@ -340,7 +330,6 @@ export default function FirstAid() {
           </div>
         </ScrollArea>
 
-        {/* Floating Done Button */}
         <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center pointer-events-none">
           <Button
             onClick={() => setSelectedInjury(null)}
@@ -353,14 +342,12 @@ export default function FirstAid() {
     );
   }
 
-  // --- VIEW: MAIN LIST ---
   return (
     <div className="relative min-h-full bg-background text-foreground pb-24 font-sans">
       <Header />
 
       <ScrollArea className="w-full h-[calc(100vh-80px)]">
         <div className="p-4 space-y-4">
-          {/* Search Bar */}
           <div className="relative group sticky top-0 z-20 -mx-4 px-4">
             <Search className="absolute left-7 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-red-500 transition-colors" />
             <Input
@@ -374,8 +361,6 @@ export default function FirstAid() {
             />
           </div>
 
-          {/* 2. Grid Content */}
-          {/* 2. Grid Content */}
           {filteredData.length === 0 ? (
             <div className="py-20 text-center opacity-40">
               <div className="mx-auto h-16 w-16 bg-slate-700/40 rounded-full flex items-center justify-center mb-4">
@@ -386,14 +371,13 @@ export default function FirstAid() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {currentItems.map((item) => (
                 <div
                   key={item.id}
                   onClick={() => setSelectedInjury(item)}
-                  className="group bg-card border border-slate-600/40 p-4 rounded-2xl shadow-sm hover:shadow-md hover:border-red-600/50 active:scale-95 transition-all duration-200 cursor-pointer flex flex-col justify-between h-36 relative overflow-hidden"
+                  className="group bg-card border border-slate-600/40 p-4 rounded-2xl shadow-sm hover:shadow-md hover:border-red-600/50 active:scale-95 transition-all duration-200 cursor-pointer flex flex-col justify-between h-40 relative overflow-hidden"
                 >
-                  {/* Decorative BG Icon */}
                   <div className="absolute -right-4 -bottom-4 opacity-5 transform rotate-[-15deg] group-hover:scale-110 transition-transform">
                     {React.cloneElement(
                       item.icon as React.ReactElement<{ className?: string }>,
@@ -428,7 +412,6 @@ export default function FirstAid() {
             </div>
           )}
 
-          {/* Pagination Pucks */}
           {filteredData.length > 0 && totalPages > 1 && (
             <div className="flex justify-center mt-8 gap-2">
               <Button
