@@ -11,22 +11,16 @@ const updates = [
     id: 1,
     title: "Prohibited List 2026",
     icon: <Pill className="h-6 w-6 text-orange-500" />,
-    color: "bg-orange-50",
+    color: "bg-orange-500/10",
     to: "/prohibited-list",
   },
   {
     id: 2,
     title: "TUE Process Changes",
-    icon: <Megaphone className="h-6 w-6 text-blue-500" />,
-    color: "bg-blue-50",
+    icon: <Megaphone className="h-6 w-6 text-primary" />,
+    color: "bg-primary/10",
     to: "/tue-process",
   },
-  // {
-  //     id: 3,
-  //     title: "Standard Updates",
-  //     icon: <Globe className="h-6 w-6 text-indigo-500" />,
-  //     color: "bg-indigo-50"
-  // },
 ];
 
 const blogs = [
@@ -57,28 +51,26 @@ export default function WadaPage() {
     <div className="flex h-full w-full flex-col bg-background text-foreground relative">
       <Header />
 
-      {/* Main Content Helper */}
       <div className="flex-1 w-full overflow-hidden flex flex-col relative">
-        {/* Main Scrollable Content */}
         <ScrollArea className="flex-1 w-full">
           <div className="p-4 space-y-6 pb-24">
-            {/* 2. Recent WADA Updates (Compact) */}
+            {/* Recent WADA Updates */}
             <section>
               <div className="flex items-center justify-between mb-3 px-1">
                 <h2 className="text-sm font-bold text-foreground">
                   Recent Updates
                 </h2>
-                <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wide cursor-pointer">
+                <span className="text-[10px] font-bold text-primary uppercase tracking-wide cursor-pointer">
                   View All
                 </span>
               </div>
 
-              <div className="grid grid-cols-2  pb-2 ">
+              <div className="grid grid-cols-2 pb-2">
                 {updates.map((item) => (
                   <button
                     onClick={() => navigate(item.to)}
                     key={item.id}
-                    className={` ${item.color} rounded-xl flex items-center mx-auto flex-col gap-2 p-3 relative  border border-black/5 active:scale-95 transition-transform duration-200`}
+                    className={`${item.color} rounded-xl flex items-center mx-auto flex-col gap-2 p-3 relative border border-border/40 active:scale-95 transition-transform duration-200`}
                   >
                     <div className="flex-1 flex items-start pt-1">
                       <div className="bg-card p-2 rounded-lg shadow-sm ring-1 ring-border">
@@ -93,23 +85,21 @@ export default function WadaPage() {
               </div>
             </section>
 
-            {/* 3. Substance & Method List Card (Refined) */}
+            {/* Substance Database */}
             <section>
               <h2 className="text-sm font-bold text-foreground mb-3 px-1">
                 Substance Database
               </h2>
               <div className="bg-card rounded-2xl p-4 shadow-sm border border-border/60 flex gap-4 items-center">
-                {/* Icon */}
-                <div className="shrink-0 h-16 w-16 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center">
-                  <ClipboardList className="h-7 w-7 text-blue-600" />
+                <div className="shrink-0 h-16 w-16 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <ClipboardList className="h-7 w-7 text-primary" />
                 </div>
 
-                {/* Content */}
                 <div className="flex-1">
                   <h3 className="text-sm font-bold text-foreground mb-1">
                     Check Compliance
                   </h3>
-                  <p className="text-xs text-slate-500 mb-3 leading-snug">
+                  <p className="text-xs text-muted-foreground mb-3 leading-snug">
                     Check substances against the 2026 Prohibited List.
                   </p>
                   <Button
@@ -123,7 +113,7 @@ export default function WadaPage() {
               </div>
             </section>
 
-            {/* 4. Educational Blogs (Tighter Layout) */}
+            {/* Educational Blogs */}
             <section className="pb-2">
               <h2 className="text-sm font-bold text-foreground mb-3 px-1">
                 Insights
@@ -140,14 +130,14 @@ export default function WadaPage() {
                       className="h-16 w-16 object-cover rounded-lg bg-muted shrink-0"
                     />
                     <div className="flex-1 py-0.5 pr-2">
-                      <span className="text-[10px] font-bold text-blue-600 mb-0.5 block uppercase tracking-wider">
+                      <span className="text-[10px] font-bold text-primary mb-0.5 block uppercase tracking-wider">
                         Education
                       </span>
                       <h3 className="text-sm font-bold text-foreground leading-snug line-clamp-2">
                         {blog.title}
                       </h3>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-slate-300 shrink-0" />
+                    <ChevronRight className="h-4 w-4 text-muted-foreground/40 shrink-0" />
                   </div>
                 ))}
               </div>
@@ -155,7 +145,6 @@ export default function WadaPage() {
           </div>
         </ScrollArea>
 
-        {/* Wrapper ensures BottomNav stays inside the phone frame */}
         <div className="absolute bottom-0 left-0 right-0 z-40">
           <BottomNav />
         </div>
