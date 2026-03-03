@@ -7,7 +7,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Activity,
   AlertCircle,
-  ArrowLeft,
   Bone,
   ChevronLeft,
   ChevronRight,
@@ -15,7 +14,7 @@ import {
   Search,
   ShieldAlert,
   Stethoscope,
-  Thermometer,
+  Thermometer
 } from "lucide-react";
 import React, { useState } from "react";
 

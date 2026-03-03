@@ -1,6 +1,5 @@
 ﻿import BottomNav from "@/components/shared/BottomNav";
 import Header from "@/components/shared/Header";
-import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,12 +7,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import {
   CheckCircle2,
-  ChevronLeft,
   Crosshair,
-  Menu,
-  Search,
-  User,
+  Search
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const LOCATIONS = [
   {
@@ -57,7 +54,6 @@ const FILTERS = [
 ];
 
 export default function MapSafetyPage() {
-  const navigate = useNavigate();
   return (
     <div className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-background text-foreground">
       <Header />

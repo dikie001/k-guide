@@ -116,7 +116,7 @@ const BottomNav = () => {
 
       <nav className="bn2-wrap" role="navigation" aria-label="Main navigation">
         <div className="bn2-bar">
-          {allItems.map(({ id, icon: Icon, label, route }, index) => {
+          {allItems.map(({ id, icon: Icon, label, route }) => {
             const active = isActive(route);
             return (
               <div key={id} style={{ display: "contents" }}>
